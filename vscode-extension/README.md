@@ -1,80 +1,107 @@
-# Tessera — IntelliSense for JavaScript In Minecraft
+# Tessera — JavaScript In Minecraft (IntelliSense)
 
-Full autocompletion, hover docs, signature help and go-to-definition for **Tessera** scripts:
+Autocomplete, hover docs, signature help and go-to-definition for Tessera scripts. Two things get
+wired up the moment you start typing:
 
-- the Tessera API — `Tessera`, `Event`, `ChatLib`, `Player`, `World`, `Renderer`, `Tessellator`, `Store`, `Mixin`, … (`ratph6.tessera.api`)
-- the **entire Mojang-mapped Minecraft API** — `net.minecraft.*` (6000+ classes, generated from the game jar)
+- the Tessera API — `Tessera`, `Event`, `ChatLib`, `Player`, `World`, `Renderer`, `Tessellator`,
+  `Store`, `Mixin`, … from `ratph6.tessera.api`
+- the **whole** Mojang-mapped Minecraft API — every `net.minecraft.*` class (6000+, generated
+  straight from the game jar)
 
-## TS mixins
+No language server to babysit, no separate process. It's just `.d.ts` files pointed at VS Code's
+built-in TypeScript service, so it's fast and it's the same engine you already trust.
 
-`Mixin.inject(...)` injects a callback straight into a Minecraft method. Its target/method/injection-point
-are string literals, so the extension adds **smart completion inside those strings**:
+## Install
 
-```ts
-Mixin.inject('net.minecraft.client.Minecraft', 'tick', (ctx) => { /* ... */ });
-//            └─ arg 0: class names      └─ arg 1: that class's methods
-Mixin.inject('net.minecraft...', 'tick', 'HEAD', (ctx) => {});   // arg 2: HEAD / RETURN / TAIL
+There's no Marketplace listing — you install the `.vsix` directly. Two steps, both from the command
+palette (`Ctrl+Shift+P`, or `Cmd+Shift+P` on macOS).
+
+**1. Build the `.vsix`** (skip if someone handed you one):
+
+```bash
+cd vscode-extension
+npm install
+npm run package        # -> tessera-intellisense-<version>.vsix
 ```
 
-- **arg 0** — every `net.minecraft.*` class (fully-qualified).
-- **arg 1** — the methods declared on the class named in arg 0 (inherited methods aren't listed —
-  retarget the declaring superclass if a method is missing).
-- **the `at` arg** — `HEAD`, `RETURN`, `TAIL`.
+**2. Install it.** Open the palette with `Ctrl+Shift+P`, type **`Install from VSIX`**, pick
+**Extensions: Install from VSIX…**, and choose the file you just built
+(`tessera-intellisense-1.3.2.vsix` or whatever the version is).
 
-`AccessWidener.widenField/widenMethod/makeExtendable(...)` get the same string completion (arg 0 = class,
-arg 1 = field/method). For **already-loaded** classes (Minecraft, KeyMapping, …), bytecode widening is
-impossible — use the reflection accessors `AccessWidener.getField/setField/invoke(...)` (and `*Static`
-variants), which reach private members on any object with no restart.
+**3. Turn it on for your folder.** Open the palette again — same `Ctrl+Shift+P` — and run
+**`Tessera: Set up IntelliSense in this folder`**. That's the switch. It drops a managed
+`tsconfig.json` next to your scripts and points the TypeScript service at the bundled type
+definitions. Until you run it (or open a folder that already has a `tessera.json` in it, which
+triggers setup automatically), completion stays dark.
 
-Snippets: `mixin`, `mixincancel`, `mixinreturn`, `widenfield`, `widenmethod`, `makeextendable`,
-`getfield`, `setfield`, `reflectinvoke`.
+> Prefer the terminal? `code --install-extension tessera-intellisense-1.3.2.vsix` does the install
+> step, but you'll still want the **Set up IntelliSense in this folder** command for any folder that
+> doesn't already contain a `tessera.json`.
+
+Now open `.minecraft/tessera/modules/` (or the project's `run/tessera/modules/`) and start writing.
+
+## Minecraft classes need no import
+
+Every uniquely-named `net.minecraft.*` class is a bare global. Type the name, get full completion —
+no import line:
 
 ```ts
 import { Tessera, Event, ChatLib } from 'ratph6.tessera.api';
 
 Tessera.register(Event.COMMAND, () => {
-  const p = new BlockPos(0, 64, 0);   // ← no import needed; full completion on BlockPos, p.getX(), etc.
+  const p = new BlockPos(0, 64, 0);   // no import; completion on BlockPos and p.getX(), p.getY()…
   ChatLib.chat("y=" + p.getY());
 });
 ```
 
-**Minecraft classes need no import.** Every uniquely-named `net.minecraft.*` class (6000+: `BlockPos`,
-`Vec3`, `Entity`, `ItemStack`, `Component`, ...) is a bare global — just type the name. The ~50 classes
-whose simple name is ambiguous (e.g. `Block`, `Item`) still use `import { Block } from 'net.minecraft.world.level.block'`
-(VS Code auto-import offers it). This resolves Mojang names, which exist in the **dev client**
-(`runClient`); a remapped production jar uses the bytecode engine for Minecraft interop.
+The ~50 classes whose simple name collides (`Block`, `Item`, …) still need an explicit
+`import { Block } from 'net.minecraft.world.level.block'` — VS Code's auto-import offers it. These
+are Mojang names, so they resolve against the dev client (`runClient`); a remapped production jar
+uses the bytecode engine for Minecraft interop.
 
-## How it works
+## Mixins, with completion inside the strings
 
-Tessera scripts are TypeScript, so completion is driven entirely by two bundled declaration files
-(`tessera.d.ts`, `minecraft.d.ts`). On activation the extension:
+`Mixin.inject(...)` patches a callback straight into a Minecraft method. The target, method and
+injection point are string literals, and the extension completes inside them:
 
-1. copies those files into its global storage (refreshed on version change), and
-2. drops a **managed** `tsconfig.json` into each folder that contains a `tessera.json`, pointing the
-   built-in TypeScript language service at them.
-
-It never overwrites a `tsconfig.json` you wrote yourself (it only touches ones marked
-`"_tesseraManaged": true`). Run **“Tessera: Set up IntelliSense in this folder”** from the command palette to
-configure a folder manually.
-
-## Install
-
-```bash
-cd vscode-extension
-npm install
-npm run package        # produces tessera-intellisense-<version>.vsix
-code --install-extension tessera-intellisense-1.3.0.vsix
+```ts
+Mixin.inject('net.minecraft.client.Minecraft', 'tick', (ctx) => { /* … */ });
+//            └─ arg 0: class names         └─ arg 1: that class's methods
+Mixin.inject('net.minecraft...', 'tick', 'HEAD', (ctx) => {});   // arg 2: HEAD / RETURN / TAIL
 ```
 
-Then open your `.minecraft/tessera/modules/` folder (or the project's `run/tessera/modules/`) in VS Code.
+- **arg 0** — any fully-qualified `net.minecraft.*` class.
+- **arg 1** — methods declared on that class. Inherited ones aren't listed; retarget the declaring
+  superclass if a method's missing.
+- **the `at` arg** — `HEAD`, `RETURN`, `TAIL`.
+
+`AccessWidener.widenField/widenMethod/makeExtendable(...)` get the same string completion (arg 0 =
+class, arg 1 = field/method). Classes that are **already loaded** (Minecraft, KeyMapping, …) can't be
+bytecode-widened — reach them with the reflection accessors `AccessWidener.getField/setField/invoke`
+(plus the `*Static` variants), which hit private members on any object with no restart.
+
+Snippets to save the typing: `mixin`, `mixincancel`, `mixinreturn`, `widenfield`, `widenmethod`,
+`makeextendable`, `getfield`, `setfield`, `reflectinvoke`.
+
+## How it actually works
+
+Tessera scripts are TypeScript, so all the completion comes from two bundled declaration files
+(`tessera.d.ts`, `minecraft.d.ts`). On activation the extension copies them into its global storage
+(refreshed when the version changes) and drops a **managed** `tsconfig.json` into every folder that
+contains a `tessera.json`, aiming the built-in TypeScript service at them.
+
+It won't clobber a `tsconfig.json` you wrote — it only touches ones tagged `"_tesseraManaged": true`.
+Run **Tessera: Set up IntelliSense in this folder** any time you want to configure a folder by hand.
 
 ## Updating the Minecraft declarations
 
-`types/minecraft.d.ts` is generated from the mapped Minecraft jar. After a Minecraft/mapping bump,
-regenerate and re-copy:
+`types/minecraft.d.ts` is generated from the mapped Minecraft jar. After a Minecraft or mapping bump,
+regenerate it and repackage:
 
 ```bash
-./gradlew genMinecraftDts        # from the Tessera project root — writes vscode-extension/types/minecraft.d.ts
+./gradlew genMinecraftDts        # from the Tessera project root -> vscode-extension/types/minecraft.d.ts
 cp src/main/resources/tessera/types/tessera.d.ts vscode-extension/types/   # only if the Tessera API changed
 cd vscode-extension && npm run package
 ```
+
+Reinstall the fresh `.vsix` the same way you did the first time — palette → **Install from VSIX…**.
