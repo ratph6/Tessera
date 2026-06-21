@@ -3,7 +3,7 @@
 TypeScript scripting for Minecraft 26.1.2 (Fabric, Kotlin). Write a `.ts` file, drop it in a
 folder, reload in game. In the spirit of ChatTriggers, rebuilt on a modern toolchain.
 
-API docs: [tessera-1w4.pages.dev](https://tessera-1w4.pages.dev) · runnable examples in [`examples/`](examples)
+API docs: [tessera-1w4.pages.dev](https://tessera-5d7.pages.dev/) · runnable examples in [`examples/`](examples)
 
 ## Two engines
 
