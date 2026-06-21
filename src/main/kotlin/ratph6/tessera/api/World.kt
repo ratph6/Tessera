@@ -2,7 +2,7 @@ package ratph6.tessera.api
 
 import net.minecraft.core.BlockPos
 
-/** World / level queries. `import { World } from 'ratph6.tessera.api'`. */
+// World / level queries.
 object World {
     @JvmStatic fun isLoaded(): Boolean = Mc.level != null
 
@@ -19,7 +19,7 @@ object World {
         return BlockWrapper(level.getBlockState(pos), pos)
     }
 
-    /** All entities currently being rendered (the loaded ones around the player). */
+    // entities currently being rendered (loaded ones around the player)
     @JvmStatic fun getAllEntities(): Array<EntityWrapper> {
         val level = Mc.level ?: return emptyArray()
         return runCatching {

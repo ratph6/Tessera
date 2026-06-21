@@ -2,18 +2,10 @@ package ratph6.tessera.agent;
 
 import java.lang.reflect.Method;
 
-/**
- * A tiny throwaway launcher run as a <em>separate</em> JVM process. It attaches to the Minecraft JVM by
- * pid and loads the Tessera agent into it.
- *
- * <p>Why a separate process: a JVM attaching to <em>itself</em> is refused unless it was started with
- * {@code -Djdk.attach.allowAttachSelf=true} (the guard reads the startup property snapshot, so it can't
- * be flipped at runtime). An external process attaching to the target has no such restriction — so this
- * lets TS mixins work without any launch flag. Uses reflection so it carries no compile-time dependency
- * on {@code jdk.attach}.
- *
- * <p>Args: {@code <targetPid> <agentJarPath>}.
- */
+// Separate-process launcher: attaches to the MC JVM by pid and loads the agent.
+// Must be a separate process — self-attach is refused without -Djdk.attach.allowAttachSelf=true
+// (read once at startup, can't be flipped at runtime); an external process has no such restriction.
+// Reflection avoids a compile-time dep on jdk.attach. Args: <targetPid> <agentJarPath>.
 public final class AttachHelper {
 
     public static void main(String[] args) throws Exception {

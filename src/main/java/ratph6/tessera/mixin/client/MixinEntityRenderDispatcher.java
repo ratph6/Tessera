@@ -14,16 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ratph6.tessera.engine.TesseraRenderHooks;
 import ratph6.tessera.engine.TesseraRenderTarget;
 
-/**
- * Drives the {@code renderEntity} / {@code postRenderEntity} triggers and Tessera's Tessellator matrix
- * API.
- *
- * <p>{@code extractEntity} produces the (entity-less) render state, so we stash the source entity on
- * it there. {@code submit} is the dispatcher's per-entity wrapper — it does
- * {@code pushPose(); translate(toEntity); renderer.submit(...); ...; popPose()}. By wrapping the
- * inner {@code EntityRenderer.submit} call we let scripts push a scale/rotation onto the pose that
- * affects only the entity model (not its shadow/flame), positioned at the entity's own origin.
- */
+// renderEntity/postRenderEntity triggers + the Tessellator matrix API.
+// extractEntity is where we stash the source entity. We wrap the inner EntityRenderer.submit call
+// (not the outer submit) so script pose tweaks affect only the model, not its shadow/flame, and
+// are applied at the entity's own origin.
 @Mixin(EntityRenderDispatcher.class)
 public class MixinEntityRenderDispatcher {
 

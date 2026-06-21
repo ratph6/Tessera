@@ -6,11 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * Central registry of all live triggers, indexed by type. Registration happens while a module's
- * `main()` runs (JS thread); lookups happen on whatever thread an event fires on, so everything is
- * held in concurrent collections.
- */
+// registry of live triggers indexed by type. registration and lookup happen on different threads, hence concurrent collections.
 object TriggerRegistry {
     private val ids = AtomicInteger(1)
     private val byId = ConcurrentHashMap<Int, TriggerMeta>()
@@ -33,10 +29,10 @@ object TriggerRegistry {
 
     fun get(id: Int): TriggerMeta? = byId[id]
 
-    /** All enabled triggers of a type, in priority order (lowest priority value first). */
+    // enabled triggers of a type, lowest priority value first
     fun byType(type: String): List<TriggerMeta> = byType[type]?.filter { it.enabled } ?: emptyList()
 
-    /** Cheap check (no list allocation) for whether any enabled trigger of [type] exists. */
+    // no-allocation check for any enabled trigger of a type
     fun hasType(type: String): Boolean = byType[type]?.any { it.enabled } == true
 
     fun count(): Int = byId.size
@@ -52,7 +48,6 @@ object TriggerRegistry {
         byType[meta.type]?.remove(meta)
     }
 
-    /** Remove every trigger owned by a module (clean unload). */
     fun removeModule(module: String) {
         val removed = byId.values.filter { it.module?.name == module }
         for (m in removed) {

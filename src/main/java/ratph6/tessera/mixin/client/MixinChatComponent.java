@@ -11,11 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/**
- * Intercepts every incoming chat message at the lowest level (the private addMessage that all of
- * addClientSystemMessage / addServerSystemMessage / addPlayerMessage funnel into) so Tessera's `chat`
- * trigger can read and optionally cancel it.
- */
+// addMessage is the private sink all chat paths funnel into — hook it once for the chat trigger.
 @Mixin(ChatComponent.class)
 public class MixinChatComponent {
 

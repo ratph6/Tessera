@@ -9,10 +9,7 @@ import ratph6.mixintest.MixinTarget
 import ratph6.tessera.api.MixinContext
 import java.util.function.Consumer
 
-/**
- * Exercises [MixinTransformer] end to end against bytecode (HEAD cancel/override, RETURN override) by
- * transforming [MixinTarget] in memory, loading the rewritten class in a child loader, and invoking it.
- */
+// transform MixinTarget in memory, load in a child loader, invoke
 class MixinTransformerTest {
 
     private val targetBinary = MixinTarget::class.java.name
@@ -20,7 +17,7 @@ class MixinTransformerTest {
 
     @AfterEach fun cleanup() = MixinRegistry.clear().let { }
 
-    /** Loads exactly [name] from [bytes]; everything else (MixinHooks, MixinContext, ...) delegates to the parent. */
+    // loads only the target from bytes; everything else delegates to parent
     private class Rewriter(val target: String, val bytes: ByteArray, parent: ClassLoader) : ClassLoader(parent) {
         override fun loadClass(n: String, resolve: Boolean): Class<*> {
             if (n == target) synchronized(getClassLoadingLock(n)) {

@@ -2,16 +2,9 @@ package ratph6.tessera.engine
 
 import java.util.function.Consumer
 
-/**
- * Front door for TypeScript mixins. Lazily self-attaches the instrumentation agent and installs
- * [MixinTransformer] on the first injection, registers each hook in [MixinRegistry], and triggers a
- * retransform so the change takes effect immediately — even for Minecraft classes that are already
- * loaded. Reverting (on `/te reload` or module unload) retransforms the affected classes back to their
- * original bytes.
- *
- * All calls are expected on the JS/render thread (where scripts register), matching the rest of the
- * engine.
- */
+// Front door for TS mixins: attaches the agent + installs MixinTransformer on first injection, registers
+// hooks, and retransforms so the change takes effect now (even for already-loaded classes). All calls
+// expected on the JS/render thread.
 object MixinManager {
 
     @Volatile private var transformerInstalled = false
@@ -30,13 +23,12 @@ object MixinManager {
         retransform(binary)
     }
 
-    /** Register a runtime access widening (make a class/method/field public, non-final). */
+    // make a class/method/field public, non-final
     fun widen(target: String, kind: AccessRegistry.Kind, member: String?, descriptor: String?) {
         ensureTransformer()
         AccessRegistry.add(target, kind, member, descriptor, TesseraEngine.currentModule())
-        // Access widening can only be applied while a class is being defined (the JVM forbids modifier
-        // changes on a loaded class). If the target is already loaded, the widening only takes effect on a
-        // later load — tell the user instead of silently doing nothing.
+        // JVM forbids modifier changes on a loaded class — if already loaded, widening only applies on a
+        // later load, so warn instead of silently doing nothing.
         val alreadyLoaded = runCatching {
             Class.forName(target, false, TesseraEngine.scriptClassLoader)
         }.getOrNull() != null
@@ -67,17 +59,16 @@ object MixinManager {
         if (transformerInstalled) return
         synchronized(this) {
             if (transformerInstalled) return
-            // Throws with a user-facing message if self-attach isn't available — surfaced to the script.
             val inst = InstrumentationLoader.instrumentation()
-            // Fully define every type transform() reaches BEFORE the transformer goes live. Otherwise the
-            // JVM invokes transform() while one of these is still mid-definition → duplicate class def.
+            // Fully define every type transform() reaches BEFORE the transformer goes live, else the JVM
+            // calls transform() while one is mid-definition -> duplicate class def.
             warmup()
             inst.addTransformer(MixinTransformer, true)
             transformerInstalled = true
         }
     }
 
-    /** Touch every class [MixinTransformer.transform] references so none is mid-definition when it runs. */
+    // touch every class transform() references so none is mid-definition when it runs
     private fun warmup() {
         MixinRegistry.isEmpty()
         AccessRegistry.isEmpty()
@@ -88,11 +79,11 @@ object MixinManager {
         ratph6.tessera.api.MixinContext::class.java.name
     }
 
-    /** Re-apply the transformer to [binary]'s already-loaded class so registry changes take effect now. */
+    // re-apply the transformer to binary's already-loaded class so registry changes take effect now
     private fun retransform(binary: String) {
         val inst = InstrumentationLoader.instrumentationOrNull() ?: return
         val cls = runCatching { Class.forName(binary, false, TesseraEngine.scriptClassLoader) }.getOrNull()
-            ?: return // not loaded yet — the transformer will catch it when the class is first loaded
+            ?: return // not loaded yet — transformer catches it on first load
         if (!inst.isModifiableClass(cls)) {
             TesseraEngine.recordError("mixin", "$binary cannot be modified by instrumentation")
             return

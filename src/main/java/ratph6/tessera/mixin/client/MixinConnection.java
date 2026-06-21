@@ -10,12 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/**
- * Feeds Tessera's {@code packetReceived} / {@code packetSent} triggers. Every inbound packet passes
- * through {@code channelRead0}; every outbound packet funnels through the 3-arg {@code send}. Both
- * run on the netty I/O thread, so {@link TesseraHooks} marshals onto the JS thread — these triggers are
- * observe-only (the packet has already been handed off, so there is nothing to cancel).
- */
+// packetReceived/packetSent triggers. Runs on the netty I/O thread (hooks marshal to JS). Observe-only.
 @Mixin(Connection.class)
 public class MixinConnection {
 

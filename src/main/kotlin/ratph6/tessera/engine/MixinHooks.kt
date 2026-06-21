@@ -2,17 +2,11 @@ package ratph6.tessera.engine
 
 import ratph6.tessera.api.MixinContext
 
-/**
- * Static entry points that the bytecode injected by [MixinTransformer] calls into. The signatures here
- * are an ABI — `MixinTransformer` emits `INVOKESTATIC` calls against these exact names/descriptors, so
- * changing them means changing the transformer too.
- *
- * Both methods build a [MixinContext], run the registered script callback, and hand the context back so
- * the injected code can read `cancelled` / `returnValue`.
- */
+// ABI for the bytecode MixinTransformer injects: it emits INVOKESTATIC against these exact
+// names/descriptors, so changing a signature means changing the transformer too.
 object MixinHooks {
 
-    /** Called at the HEAD of an injected method. [args] are the boxed method arguments. */
+    // HEAD of an injected method; args are boxed
     @JvmStatic
     fun head(id: Int, self: Any?, args: Array<Any?>): MixinContext {
         val hook = MixinRegistry.get(id) ?: return MixinContext("", "", self, args)
@@ -21,7 +15,7 @@ object MixinHooks {
         return ctx
     }
 
-    /** Called at each RETURN site of an injected method. [returnValue] is the boxed value about to be returned. */
+    // each RETURN site; returnValue is the boxed value about to be returned
     @JvmStatic
     fun ret(id: Int, self: Any?, args: Array<Any?>, returnValue: Any?): MixinContext {
         val hook = MixinRegistry.get(id) ?: return MixinContext("", "", self, args)

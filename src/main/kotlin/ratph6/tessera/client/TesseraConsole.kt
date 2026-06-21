@@ -18,14 +18,7 @@ import javax.swing.SwingUtilities
 import javax.swing.text.SimpleAttributeSet
 import javax.swing.text.StyleConstants
 
-/**
- * A standalone log window in the spirit of ChatTriggers' console. It mirrors every Tessera console line
- * (chat output, `Tessera.log`, and errors) with level colours and full stack traces, and offers an input
- * box that evaluates a line of TypeScript via `/te eval`.
- *
- * Opened with `/te console`. Lives on the AWT/Swing thread, independent of the game window; lines
- * arrive from the render thread, so all UI mutation is marshalled onto the EDT.
- */
+// standalone Swing log window (/te console). lines arrive from the render thread, so UI mutation is marshalled onto the EDT.
 object TesseraConsole {
 
     private const val BG = 0x1E1E1E
@@ -34,11 +27,8 @@ object TesseraConsole {
     private var frame: JFrame? = null
     private var pane: JTextPane? = null
 
-    /** Open the console (creating it on first use) and replay recent history. */
     fun open() {
-        // Minecraft's launch usually starts the JVM with -Djava.awt.headless=true, and AWT *caches*
-        // that flag the first time it's read — so just setting the property now is too late. Flip the
-        // property AND clear the cached value, otherwise JFrame throws a message-less HeadlessException.
+        // AWT caches headless on first read, so setting the property isn't enough — clear the cached value too
         runCatching { System.setProperty("java.awt.headless", "false") }
         unlatchHeadless()
         SwingUtilities.invokeLater {
@@ -57,13 +47,8 @@ object TesseraConsole {
         }
     }
 
-    /**
-     * Reset AWT's cached headless decision so a window can be created after Minecraft launched the JVM
-     * headless. `GraphicsEnvironment.headless` is a private static cache; nulling it forces a re-read of
-     * the (now `false`) property. Needs `--add-opens java.desktop/java.awt=ALL-UNNAMED` on JDK 25+ —
-     * best-effort: if the module is locked down this no-ops and the HeadlessException message guides the
-     * user to add the flag.
-     */
+    // null out GraphicsEnvironment.headless cache so it re-reads the (now false) property.
+    // needs --add-opens java.desktop/java.awt=ALL-UNNAMED on JDK 25+; best-effort no-op otherwise.
     private fun unlatchHeadless() {
         runCatching {
             val ge = Class.forName("java.awt.GraphicsEnvironment")
@@ -115,7 +100,7 @@ object TesseraConsole {
             setLocationRelativeTo(null)
         }
 
-        // Replay buffered history, then stream new lines.
+        // replay history, then stream new lines
         for (line in TesseraEngine.recentLog()) append(line)
         TesseraEngine.consoleSink = { line -> SwingUtilities.invokeLater { append(line) } }
     }

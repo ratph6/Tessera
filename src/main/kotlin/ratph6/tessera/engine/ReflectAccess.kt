@@ -5,21 +5,13 @@ import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.concurrent.ConcurrentHashMap
 
-/**
- * Reflection-backed member access for scripts — the part of "access widening" that works on classes
- * that are *already loaded* (where bytecode modifier-flipping is illegal). Mod code runs with full Java
- * access and `net.minecraft` lives in the unnamed module, so `setAccessible(true)` succeeds; GraalJS
- * can't reach `java.lang.reflect` itself, so these helpers are the bridge.
- *
- * Fields/methods are resolved by walking the class hierarchy and cached. Numeric arguments coming from
- * JS (which arrive boxed and loosely typed) are coerced to the target field/parameter type.
- */
+// Reflection-backed member access — the part of "access widening" that works on already-loaded classes
+// (where bytecode modifier-flipping is illegal). setAccessible succeeds since net.minecraft is in the
+// unnamed module; GraalJS can't reach java.lang.reflect itself, so these helpers bridge it.
 object ReflectAccess {
 
     private val fieldCache = ConcurrentHashMap<String, Field>()
     private val methodCache = ConcurrentHashMap<String, Method>()
-
-    // --- fields -----------------------------------------------------------------------------------
 
     fun getField(target: Any, name: String): Any? = resolveField(target.javaClass, name).get(target)
 
@@ -39,8 +31,6 @@ object ReflectAccess {
         f.set(null, coerce(value, f.type))
     }
 
-    // --- methods ----------------------------------------------------------------------------------
-
     fun invoke(target: Any, name: String, args: Array<out Any?>): Any? {
         val m = resolveMethod(target.javaClass, name, args.size)
         return m.invoke(target, *coerceArgs(args, m))
@@ -51,8 +41,6 @@ object ReflectAccess {
         val m = resolveMethod(cls, name, args.size)
         return m.invoke(null, *coerceArgs(args, m))
     }
-
-    // --- resolution ------------------------------------------------------------------------------
 
     private fun loadClass(name: String): Class<*> =
         Class.forName(name, false, TesseraEngine.scriptClassLoader)
@@ -89,14 +77,12 @@ object ReflectAccess {
         throw NoSuchMethodException("no method '$name' with $argCount arg(s) on ${start.name} (or its superclasses)")
     }
 
-    // --- coercion --------------------------------------------------------------------------------
-
     private fun coerceArgs(args: Array<out Any?>, m: Method): Array<Any?> {
         val types = m.parameterTypes
         return Array(args.size) { i -> coerce(args[i], types[i]) }
     }
 
-    /** Convert a (often JS-boxed) value to the declared [type] — chiefly numeric/boolean/char widening. */
+    // convert a (often JS-boxed) value to the declared type — chiefly numeric/boolean/char widening
     private fun coerce(value: Any?, type: Class<*>): Any? {
         if (value == null || type.isInstance(value)) return value
         if (value is Number) return when (type) {
@@ -113,7 +99,7 @@ object ReflectAccess {
         return value
     }
 
-    /** True if [name]'s field on [target] is final (informational — final instance fields still write). */
+    // informational only — final instance fields still write via reflection
     fun isFinalField(target: Any, name: String): Boolean =
         Modifier.isFinal(resolveField(target.javaClass, name).modifiers)
 }

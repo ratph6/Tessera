@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/** Feeds the {@code messageSent} trigger; cancelling blocks the outgoing chat message. */
+// messageSent trigger; cancel blocks the outgoing chat.
 @Mixin(ClientPacketListener.class)
 public class MixinClientPacketListener {
 

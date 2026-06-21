@@ -20,19 +20,9 @@ import org.objectweb.asm.tree.VarInsnNode
 import java.lang.instrument.ClassFileTransformer
 import java.security.ProtectionDomain
 
-/**
- * The single retransform-capable [ClassFileTransformer] behind TypeScript mixins. For any class that
- * has registered [MixinRegistry] hooks, it rewrites the matching methods to call [MixinHooks] — at HEAD
- * (with the option to cancel or substitute the return value) and/or at every RETURN site.
- *
- * Because the JVM always hands a transformer the *original* class bytes on each retransform, removing a
- * hook and retransforming cleanly reverts the method — there is no accumulation of injected code.
- *
- * Injection is deliberately conservative so frame computation stays trivial: a HEAD injection adds a
- * single forward branch whose merge point is the method's entry frame; RETURN injections sit on a
- * straight line before an existing return. That keeps [ClassWriter.COMPUTE_FRAMES] from ever needing a
- * real common-superclass lookup on Minecraft types in practice.
- */
+// The retransform-capable transformer behind TS mixins: rewrites matching methods to call MixinHooks at
+// HEAD and/or RETURN. The JVM always hands the original bytes, so removing a hook + retransforming
+// cleanly reverts — no accumulation. Injection is kept conservative so frame computation stays trivial.
 object MixinTransformer : ClassFileTransformer {
 
     private const val CTX = "ratph6/tessera/api/MixinContext"
@@ -48,9 +38,8 @@ object MixinTransformer : ClassFileTransformer {
         classfileBuffer: ByteArray,
     ): ByteArray? {
         if (className == null) return null
-        // Never inject Tessera's own classes. Critical for correctness, not just hygiene: this check
-        // runs *before* touching MixinRegistry, so when the JVM calls transform() for MixinRegistry/
-        // MixinHooks/etc. while they are still being defined, we return without a re-entrant load.
+        // Skip Tessera's own classes BEFORE touching MixinRegistry — otherwise transform() for a
+        // still-being-defined MixinRegistry/MixinHooks triggers a re-entrant load.
         if (className.startsWith("ratph6/tessera/")) return null
         val hooks = MixinRegistry.hooksFor(className)
         val widenings = AccessRegistry.forClass(className)
@@ -60,10 +49,8 @@ object MixinTransformer : ClassFileTransformer {
             val cn = ClassNode()
             ClassReader(classfileBuffer).accept(cn, ClassReader.EXPAND_FRAMES)
 
-            // Access widening first (pure flag flips, no code change), then mixin code injection.
-            // Only at INITIAL load: the JVM forbids changing modifiers when redefining/retransforming an
-            // already-loaded class, so applying it during a retransform would be rejected (and would break
-            // an otherwise-valid mixin retransform on the same class). classBeingRedefined == null ⇒ first load.
+            // Access widening (flag flips) only at initial load — the JVM rejects modifier changes on a
+            // redefine/retransform. classBeingRedefined == null ⇒ first load.
             val accessChanged = if (classBeingRedefined == null) applyAccess(cn, widenings) else false
             var injected = false
             for (mn in cn.methods.toList()) {
@@ -79,9 +66,8 @@ object MixinTransformer : ClassFileTransformer {
             }
             if (!accessChanged && !injected) return null
 
-            // Only recompute frames when we changed code (injection). Access-only widening leaves every
-            // method body untouched, so we keep the original frames — far safer than COMPUTE_FRAMES,
-            // which would need real common-superclass lookups on Minecraft types.
+            // Recompute frames only when code changed (injection); access-only widening keeps the original
+            // frames — safer than COMPUTE_FRAMES, which needs common-superclass lookups on Minecraft types.
             val cw = LoaderAwareWriter(loader, if (injected) ClassWriter.COMPUTE_FRAMES else 0)
             cn.accept(cw)
             cw.toByteArray()
@@ -91,7 +77,6 @@ object MixinTransformer : ClassFileTransformer {
         }
     }
 
-    /** Flip access flags per [AccessRegistry]: widened members become public; classes/fields lose `final`. */
     private fun applyAccess(cn: ClassNode, widenings: List<AccessRegistry.Widen>): Boolean {
         if (widenings.isEmpty()) return false
         var changed = false
@@ -116,14 +101,10 @@ object MixinTransformer : ClassFileTransformer {
         return changed
     }
 
-    /** Clear private/protected/final, set public — the "accessible + mutable" widening. */
     private fun publicNonFinal(access: Int): Int =
         (access and (Opcodes.ACC_PRIVATE or Opcodes.ACC_PROTECTED or Opcodes.ACC_FINAL).inv()) or Opcodes.ACC_PUBLIC
 
-    // ----------------------------------------------------------------------------------------------
     // HEAD: ctx = MixinHooks.head(id, self, args); if (ctx.cancelled) return [override|default];
-    // ----------------------------------------------------------------------------------------------
-
     private fun injectHead(mn: MethodNode, id: Int) {
         val isStatic = mn.access and Opcodes.ACC_STATIC != 0
         val ctxLocal = mn.maxLocals
@@ -146,7 +127,7 @@ object MixinTransformer : ClassFileTransformer {
         mn.instructions.insert(il)
     }
 
-    /** Emit a return honouring an override: `hasReturnOverride ? (R) returnValue : defaultZero`. */
+    // emit `hasReturnOverride ? (R) returnValue : defaultZero`
     private fun returnFromCtx(mn: MethodNode, ctxLocal: Int): InsnList {
         val ret = Type.getReturnType(mn.desc)
         val il = InsnList()
@@ -158,27 +139,23 @@ object MixinTransformer : ClassFileTransformer {
         il.add(VarInsnNode(Opcodes.ALOAD, ctxLocal))
         il.add(FieldInsnNode(Opcodes.GETFIELD, CTX, "hasReturnOverride", "Z"))
         il.add(JumpInsnNode(Opcodes.IFEQ, useOriginal))
-        // override path: (R) ctx.returnValue
         il.add(VarInsnNode(Opcodes.ALOAD, ctxLocal))
         il.add(FieldInsnNode(Opcodes.GETFIELD, CTX, "returnValue", "Ljava/lang/Object;"))
         unbox(il, ret)
         il.add(InsnNode(ret.getOpcode(Opcodes.IRETURN)))
-        // no override: a zero/null of the right type (matches a plain `ci.cancel()` with no value set)
+        // no override: zero/null of the right type (a plain cancel() with no value)
         il.add(useOriginal)
         pushZero(il, ret)
         il.add(InsnNode(ret.getOpcode(Opcodes.IRETURN)))
         return il
     }
 
-    // ----------------------------------------------------------------------------------------------
     // RETURN: at each return site, ctx = MixinHooks.ret(id, self, args, boxedReturn);
     //         push ctx.hasReturnOverride ? (R) ctx.returnValue : original; then the original return.
-    // ----------------------------------------------------------------------------------------------
-
     private fun injectReturn(mn: MethodNode, id: Int) {
         val isStatic = mn.access and Opcodes.ACC_STATIC != 0
         val ret = Type.getReturnType(mn.desc)
-        // Snapshot: we mutate the list while iterating.
+        // snapshot: we mutate the list while iterating
         val returns = mn.instructions.toArray().filter { isReturnInsn(it.opcode) }
         for (insn in returns) {
             val pre = if (ret.sort == Type.VOID) {
@@ -205,10 +182,9 @@ object MixinTransformer : ClassFileTransformer {
         val retLocal = mn.maxLocals; mn.maxLocals += 1
         val ctxLocal = mn.maxLocals; mn.maxLocals += 1
         val il = InsnList()
-        // boxed original return value -> retLocal   (stack on entry: [retval])
+        // box original return value -> retLocal (stack on entry: [retval])
         box(il, ret)
         il.add(VarInsnNode(Opcodes.ASTORE, retLocal))
-        // ctx = MixinHooks.ret(id, self, args, retLocal)
         pushInt(il, id)
         il.add(selfNode(isStatic))
         il.add(buildArgsArray(mn, isStatic))
@@ -232,10 +208,6 @@ object MixinTransformer : ClassFileTransformer {
         return il
     }
 
-    // ----------------------------------------------------------------------------------------------
-    // shared bytecode helpers
-    // ----------------------------------------------------------------------------------------------
-
     private fun isReturnInsn(op: Int): Boolean =
         op == Opcodes.RETURN || op == Opcodes.IRETURN || op == Opcodes.LRETURN ||
             op == Opcodes.FRETURN || op == Opcodes.DRETURN || op == Opcodes.ARETURN
@@ -243,7 +215,7 @@ object MixinTransformer : ClassFileTransformer {
     private fun selfNode(isStatic: Boolean): AbstractInsnNode =
         if (isStatic) InsnNode(Opcodes.ACONST_NULL) else VarInsnNode(Opcodes.ALOAD, 0)
 
-    /** Build an `Object[]` of the (boxed) method arguments and leave it on the stack. */
+    // Object[] of the boxed method args, left on the stack
     private fun buildArgsArray(mn: MethodNode, isStatic: Boolean): InsnList {
         val il = InsnList()
         val args = Type.getArgumentTypes(mn.desc)
@@ -262,7 +234,7 @@ object MixinTransformer : ClassFileTransformer {
         return il
     }
 
-    /** Box the primitive on the stack (no-op for reference types). */
+    // box the primitive on the stack (no-op for reference types)
     private fun box(il: InsnList, t: Type) {
         val (owner, prim) = when (t.sort) {
             Type.BOOLEAN -> "java/lang/Boolean" to "Z"
@@ -278,7 +250,7 @@ object MixinTransformer : ClassFileTransformer {
         il.add(MethodInsnNode(Opcodes.INVOKESTATIC, owner, "valueOf", "($prim)L$owner;", false))
     }
 
-    /** Cast/unbox the reference on the stack to [t]. */
+    // cast/unbox the reference on the stack to t
     private fun unbox(il: InsnList, t: Type) {
         val (owner, method, prim) = when (t.sort) {
             Type.BOOLEAN -> Triple("java/lang/Boolean", "booleanValue", "Z")
@@ -299,7 +271,7 @@ object MixinTransformer : ClassFileTransformer {
         il.add(MethodInsnNode(Opcodes.INVOKEVIRTUAL, owner, method, "()$prim", false))
     }
 
-    /** Push the zero value of [t] (the default returned by a `cancel()` with no return override). */
+    // zero value of t (default for cancel() with no return override)
     private fun pushZero(il: InsnList, t: Type) {
         when (t.sort) {
             Type.LONG -> il.add(InsnNode(Opcodes.LCONST_0))
@@ -319,11 +291,8 @@ object MixinTransformer : ClassFileTransformer {
         }
     }
 
-    /**
-     * A [ClassWriter] that resolves common-superclass queries against the *target* class loader (Knot
-     * for Minecraft), falling back to `java/lang/Object` when a type can't be loaded — never triggering
-     * a load through the wrong loader, and never failing the whole transform over a frame merge.
-     */
+    // Resolves common-superclass queries against the target loader (Knot for Minecraft), falling back to
+    // Object — never loading through the wrong loader, never failing the transform over a frame merge.
     private class LoaderAwareWriter(private val loader: ClassLoader?, flags: Int) : ClassWriter(flags) {
         private val cl = loader ?: ClassLoader.getSystemClassLoader()
 

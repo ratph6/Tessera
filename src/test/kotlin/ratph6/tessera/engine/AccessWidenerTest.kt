@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Test
 import ratph6.mixintest.MixinAccessTarget
 import java.lang.reflect.Modifier
 
-/**
- * Verifies [MixinTransformer] applies [AccessRegistry] widenings at initial class load: the target's
- * private field/method become public and the final class loses `final`. No Minecraft, no agent.
- */
+// widenings applied at initial class load, no Minecraft/agent
 class AccessWidenerTest {
 
     private val targetBinary = MixinAccessTarget::class.java.name
@@ -33,7 +30,7 @@ class AccessWidenerTest {
     private fun rewriteAndLoad(): Class<*> {
         val parent = MixinAccessTarget::class.java.classLoader
         val original = parent.getResourceAsStream("$targetInternal.class")!!.use { it.readBytes() }
-        // classBeingRedefined = null → the initial-load path, where access widening is legal.
+        // classBeingRedefined = null → initial-load path, where widening is legal
         val transformed = MixinTransformer.transform(parent, targetInternal, null, null, original)
             ?: error("transformer made no change — no widening matched")
         return Rewriter(targetBinary, transformed, parent).loadClass(targetBinary)

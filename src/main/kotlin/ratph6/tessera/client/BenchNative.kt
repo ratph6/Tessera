@@ -3,14 +3,7 @@ package ratph6.tessera.client
 import net.minecraft.core.BlockPos
 import ratph6.tessera.api.ChatLib
 
-/**
- * Hand-written JVM baseline for the two benchmarks in `examples/bench-*`.
- *
- * Run with `/te bench`. The workloads are identical to the TypeScript versions — the only
- * difference is that this code was written directly in Kotlin and compiled by kotlinc, whereas
- * Tessera compiles the TS to JVM bytecode via swc4j. Comparing the two numbers in the same client
- * shows how close Tessera's output runs to code a human wrote against the JVM.
- */
+// native kotlin baseline for the examples/bench-* workloads, to compare against the TS->bytecode output. /te bench
 object BenchNative {
 
     fun run() {
@@ -19,7 +12,6 @@ object BenchNative {
         nativeInterop()
     }
 
-    /** Mirror of examples/bench-native: isPrime over 1,000,000 numbers. */
     private fun nativeCompute() {
         val n = 1_000_000
         val start = System.nanoTime()
@@ -43,7 +35,6 @@ object BenchNative {
         ChatLib.chat("§a[native-compute] isPrime x$n  ->  $ms ms  ($count primes)")
     }
 
-    /** Mirror of examples/bench-interop: 27,000 × `new BlockPos`. */
     private fun nativeInterop() {
         val n = 30
         val x = -1674
@@ -51,7 +42,7 @@ object BenchNative {
         val z = 1495
         val start = System.nanoTime()
         var made = 0
-        var sink = 0 // touch each BlockPos so the allocation isn't optimised away
+        var sink = 0 // touch each BlockPos so it isn't optimised away
         for (x1 in x until x + n) {
             for (z1 in z until z + n) {
                 for (y1 in y until y + n) {

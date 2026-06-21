@@ -3,18 +3,8 @@ package ratph6.tessera.engine
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 
-/**
- * Runtime access-widening requests from TypeScript ([ratph6.tessera.api.AccessWidener]). Like Fabric's
- * static access widener, but applied live by [MixinTransformer] when a class is (re)loaded — so scripts
- * can open up private/final Minecraft members on demand.
- *
- * Indexed by internal class name (`net/minecraft/...`) so the transformer can find what to widen.
- * Entries carry their owning module so a `/te reload` or unload drops them.
- *
- * Caveat (enforced by the JVM, not us): modifier changes are only legal while a class is being defined.
- * A widening registered before its class loads takes effect; one registered after the class is already
- * loaded cannot be retro-applied this session (see [MixinManager]).
- */
+// Runtime access-widening requests, applied live by MixinTransformer on (re)load. Indexed by internal
+// class name. JVM only allows modifier changes while a class is being defined — widen before first load.
 object AccessRegistry {
 
     enum class Kind { CLASS, METHOD, FIELD }
@@ -23,10 +13,8 @@ object AccessRegistry {
         val targetBinary: String,
         val targetInternal: String,
         val kind: Kind,
-        /** Method or field name; null for [Kind.CLASS]. */
-        val member: String?,
-        /** Method descriptor to match exactly, or null to match every overload / not applicable. */
-        val descriptor: String?,
+        val member: String?, // null for CLASS
+        val descriptor: String?, // null = match every overload / n/a
         val module: TesseraModule?,
     )
 

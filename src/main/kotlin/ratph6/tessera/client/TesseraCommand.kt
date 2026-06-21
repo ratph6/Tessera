@@ -9,13 +9,13 @@ import ratph6.tessera.api.ChatLib
 import ratph6.tessera.engine.TesseraEngine
 import ratph6.tessera.triggers.TriggerRegistry
 
-/** Registers `/te ...` and every script-defined `command` trigger with brigadier. */
+// registers /te and every script-defined command with brigadier
 object TesseraCommand {
 
-    /** Script command names already added to the live dispatcher (brigadier has no removal, so we de-dup). */
+    // brigadier has no removal, so de-dup names we've already added
     private val registered = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
 
-    /** The live client dispatcher from the registration callback — reused to add commands after reloads. */
+    // kept so we can add commands after reloads
     @Volatile private var dispatcher: CommandDispatcher<FabricClientCommandSource>? = null
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
@@ -66,11 +66,7 @@ object TesseraCommand {
         registerScriptCommands(dispatcher)
     }
 
-    /**
-     * Add any not-yet-registered script `command` triggers to [dispatcher]. The `executes` body looks
-     * the trigger up by name at *invoke* time, so a node registered once always dispatches to the
-     * current trigger — survives reloads. Call [refreshScriptCommands] after modules (re)load.
-     */
+    // executes body looks the trigger up by name at invoke time, so a node registered once survives reloads
     private fun registerScriptCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         for (cmd in TriggerRegistry.allCommands()) {
             val name = cmd.name ?: continue
@@ -87,10 +83,7 @@ object TesseraCommand {
         }
     }
 
-    /**
-     * Re-register script commands into the live client dispatcher (called after `/te reload` or a
-     * module load). Without this, commands from modules loaded after startup parse as "unknown".
-     */
+    // call after reload/module load, else commands from late-loaded modules parse as "unknown"
     fun refreshScriptCommands() {
         dispatcher?.let { registerScriptCommands(it) }
     }

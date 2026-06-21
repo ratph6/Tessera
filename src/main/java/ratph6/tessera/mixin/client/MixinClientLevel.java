@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/** Feeds the {@code spawnParticle} trigger from the client level. Observe-only. */
+// spawnParticle trigger. Observe-only.
 @Mixin(ClientLevel.class)
 public class MixinClientLevel {
 

@@ -9,27 +9,10 @@ import java.util.jar.JarOutputStream
 import java.util.jar.Manifest
 import java.util.zip.ZipEntry
 
-/**
- * Obtains a live [Instrumentation] for the running JVM by loading a tiny java agent (see
- * [ratph6.tessera.agent.TesseraAgent]). This is what lets TypeScript mixins rewrite Minecraft classes
- * that are *already loaded* by the time a script runs — a static `.mixins.json` only gets a shot during
- * early class loading.
- *
- * Two attach strategies, tried in order:
- *  1. **Self-attach** — fast, in-process. Only works when the JVM was launched with
- *     `-Djdk.attach.allowAttachSelf=true` (the guard reads the *startup* property snapshot, so it can't
- *     be enabled at runtime). Set automatically for the dev run in build.gradle.kts.
- *  2. **External-process attach** — spawns a throwaway JVM ([ratph6.tessera.agent.AttachHelper]) that
- *     attaches to *us* by pid. A separate process attaching has no self-attach restriction, so this
- *     path needs **no launch flag** — the robust default for production.
- *
- * Both paths require the Java runtime to include the `jdk.attach` module (any full JDK does; some
- * stripped Minecraft runtime images do not). If neither works, mixins are disabled with a clear error
- * and the rest of Tessera keeps running.
- *
- * Failure is sticky: once attach fails we remember why and fail fast on subsequent calls instead of
- * retrying the (slow) attach every time.
- */
+// Obtains a live Instrumentation by loading a tiny java agent, so TS mixins can rewrite Minecraft
+// classes that are already loaded. Tries self-attach (needs -Djdk.attach.allowAttachSelf=true, dev
+// only) then external-process attach (no launch flag — robust default). Both need the jdk.attach
+// module. Failure is sticky: once attach fails we remember why and fail fast instead of retrying.
 object InstrumentationLoader {
 
     private val log = org.slf4j.LoggerFactory.getLogger("Tessera")
@@ -41,15 +24,14 @@ object InstrumentationLoader {
     @Volatile private var inst: Instrumentation? = null
     @Volatile private var failure: String? = null
 
-    /** The instrumentation if already attached, else null (does not attempt an attach). */
     fun instrumentationOrNull(): Instrumentation? = inst
 
-    /** Clear a remembered attach failure so the next [instrumentation] call retries (used by `/te reload`). */
+    // clear a remembered attach failure so the next instrumentation() retries (used by /te reload)
     fun resetFailureForRetry() {
         if (inst == null) failure = null
     }
 
-    /** The instrumentation, attaching on first use. Throws (with a user-facing message) on failure. */
+    // attaches on first use; throws with a user-facing message on failure
     fun instrumentation(): Instrumentation {
         inst?.let { return it }
         synchronized(this) {
@@ -68,7 +50,7 @@ object InstrumentationLoader {
     }
 
     private fun attach(): Instrumentation {
-        // Ensure jdk.attach is present before either strategy (both reflect into com.sun.tools.attach).
+        // both strategies reflect into com.sun.tools.attach — bail early if jdk.attach is absent
         try {
             Class.forName("com.sun.tools.attach.VirtualMachine")
         } catch (e: ClassNotFoundException) {
@@ -81,7 +63,7 @@ object InstrumentationLoader {
         val agentJar = buildAgentJar()
         val pid = ProcessHandle.current().pid().toString()
 
-        // 1) Fast path: self-attach (works only with -Djdk.attach.allowAttachSelf=true).
+        // fast path: self-attach (needs -Djdk.attach.allowAttachSelf=true)
         try {
             selfAttach(agentJar, pid)
             readInstrumentation()?.let { log.info("instrumentation attached for TS mixins (self-attach)"); return it }
@@ -89,16 +71,15 @@ object InstrumentationLoader {
             log.info("self-attach unavailable ({}); falling back to external attach", rootCause(e).message)
         }
 
-        // 2) Robust path: a separate JVM attaches to us — no launch flag needed.
+        // robust path: a separate JVM attaches to us — no launch flag needed
         externalAttach(agentJar, pid)
         return readInstrumentation()
             ?: throw IllegalStateException("agent attached but Instrumentation was not delivered")
     }
 
-    /** Read the [Instrumentation] the agent stashed on the system-loader copy of [AGENT_CLASS]. */
+    // The agent jar is appended to the system loader's search, so its separate copy of TesseraAgent —
+    // the one agentmain populated with the Instrumentation — is reachable there.
     private fun readInstrumentation(): Instrumentation? {
-        // The attach appends the agent jar to the system class loader's search, so its (separate) copy
-        // of TesseraAgent — the one agentmain populated — is reachable there.
         val holder = runCatching { Class.forName(AGENT_CLASS, true, ClassLoader.getSystemClassLoader()) }.getOrNull()
             ?: return null
         return holder.getField("inst").get(null) as? Instrumentation
@@ -114,7 +95,7 @@ object InstrumentationLoader {
         }
     }
 
-    /** Spawn a helper JVM that attaches to our pid and loads the agent (sidesteps the self-attach rule). */
+    // spawn a helper JVM that attaches to our pid (sidesteps the self-attach rule)
     private fun externalAttach(agentJar: String, pid: String) {
         val javaBin = javaExecutable()
         val cmd = listOf(
@@ -141,7 +122,7 @@ object InstrumentationLoader {
         return Path.of(home, "bin", name).toAbsolutePath().toString()
     }
 
-    /** Write the agent jar: both helper classes + a manifest that serves as agent, premain and launcher. */
+    // both helper classes + a manifest that serves as agent, premain and launcher
     private fun buildAgentJar(): String {
         val agentBytes = resourceBytes(AGENT_RESOURCE)
         val helperBytes = resourceBytes(HELPER_RESOURCE)
@@ -152,7 +133,7 @@ object InstrumentationLoader {
             mainAttributes[Attributes.Name("Premain-Class")] = AGENT_CLASS
             mainAttributes[Attributes.Name("Can-Retransform-Classes")] = "true"
             mainAttributes[Attributes.Name("Can-Redefine-Classes")] = "true"
-            // So the same jar can be launched directly by the external helper process.
+            // so the same jar can be launched directly by the external helper
             mainAttributes[Attributes.Name.MAIN_CLASS] = HELPER_CLASS
         }
 
@@ -173,7 +154,6 @@ object InstrumentationLoader {
         InstrumentationLoader::class.java.getResourceAsStream(path)?.use { it.readBytes() }
             ?: throw IllegalStateException("agent class resource missing from the mod jar ($path)")
 
-    /** Unwrap reflection/wrapper layers to the real failure for a useful message. */
     private fun rootCause(t: Throwable): Throwable {
         var cur: Throwable = t
         while (true) {

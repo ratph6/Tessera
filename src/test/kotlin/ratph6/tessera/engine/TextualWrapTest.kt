@@ -10,9 +10,8 @@ import kotlin.io.path.writeText
 
 class TextualWrapTest {
   @Test fun `textual wrap runs top-level state + callbacks`() {
-    // Textual wrap is the primary path: verify a top-level-only script loads and that module state
-    // mutates across callbacks (§, Num, Args, boolean toggle, double accumulation).
-    TriggerRegistry.clear() // singleton shared across tests
+    // textual wrap is the primary path: top-level-only script, module state mutates across callbacks
+    TriggerRegistry.clear() // shared singleton
     val captured = mutableListOf<String>()
     TesseraEngine.chatSink = { captured.add(it) }
     val modules = Files.createTempDirectory("tessera-tw").resolve("modules")
@@ -43,8 +42,7 @@ class TextualWrapTest {
   }
 
   @Test fun `the real cubed example compiles to a runnable class`() {
-    // Regression: the shipped Cubed module must compile (typed render param, long concat, many
-    // registrations, Tessellator/PlayerScales imports) and expose a runnable __tesseraEntry.
+    // regression: the shipped Cubed module must compile and expose a runnable __tesseraEntry
     val src = Files.readString(java.nio.file.Path.of("examples/cubed/index.ts"))
     val runner = TesseraCompiler.compile(src, "cubed/index.ts", Tessera::class.java.classLoader)
     assertTrue(

@@ -4,11 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import ratph6.mixintest.MixinAccessTarget
 
-/**
- * Reflection accessors must reach private members of an already-instantiated (loaded) object — the
- * case bytecode widening can't handle. Also checks JS-style numeric coercion (a `Double` written into
- * an `int` field).
- */
+// reflection reaches private members of an already-loaded object (bytecode widening can't)
 class ReflectAccessTest {
 
     @Test fun `reads, writes (with coercion) and invokes private members`() {
@@ -16,7 +12,7 @@ class ReflectAccessTest {
 
         assertEquals(42, ReflectAccess.getField(obj, "hidden"), "read private field")
 
-        // JS numbers arrive as Double; must coerce into the int field.
+        // JS numbers arrive as Double; must coerce into the int field
         ReflectAccess.setField(obj, "hidden", 100.0)
         assertEquals(100, ReflectAccess.getField(obj, "hidden"), "write private field with coercion")
 

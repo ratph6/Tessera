@@ -1,20 +1,12 @@
 package ratph6.tessera.triggers
 
-/**
- * Canonical trigger-type strings accepted by `register(type, cb)`, grouped as in the brief.
- *
- * Each constant is the exact string a script passes. [CANCELLABLE] lists the types whose callback
- * receives a cancellable event as its final argument; [CHAT_LIKE] lists the types that honour
- * `.setCriteria()` / `.setContains()` / ... pattern matching.
- */
+// trigger-type strings a script passes to register(type, cb)
 object TriggerType {
-    // chat & commands
     const val CHAT = "chat"
     const val ACTION_BAR = "actionBar"
     const val COMMAND = "command"
     const val MESSAGE_SENT = "messageSent"
 
-    // rendering (HUD)
     const val RENDER_OVERLAY = "renderOverlay"
     const val RENDER_CROSSHAIR = "renderCrosshair"
     const val RENDER_HOTBAR = "renderHotbar"
@@ -35,7 +27,6 @@ object TriggerType {
     const val RENDER_BOSS_HEALTH = "renderBossHealth"
     const val RENDER_PLAYER_LIST = "renderPlayerList"
 
-    // rendering (world)
     const val RENDER_WORLD = "renderWorld"
     const val RENDER_ENTITY = "renderEntity"
     const val POST_RENDER_ENTITY = "postRenderEntity"
@@ -43,7 +34,6 @@ object TriggerType {
     const val POST_RENDER_TILE_ENTITY = "postRenderTileEntity"
     const val BLOCK_HIGHLIGHT = "blockHighlight"
 
-    // world & game
     const val WORLD_LOAD = "worldLoad"
     const val WORLD_UNLOAD = "worldUnload"
     const val BLOCK_BREAK = "blockBreak"
@@ -52,21 +42,17 @@ object TriggerType {
     const val STEP = "step"
     const val GAME_LOAD = "gameLoad"
 
-    // entities
     const val ENTITY_DAMAGE = "entityDamage"
     const val ENTITY_DEATH = "entityDeath"
     const val SPAWN_PARTICLE = "spawnParticle"
 
-    // player
     const val PLAYER_JOIN = "playerJoin"
     const val PLAYER_LEAVE = "playerLeave"
 
-    // sound
     const val SOUND_PLAY = "soundPlay"
     const val NOTE_BLOCK_PLAY = "noteBlockPlay"
     const val NOTE_BLOCK_CHANGE = "noteBlockChange"
 
-    // gui / inventory
     const val GUI_OPEN = "guiOpen"
     const val GUI_CLOSE = "guiClose"
     const val GUI_KEY = "guiKey"
@@ -79,7 +65,6 @@ object TriggerType {
     const val PICKUP_ITEM = "pickupItem"
     const val DROP_ITEM = "dropItem"
 
-    // input
     const val KEY_DOWN = "keyDown"
     const val KEY_UP = "keyUp"
     const val MOUSE_CLICK = "mouseClick"
@@ -87,13 +72,12 @@ object TriggerType {
     const val MOUSE_SCROLLED = "mouseScrolled"
     const val MOUSE_MOVE = "mouseMove"
 
-    // network
     const val PACKET_RECEIVED = "packetReceived"
     const val PACKET_SENT = "packetSent"
     const val SERVER_CONNECT = "serverConnect"
     const val SERVER_DISCONNECT = "serverDisconnect"
 
-    /** Types whose JS callback receives a cancellable event object as its final argument. */
+    // types whose callback gets a cancellable event as its final arg
     val CANCELLABLE: Set<String> = setOf(
         CHAT, ACTION_BAR, MESSAGE_SENT,
         RENDER_CROSSHAIR, RENDER_HOTBAR, RENDER_HEALTH, RENDER_ARMOR, RENDER_FOOD, RENDER_MOUNT_HEALTH,
@@ -105,10 +89,9 @@ object TriggerType {
         KEY_DOWN, MOUSE_CLICK, MOUSE_SCROLLED, PACKET_RECEIVED, PACKET_SENT,
     )
 
-    /** Types that honour `.setCriteria()` and the match-mode setters. */
+    // types that honour .setCriteria() and the match-mode setters
     val CHAT_LIKE: Set<String> = setOf(CHAT, ACTION_BAR, MESSAGE_SENT)
 
-    /** Every known trigger type string — used for convention-based auto-registration. */
     val ALL: Set<String> = setOf(
         CHAT, ACTION_BAR, COMMAND, MESSAGE_SENT,
         RENDER_OVERLAY, RENDER_CROSSHAIR, RENDER_HOTBAR, RENDER_HEALTH, RENDER_ARMOR, RENDER_FOOD,
@@ -127,12 +110,8 @@ object TriggerType {
 
     fun isCancellable(type: String): Boolean = type in CANCELLABLE
 
-    /**
-     * Events that have a live source hook in this build (Fabric event, mixin, or engine pump) and so
-     * actually fire. Registering any other [ALL] type is accepted but warns, since its callback would
-     * never run — input (`keyDown`/`mouse*`) and per-element HUD renders aren't hookable on this MC
-     * version (reworked input + layered HUD); the rest are added incrementally.
-     */
+    // types that actually have a source hook in this build and so fire; others warn on register.
+    // input + per-element HUD renders aren't hookable on this MC version.
     val WIRED: Set<String> = setOf(
         CHAT, COMMAND, TICK, GAME_TICK, STEP, GAME_LOAD,
         WORLD_LOAD, WORLD_UNLOAD, SERVER_CONNECT, SERVER_DISCONNECT,
@@ -143,6 +122,6 @@ object TriggerType {
         INVENTORY_OPEN, INVENTORY_CLOSE,
     )
 
-    /** A known event type that currently has no source hook (registrable, but won't fire). */
+    // known type with no source hook: registrable, but won't fire
     fun isUnwired(type: String): Boolean = type in ALL && type !in WIRED
 }

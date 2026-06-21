@@ -1,52 +1,8 @@
 package ratph6.tessera.api
 
-/**
- * The catalogue of events you can register a trigger for, in the spirit of ChatTriggers'
- * `TriggerType`. Pass one to [Tessera.register]:
- *
- * ```ts
- * import { Tessera, Event, ChatLib } from 'ratph6.tessera.api';
- * Tessera.register(Event.CHAT, (message, event) => ChatLib.chat("pong!"));
- * ```
- *
- * Implemented as string constants (not a JVM enum) — `Event.CHAT` is the string `"chat"`. This is
- * deliberate: the swc4j bytecode compiler miscompiles passing an enum constant alongside a lambda
- * argument, whereas string constants compile cleanly. The script-facing syntax is identical.
- *
- * ## What your callback receives
- *
- * `Tessera.register(Event.X, (...args) => { })` — the arguments per event:
- *
- * | Event | Callback arguments | Notes |
- * |---|---|---|
- * | `CHAT` | `(message: string)` | the chat line; supports `setCriteria`/`setContains` |
- * | `COMMAND` | `(args: string[])` | words after the command; name via `.setName("x")` |
- * | `MESSAGE_SENT` | `(message: string)` | outgoing chat — cancel to block it |
- * | `ACTION_BAR` | `(text: string)` | overlay message — cancel to hide |
- * | `TICK` / `GAME_TICK` | `(tick: number)` | client tick count |
- * | `STEP` | `(dt: number)` | seconds since last step; rate via `.setFps()`/`.setDelay()` |
- * | `GAME_LOAD` | `()` | client finished starting |
- * | `WORLD_LOAD` / `WORLD_UNLOAD` | `()` | joined / left a world |
- * | `SERVER_CONNECT` | `(ip: string, port: number)` | |
- * | `SERVER_DISCONNECT` | `(reason: string)` | |
- * | `RENDER_OVERLAY` | `()` | draw the HUD via the `Renderer` API |
- * | `RENDER_ENTITY` / `POST_RENDER_ENTITY` | `(entity: EntityWrapper)` | `getName()`/`getX()`/`isPlayer()`/… |
- * | `ENTITY_DEATH` | `(entity: EntityWrapper)` | |
- * | `BLOCK_BREAK` | `(block: BlockWrapper)` | `getX()`/`getType()`/`isAir()` — cancel to veto |
- * | `SOUND_PLAY` | `(name: string)` | sound id, e.g. `minecraft:block.note_block.harp` |
- * | `SPAWN_PARTICLE` | `(name: string, x: number, y: number, z: number)` | |
- * | `GUI_OPENED` / `GUI_CLOSED` / `GUI_DRAW_BACKGROUND` | `(screenClassName: string)` | |
- * | `INVENTORY_OPEN` / `INVENTORY_CLOSE` | `(screenClassName: string)` | |
- * | `GUI_KEY` | `(keyEvent)` | net.minecraft `KeyEvent` |
- * | `GUI_MOUSE_CLICK` | `(mouseEvent)` | net.minecraft `MouseButtonEvent` |
- * | `PACKET_RECEIVED` / `PACKET_SENT` | `(packet, name: string)` | raw net.minecraft `Packet` + class name; observe-only |
- *
- * Custom bus: `Tessera.on("myEvent", (payload) => {})` receives whatever `Tessera.emit("myEvent", payload)` sent.
- *
- * Events not listed above have no source hook in this build — registering them is accepted but logs a
- * warning and the callback never fires (global key/mouse and per-element HUD renders aren't hookable
- * on this Minecraft version; the rest are added incrementally).
- */
+// Event ids for Tessera.register. String constants, not a JVM enum: swc4j miscompiles passing an
+// enum constant alongside a lambda arg, strings compile cleanly. Events with no hook in this build
+// register fine but never fire (logs a warning).
 object Event {
     // chat & messages
     const val CHAT = "chat"

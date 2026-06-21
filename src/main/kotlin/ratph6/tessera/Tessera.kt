@@ -7,8 +7,7 @@ object Tessera : ModInitializer {
     private val logger = LoggerFactory.getLogger("tessera")
 
 	override fun onInitialize() {
-		// Earliest mod hook — flip AWT out of headless now, before MC touches it, so the /te console
-		// window can open later. (TesseraConsole also clears the cached flag as a fallback.)
+		// flip AWT out of headless before MC touches it, so /te console can open later
 		runCatching { System.setProperty("java.awt.headless", "false") }
 		logger.info("Tessera initialized.")
 	}

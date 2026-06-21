@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/** Feeds the {@code entityDeath} trigger. Observe-only. */
+// entityDeath trigger. Observe-only.
 @Mixin(LivingEntity.class)
 public class MixinLivingEntity {
 

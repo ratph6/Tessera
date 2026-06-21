@@ -10,23 +10,18 @@ import java.nio.file.Files
 import kotlin.io.path.createDirectories
 import kotlin.io.path.writeText
 
-/**
- * Headless end-to-end test of the engine with the modern API: TS -> JVM bytecode, top-level
- * registration auto-wrapped (no main/export), `Event` enum constants, and **arrow-function
- * callbacks** dispatched via MethodHandle. No Minecraft. Uses `Tessera.log` (routes to the chat sink).
- */
+// headless e2e for the bytecode engine: TS -> JVM bytecode, arrow callbacks via MethodHandle
 class TesseraBytecodeEngineTest {
 
     @Test
     fun `arrow callbacks, Event enum and auto-wrapped top-level registration all work`() {
-        TriggerRegistry.clear() // singleton shared across tests
+        TriggerRegistry.clear() // shared singleton
         val captured = mutableListOf<String>()
         TesseraEngine.chatSink = { captured.add(it) }
 
         val root = Files.createTempDirectory("tessera-bc-test")
         val modules = root.resolve("modules")
 
-        // No main(), no export — just top-level register calls with arrow callbacks.
         modules.resolve("demo").createDirectories()
         modules.resolve("demo/tessera.json").writeText("""{"name":"demo","engine":"bytecode"}""")
         modules.resolve("demo/index.ts").writeText(
@@ -40,7 +35,7 @@ class TesseraBytecodeEngineTest {
             """.trimIndent(),
         )
 
-        // Convention module: no main(), exported function named after a trigger.
+        // convention module: exported function named after a trigger
         modules.resolve("conv").createDirectories()
         modules.resolve("conv/tessera.json").writeText("""{"name":"conv","engine":"bytecode"}""")
         modules.resolve("conv/index.ts").writeText(
@@ -52,7 +47,6 @@ class TesseraBytecodeEngineTest {
 
         TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
         try {
-            // Event.CHAT enum constant resolved + arrow callback registered with criteria.
             val chat = TriggerRegistry.byType("chat")
             assertEquals(1, chat.size, "one chat trigger")
             assertEquals(MatchMode.CONTAINS, chat[0].matchMode)
@@ -66,18 +60,16 @@ class TesseraBytecodeEngineTest {
             TesseraEngine.fireChat("chat", "ping there", "ping there")
             assertTrue(captured.any { it.contains("heard:ping there") }, "matching chat should fire arrow")
 
-            // generic dispatch + arity adaptation (tick() takes no args; we pass a count)
+            // arity adaptation: tick() takes no args, we pass a count
             captured.clear()
             TesseraEngine.dispatch("tick", 1L)
             assertTrue(captured.any { it.contains("conv-tick") }, "tick dispatch should run convention fn")
 
-            // custom event bus with arrow
             captured.clear()
             TesseraEngine.emitEvent("custom:hi", emptyArray())
             TesseraEngine.pump()
             assertTrue(captured.any { it.contains("hi-event") }, "custom event should reach Tessera.on arrow")
 
-            // timer arrow fires on pump
             assertTrue(captured.any { it.contains("timer-fired") }, "setTimeout arrow should fire on pump")
         } finally {
             TesseraEngine.shutdown()
@@ -92,8 +84,7 @@ class TesseraBytecodeEngineTest {
         val root = Files.createTempDirectory("tessera-cubed-test")
         val modules = root.resolve("modules")
 
-        // Mirrors how the Cubed port mutates module-level state from a callback and parses command
-        // args via Num/Args (no JS-style array indexing, no `as` casts).
+        // Cubed-port idioms: module-level state mutated from a callback, args via Num/Args
         modules.resolve("state").createDirectories()
         modules.resolve("state/tessera.json").writeText("""{"name":"state","engine":"bytecode"}""")
         modules.resolve("state/index.ts").writeText(
@@ -116,7 +107,6 @@ class TesseraBytecodeEngineTest {
             captured.clear()
             TesseraEngine.dispatchCommand("acc", arrayOf("2.5", "ignored"))
             TesseraEngine.dispatchCommand("acc", arrayOf("4"))
-            // module-level `let` persists + mutates across calls; Num/Args parse cleanly
             assertTrue(captured.any { it.contains("count=2 total=2.5 on=true") }, "first call: $captured")
             assertTrue(captured.any { it.contains("count=1 total=6.5 on=false") }, "second call: $captured")
         } finally {

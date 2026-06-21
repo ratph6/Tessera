@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import ratph6.tessera.engine.TesseraHooks;
 
-/** Feeds the {@code soundPlay} trigger — every sound that reaches the engine. Observe-only. */
+// soundPlay trigger. Observe-only.
 @Mixin(SoundEngine.class)
 public class MixinSoundEngine {
     @Inject(method = "play", at = @At("HEAD"))

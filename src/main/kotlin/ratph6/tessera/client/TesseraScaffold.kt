@@ -4,11 +4,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 
-/**
- * Sets up `.minecraft/tessera/` on first run: always refreshes the bundled `tessera.d.ts` (for IDE support)
- * and, when the modules directory doesn't exist yet, drops in the `hello-tessera` example so there is
- * something to test immediately.
- */
+// first-run setup of .minecraft/tessera/: refresh tessera.d.ts, and drop the hello-tessera example if modules dir is empty
 object TesseraScaffold {
     private val exampleFiles = listOf("hello-tessera/tessera.json", "hello-tessera/index.ts")
 
@@ -37,11 +33,7 @@ object TesseraScaffold {
         }
     }
 
-    /**
-     * Scaffold a new module folder `<modulesDir>/<name>` with a `tessera.json` manifest and a starter
-     * `index.ts`. Fails if the folder already exists (so we never clobber an existing module).
-     * Returns the module directory on success.
-     */
+    // fails if the folder already exists so we never clobber an existing module
     fun createModule(modulesDir: Path, name: String): Result<Path> = runCatching {
         val dir = modulesDir.resolve(name)
         require(!Files.exists(dir)) { "module '$name' already exists" }
@@ -78,10 +70,7 @@ object TesseraScaffold {
         }).setName("$name");
     """.trimIndent() + "\n"
 
-    /**
-     * Open [dir] in VSCodium. Resolves the launcher per-OS (`codium.cmd` via `cmd /c` on Windows,
-     * `codium` elsewhere) and starts it detached. Returns failure if the process can't be spawned.
-     */
+    // open dir in VSCodium, resolving the launcher per-OS
     fun openInEditor(dir: Path): Result<Unit> = runCatching {
         val windows = System.getProperty("os.name").orEmpty().lowercase().contains("win")
         val cmd = if (windows) listOf("cmd", "/c", "codium", dir.toString())

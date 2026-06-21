@@ -8,13 +8,8 @@ import kotlin.io.path.isDirectory
 import kotlin.io.path.name
 import kotlin.io.path.readText
 
-/**
- * Discovers and compiles modules under `<gameDir>/tessera/modules/<moduleName>/`.
- *
- * Each module has a single entry script (`index.ts` by default, or `entry` from `tessera.json`). It is
- * run on the engine named by the manifest's `engine` field: `"graal"` (default — real ECMAScript via
- * [GraalRuntime]) or `"bytecode"` (swc4j TS→JVM via [TesseraCompiler], native speed).
- */
+// Discovers and compiles modules under <gameDir>/tessera/modules/<name>/. Each has a single entry script,
+// run on the manifest's engine: "graal" (default) or "bytecode" (swc4j TS->JVM).
 object TesseraLoader {
     private val entryCandidates = listOf("index.ts", "index.js", "index.mts", "index.mjs", "index.tsx", "index.cts")
 

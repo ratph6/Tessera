@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.BlockState
 
-/** Lightweight wrapper around a Minecraft entity, returned to scripts. */
+// Lightweight wrapper around a Minecraft entity.
 class EntityWrapper(@JvmField val handle: Entity) {
     fun getX(): Double = handle.x
     fun getY(): Double = handle.y
@@ -17,14 +17,14 @@ class EntityWrapper(@JvmField val handle: Entity) {
     fun distanceTo(other: EntityWrapper): Double = handle.distanceTo(other.handle).toDouble()
     fun isPlayer(): Boolean = handle is net.minecraft.world.entity.player.Player
 
-    /** Body yaw in degrees, normalized to [-180, 180) (raw yRot accumulates unbounded). */
+    // raw yRot accumulates unbounded, so wrap to [-180, 180)
     fun getYaw(): Double = Mth.wrapDegrees(handle.yRot.toDouble())
 
-    /** True if this entity is the local player (matched by UUID, not name). */
+    // matched by UUID, not name
     fun isLocalPlayer(): Boolean = Mc.player?.let { handle.uuid == it.uuid } ?: false
 }
 
-/** Lightweight wrapper around an item stack. */
+// Lightweight wrapper around an item stack.
 class ItemWrapper(@JvmField val stack: ItemStack) {
     fun getName(): String = runCatching { stack.hoverName.string }.getOrDefault("")
     fun getStackSize(): Int = stack.count
@@ -32,7 +32,7 @@ class ItemWrapper(@JvmField val stack: ItemStack) {
     fun getRawName(): String = runCatching { stack.item.toString() }.getOrDefault("")
 }
 
-/** Lightweight wrapper around a block at a position. */
+// Lightweight wrapper around a block at a position.
 class BlockWrapper(@JvmField val state: BlockState, @JvmField val pos: BlockPos) {
     fun getX(): Int = pos.x
     fun getY(): Int = pos.y

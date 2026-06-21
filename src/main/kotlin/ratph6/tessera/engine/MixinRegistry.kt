@@ -4,33 +4,21 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 
-/** Where in a target method an injection runs. */
 object MixinAt {
     const val HEAD = "HEAD"
-    /** Every `return` site (alias `TAIL`). */
-    const val RETURN = "RETURN"
+    const val RETURN = "RETURN" // alias TAIL
 }
 
-/**
- * The set of TypeScript-defined injections currently active. Indexed two ways: by the internal class
- * name (`net/minecraft/...`) so [MixinTransformer] can find what to inject when a class is (re)loaded,
- * and by a small integer [Hook.id] that the injected bytecode passes back to [MixinHooks] to identify
- * which callback to run.
- *
- * Hooks carry their owning [module] so a `/te reload` or module unload can strip them again.
- */
+// Active TS injections, indexed by internal class name (for MixinTransformer) and by Hook.id (which the
+// injected bytecode passes back to MixinHooks). Hooks carry their module so a reload/unload can strip them.
 object MixinRegistry {
 
     data class Hook(
         val id: Int,
-        /** Binary name, e.g. `net.minecraft.client.Minecraft`. */
-        val targetBinary: String,
-        /** Internal name, e.g. `net/minecraft/client/Minecraft`. */
-        val targetInternal: String,
+        val targetBinary: String, // net.minecraft.client.Minecraft
+        val targetInternal: String, // net/minecraft/client/Minecraft
         val method: String,
-        /** Method descriptor to match exactly, or null to match every overload by name. */
-        val descriptor: String?,
-        /** One of [MixinAt]. */
+        val descriptor: String?, // null = match every overload by name
         val at: String,
         val module: TesseraModule?,
         val callback: TesseraCallback,
@@ -57,7 +45,6 @@ object MixinRegistry {
 
     fun get(id: Int): Hook? = byId[id]
 
-    /** Hooks whose target is the class with this internal name (`net/minecraft/...`). */
     fun hooksFor(internalName: String): List<Hook> = byClass[internalName] ?: emptyList()
 
     fun remove(hook: Hook): String? {
@@ -69,7 +56,7 @@ object MixinRegistry {
         return hook.targetBinary
     }
 
-    /** Drop every hook owned by [moduleName]; returns the binary names of classes that need reverting. */
+    // returns binary names of classes that need reverting
     fun removeModule(moduleName: String): Set<String> {
         val affected = HashSet<String>()
         for (hook in byId.values.toList()) {
@@ -81,7 +68,7 @@ object MixinRegistry {
         return affected
     }
 
-    /** Drop every hook; returns the binary names of all classes that need reverting. */
+    // returns binary names of classes that need reverting
     fun clear(): Set<String> {
         val affected = byId.values.mapTo(HashSet()) { it.targetBinary }
         byId.clear()

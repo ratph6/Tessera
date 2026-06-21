@@ -2,21 +2,14 @@ package ratph6.tessera.api
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-/** Tracks every [Display] so the HUD hook can render them each frame. */
+// Tracks every Display so the HUD hook can render them each frame.
 object DisplayManager {
     val displays = CopyOnWriteArrayList<Display>()
     fun clear() = displays.clear()
     fun renderAll() { for (d in displays) d.render() }
 }
 
-/**
- * A persistent multi-line HUD overlay. `import { Display } from 'ratph6.tessera.api'`.
- *
- * ```ts
- * const d = new Display().setX(5).setY(5);
- * export function onTick(): void { d.setLine(0, "FPS: " + ...); }
- * ```
- */
+// A persistent multi-line HUD overlay.
 class Display {
     private val lines = ArrayList<String>()
     private var x = 2
@@ -40,7 +33,6 @@ class Display {
     fun setShadow(value: Boolean): Display { shadow = value; return this }
     fun setVisible(value: Boolean): Display { visible = value; return this }
 
-    /** Remove this display so it stops rendering. */
     fun remove() { DisplayManager.displays.remove(this) }
 
     internal fun render() {

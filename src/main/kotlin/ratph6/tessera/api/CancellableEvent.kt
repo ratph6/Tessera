@@ -1,16 +1,6 @@
 package ratph6.tessera.api
 
-/**
- * Passed as the final argument to cancellable trigger callbacks. Call [cancel] to stop the
- * underlying game action (e.g. hide a chat message). Scripts:
- *
- * ```ts
- * import { CancellableEvent } from 'ratph6.tessera.api';
- * export function onChat(message: string, event: CancellableEvent): void {
- *   if (message.includes("spam")) event.cancel();
- * }
- * ```
- */
+// Passed last to cancellable callbacks; cancel() stops the underlying game action.
 class CancellableEvent {
     @JvmField var cancelled: Boolean = false
 

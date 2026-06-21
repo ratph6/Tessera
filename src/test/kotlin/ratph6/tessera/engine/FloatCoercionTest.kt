@@ -4,17 +4,14 @@ import org.graalvm.polyglot.Context
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-/** A stand-in for a Minecraft object with float setters (setYRot/setXRot are `float`). */
+// stand-in for a Minecraft object with float setters
 @Suppress("unused")
 class FloatTargetForTest {
     @JvmField var yaw: Float = 0f
     fun setYaw(v: Float) { yaw = v }
 }
 
-/**
- * Reproduces the GraalJS "Invalid or lossy primitive coercion" failure for double→float and proves the
- * host-access target-type mappings fix it: a fractional JS number reaches a Java `float` parameter.
- */
+// regression for GraalJS "lossy primitive coercion" on double→float; host-access mappings fix it
 class FloatCoercionTest {
 
     @Test fun `JS number passes into a float parameter`() {

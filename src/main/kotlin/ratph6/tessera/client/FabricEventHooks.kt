@@ -21,15 +21,10 @@ import ratph6.tessera.engine.TesseraEngine
 import ratph6.tessera.triggers.TriggerType
 import java.nio.file.Path
 
-/**
- * Connects Tessera to the game via Fabric API events (no mixins needed for these). The engine is
- * bootstrapped lazily on whichever of these fires first — always on the client/render thread, which
- * becomes the JS thread for all dispatch.
- */
+// wires Tessera to Fabric API events. engine boots lazily on whichever fires first (always render thread).
 object FabricEventHooks {
 
     fun register(modulesDir: Path, classLoader: ClassLoader) {
-        // Per-tick pump + the `tick` trigger.
         ClientTickEvents.END_CLIENT_TICK.register(ClientTickEvents.EndTick {
             ensureBootstrapped(modulesDir, classLoader)
             TesseraEngine.pump()
@@ -37,7 +32,7 @@ object FabricEventHooks {
             TesseraEngine.dispatch(TriggerType.GAME_TICK, TesseraEngine.tickCount)
         })
 
-        // HUD overlay drawing (new HudElement API; runs last so Tessera draws on top).
+        // runs last so Tessera draws on top
         HudElementRegistry.addLast(
             Identifier.fromNamespaceAndPath("tessera", "overlay"),
             HudElement { graphics, _ ->
@@ -51,13 +46,11 @@ object FabricEventHooks {
             },
         )
 
-        // Per-frame world render (end of the main level pass). Fires every frame, so scripts can do
-        // smooth, frame-rate-independent work (e.g. easing a camera rotation by elapsed time).
+        // fires every frame, so scripts can do frame-rate-independent work
         LevelRenderEvents.END_MAIN.register(LevelRenderEvents.EndMain { _ ->
             TesseraEngine.dispatch(TriggerType.RENDER_WORLD)
         })
 
-        // World / server connection lifecycle.
         ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { _, _, client ->
             TesseraEngine.dispatch(TriggerType.WORLD_LOAD)
             client.currentServer?.let { TesseraEngine.dispatch(TriggerType.SERVER_CONNECT, it.ip, 25565) }
@@ -67,19 +60,17 @@ object FabricEventHooks {
             TesseraEngine.dispatch(TriggerType.SERVER_DISCONNECT, "disconnected")
         })
 
-        // Client fully started (game loaded).
         ClientLifecycleEvents.CLIENT_STARTED.register(ClientLifecycleEvents.ClientStarted {
             ensureBootstrapped(modulesDir, classLoader)
             TesseraEngine.dispatch(TriggerType.GAME_LOAD)
         })
 
-        // Left-click on a block → blockBreak (cancel to veto the swing).
+        // cancel to veto the swing
         AttackBlockCallback.EVENT.register(AttackBlockCallback { _, world, _, pos, _ ->
             val cancelled = TesseraEngine.dispatch(TriggerType.BLOCK_BREAK, BlockWrapper(world.getBlockState(pos), pos))
             if (cancelled) InteractionResult.FAIL else InteractionResult.PASS
         })
 
-        // GUI / inventory lifecycle + in-screen input, via Fabric's per-screen events.
         ScreenEvents.AFTER_INIT.register(ScreenEvents.AfterInit { _, screen, _, _ ->
             val name = screen.javaClass.simpleName
             val container = screen is AbstractContainerScreen<*>
@@ -93,7 +84,7 @@ object FabricEventHooks {
             ScreenEvents.afterBackground(screen).register(ScreenEvents.AfterBackground { _, _, _, _, _ ->
                 TesseraEngine.dispatch(TriggerType.GUI_DRAW_BACKGROUND, name)
             })
-            // MC 26.1.2 delivers input as KeyEvent / MouseButtonEvent objects (read them in the script).
+            // MC 26.1.2 delivers input as KeyEvent / MouseButtonEvent objects
             ScreenKeyboardEvents.afterKeyPress(screen).register(ScreenKeyboardEvents.AfterKeyPress { _, keyEvent ->
                 TesseraEngine.dispatch(TriggerType.GUI_KEY, keyEvent)
             })
@@ -102,7 +93,6 @@ object FabricEventHooks {
             })
         })
 
-        // /te plus any script-defined commands.
         ClientCommandRegistrationCallback.EVENT.register(ClientCommandRegistrationCallback { dispatcher, _ ->
             ensureBootstrapped(modulesDir, classLoader)
             TesseraCommand.register(dispatcher)

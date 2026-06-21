@@ -8,21 +8,15 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.util.concurrent.ConcurrentHashMap
 
-/**
- * A remote, per-player scale table fetched from a URL — the engine primitive behind "global sizes"
- * style scripts. The JSON is an object of `{ "PlayerName": { "x": 2, "y": 2, "z": 2 }, ... }`.
- *
- * [fetch] downloads and parses off-thread (HTTP can't run on the render thread); the parsed table is
- * then read synchronously inside a `renderEntity` trigger via [has] / [getX] / [getY] / [getZ].
- * Lookups are case-insensitive.
- */
+// Remote per-player scale table fetched from a URL: { "PlayerName": { "x": 2, "y": 2, "z": 2 } }.
+// Lookups are case-insensitive.
 object PlayerScales {
 
     private class Scale(val x: Double, val y: Double, val z: Double)
 
     private val table = ConcurrentHashMap<String, Scale>()
 
-    /** Download and parse [url] in the background, replacing the current table on success. */
+    // fetch off-thread (HTTP can't run on the render thread); replaces the table on success
     @JvmStatic
     fun fetch(url: String) {
         Thread({

@@ -3,15 +3,9 @@ package ratph6.tessera.triggers
 import ratph6.tessera.engine.TesseraCallback
 import ratph6.tessera.engine.TesseraModule
 
-/** How a chat-like trigger's [TriggerMeta.criteria] is compared against an incoming message. */
 enum class MatchMode { EXACT, CONTAINS, START, END }
 
-/**
- * One registered trigger. The [callback] (an arrow function, or a named function via convention) is
- * stored as a uniform [TesseraCallback], so the engine invokes bytecode lambdas and GraalJS guest
- * functions the same way. [module] is nullable (null for `/te eval` snippets) and is only used to
- * unload a module's hooks.
- */
+// one registered trigger. module is null for /te eval snippets.
 class TriggerMeta(
     val id: Int,
     @Volatile var type: String,
@@ -22,15 +16,12 @@ class TriggerMeta(
     @Volatile var priority: Int = 0
     @Volatile var cancelable: Boolean = TriggerType.isCancellable(type)
 
-    // chat-like matching
     @Volatile var criteria: String? = null
     @Volatile var matchMode: MatchMode = MatchMode.EXACT
 
-    // step timing
     @Volatile var delayMs: Int = 1000
     @Volatile var lastStepNanos: Long = 0L
 
-    // misc filters
     @Volatile var name: String? = null
     @Volatile var sound: String? = null
     @Volatile var filterClass: String? = null

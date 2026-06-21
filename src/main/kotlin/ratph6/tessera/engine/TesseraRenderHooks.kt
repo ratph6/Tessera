@@ -6,14 +6,9 @@ import ratph6.tessera.api.EntityWrapper
 import ratph6.tessera.api.Tessellator
 import ratph6.tessera.triggers.TriggerType
 
-/**
- * Bridge between the entity-render mixin and the engine. Called on the render thread (which is the
- * JS thread), once before and once after each entity model is submitted, with the live [PoseStack].
- *
- * The `renderEntity` callback runs with [Tessellator] bound to [pose], so a script may push a
- * scale/rotation that transforms the model. Anything left on the stack is auto-popped after
- * `postRenderEntity` so a buggy or conditional script can never unbalance Minecraft's pose stack.
- */
+// Bridge between the entity-render mixin and the engine, called on the render (= JS) thread before and
+// after each entity model with the live PoseStack. Tessellator is bound to pose so a script can push a
+// transform; anything left is auto-popped after post so a buggy script can't unbalance the pose stack.
 object TesseraRenderHooks {
 
     @JvmStatic

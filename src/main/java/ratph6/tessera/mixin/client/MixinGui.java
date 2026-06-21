@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ratph6.tessera.engine.TesseraHooks;
 
-/** Feeds the {@code actionBar} trigger; cancelling hides the overlay (action-bar) message. */
+// actionBar trigger; cancel hides the message.
 @Mixin(Gui.class)
 public class MixinGui {
 

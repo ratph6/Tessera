@@ -11,24 +11,16 @@ import com.caoccao.javet.swc4j.options.Swc4jParseOptions
 import java.lang.reflect.Modifier
 import java.net.URI
 
-/**
- * Compiles a Tessera script (TypeScript / modern JS) straight to JVM bytecode using swc4j's
- * [ByteCodeCompiler]. Scripts run as native JVM classes — every `export function` becomes a static
- * method on the default `$` class, and scripts reach the Tessera API by importing our Kotlin objects by
- * package, e.g. `import { Tessera, Event } from 'ratph6.tessera.api'`.
- *
- * Because the compiler does not execute top-level statements, the source is first rewritten so any
- * top-level code (e.g. `Tessera.register(...)`) is moved into a generated `__tesseraEntry()` function that
- * the engine runs on load — so scripts need neither a `main()` nor `export`. Two wrap strategies
- * exist (see [compile]): a textual one (default; deterministic) and an AST one (fallback).
- */
+// Compiles a script straight to JVM bytecode via swc4j. Every `export function` becomes a static method
+// on the default `$` class. swc4j doesn't run top-level statements, so they're first moved into a
+// generated __tesseraEntry() the engine runs on load — two wrap strategies (textual + AST), see compile().
 object TesseraCompiler {
 
     private val log = org.slf4j.LoggerFactory.getLogger("Tessera")
 
     private val parser = Swc4j()
 
-    /** Test-only: skip the textual wrap to exercise the AST wrap path directly. */
+    // test-only: skip the textual wrap to exercise the AST path directly
     internal var disableTextualWrap = false
 
     private val typeAliasMap: Map<String, String> = mapOf(
@@ -63,17 +55,10 @@ object TesseraCompiler {
                 .build(),
         )
 
-    /**
-     * Compile [source] to runnable JVM classes (inlining Event.*, auto-wrapping top-level code).
-     *
-     * Tries, in order: the textual top-level wrap, the AST-based wrap, then the source as-is. Each
-     * attempt both compiles *and* force-loads the `$` class, so a swc4j codegen bug that emits
-     * unverifiable bytecode is caught here and the next strategy is tried — a bad attempt can never
-     * escape as a raw VerifyError. The textual wrap is primary because the AST wrap slices the source
-     * using swc4j byte-position spans, which drift across the shared parser's lifetime (a later module
-     * sees offset spans) and can yield bad bytecode; the textual wrap is deterministic. If no strategy
-     * yields a loadable class, throws with the real cause.
-     */
+    // Tries textual wrap, AST wrap, then as-is. Each attempt force-loads the `$` class so swc4j codegen
+    // bugs (unverifiable bytecode) are caught here and the next strategy tried — never escaping as a raw
+    // VerifyError. Textual is primary: the AST wrap's swc4j byte spans drift across the shared parser's
+    // lifetime and can yield bad bytecode, whereas textual is deterministic.
     fun compile(source: String, fileName: String, parentClassLoader: ClassLoader): ByteCodeRunner {
         val inlined = inlineEvents(source)
         check(inlined, fileName)
@@ -83,7 +68,7 @@ object TesseraCompiler {
             if (src == null) return null
             return try {
                 val runner = newCompiler(parentClassLoader).compile(src)
-                runner.defaultClass // force class load so a VerifyError/LinkageError surfaces now
+                runner.defaultClass // force load so a VerifyError/LinkageError surfaces now
                 runner
             } catch (t: Throwable) {
                 log.warn("{} compile failed for {} ({})", label, fileName, t.toString())
@@ -92,12 +77,10 @@ object TesseraCompiler {
             }
         }
 
-        // Primary: textual wrap (no swc4j AST/spans → deterministic). Handles the common Tessera script
-        // shape: imports + top-level statements + arrow callbacks.
+        // primary: textual wrap (deterministic, handles the common imports + statements + arrows shape)
         if (!disableTextualWrap) attempt("textual-wrap", textualWrapTopLevel(inlined))?.let { return it }
 
-        // Fallback: AST wrap. Correctly relocates top-level function/class declarations (which the
-        // textual wrap can't), for scripts that use them.
+        // fallback: AST wrap relocates top-level function/class declarations the textual wrap can't
         val astWrapped = try {
             wrapTopLevel(inlined, fileName)
         } catch (t: Throwable) {
@@ -105,8 +88,7 @@ object TesseraCompiler {
         }
         attempt("ast-wrap", astWrapped)?.let { log.info("compiled {} via AST-wrap fallback", fileName); return it }
 
-        // Last resort: compile as-is. Only yields a default class if the script declares
-        // `export function`s (a top-level-only script needs one of the wraps above).
+        // last resort: as-is. Only yields a default class if the script declares `export function`s.
         attempt("as-is", inlined)?.let { return it }
 
         throw IllegalStateException(
@@ -116,19 +98,13 @@ object TesseraCompiler {
         )
     }
 
-    /** Lines that must stay at module scope (not be moved into `__tesseraEntry`). */
+    // lines that must stay at module scope (not move into __tesseraEntry)
     private val keepAtTopLevel =
         Regex("""^\s*(import\b|export\b|declare\b|interface\s|type\s|enum\s|abstract\s+class\b|class\s|function\s|async\s+function\b)""")
 
-    /**
-     * Keeps import/declaration lines at module scope and moves everything else (statements,
-     * `let`/`const`, registrations) into a generated `__tesseraEntry()` so arrow callbacks still share the
-     * same scope. Purely textual — no swc4j AST — so it's deterministic. Returns null if there's
-     * nothing executable to move (e.g. a convention module of only `export function`s).
-     *
-     * Limitation: a top-level `function`/`class` *declaration* spanning multiple lines isn't relocated
-     * correctly (only its first line is kept up top); such scripts fall through to the AST wrap.
-     */
+    // Keeps imports/declarations at module scope, moves everything else into __tesseraEntry(). Returns
+    // null when nothing's executable to move. Limitation: a multi-line top-level function/class decl
+    // isn't relocated correctly (only its first line stays up top) — those fall through to the AST wrap.
     private fun textualWrapTopLevel(source: String): String? {
         val header = StringBuilder()
         val body = StringBuilder()
@@ -151,7 +127,6 @@ object TesseraCompiler {
         }
     }
 
-    /** Names + string values of every constant on ratph6.tessera.api.Event. */
     private val eventConstants: Map<String, String> by lazy {
         runCatching {
             Class.forName("ratph6.tessera.api.Event").declaredFields
@@ -160,11 +135,8 @@ object TesseraCompiler {
         }.getOrDefault(emptyMap())
     }
 
-    /**
-     * Replace `Event.CHAT` etc. with their string literal ("chat") before compiling. swc4j
-     * miscompiles a static-field access passed alongside a lambda argument, but compiles a string
-     * literal cleanly — so scripts keep the nice `Event.CHAT` syntax while the compiler sees "chat".
-     */
+    // Replace Event.CHAT etc. with their string literal before compiling: swc4j miscompiles a static-field
+    // access passed alongside a lambda arg, but compiles the literal cleanly.
     private fun inlineEvents(source: String): String {
         if (!source.contains("Event.") || eventConstants.isEmpty()) return source
         return Regex("""\bEvent\.([A-Za-z_][A-Za-z0-9_]*)\b""").replace(source) { m ->
@@ -179,11 +151,7 @@ object TesseraCompiler {
         else -> Swc4jMediaType.TypeScript
     }
 
-    /**
-     * Returns a rewritten source where top-level statements are moved into `export function
-     * __tesseraEntry()`, leaving imports + declarations (functions, classes, types) in place. Returns
-     * null if parsing fails or there are no top-level statements to move (so the caller compiles raw).
-     */
+    // AST equivalent of textualWrapTopLevel; returns null if parsing fails or nothing to move.
     private fun wrapTopLevel(source: String, fileName: String): String? {
         val options = Swc4jParseOptions()
             .setSpecifier(URI.create("file:///$fileName").toURL())

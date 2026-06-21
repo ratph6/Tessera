@@ -2,14 +2,9 @@ package ratph6.tessera.api
 
 import net.minecraft.client.gui.GuiGraphicsExtractor
 
-/**
- * 2D HUD drawing. Only valid inside a `renderOverlay` / HUD trigger, where Tessera sets [graphics] to
- * the frame's draw target (the 26.1.2 `GuiGraphicsExtractor`, i.e. the renamed GuiGraphics).
- *
- * Coordinates are integers; colours are packed ARGB (use [color]).
- */
+// 2D HUD drawing. Only valid inside a renderOverlay/HUD trigger. Colours are packed ARGB (use color()).
 object Renderer {
-    /** Set by the HUD render hook for the duration of each frame's overlay dispatch. */
+    // set by the HUD render hook for each frame's overlay dispatch
     @JvmField var graphics: GuiGraphicsExtractor? = null
 
     private val font get() = Mc.client.font
@@ -26,7 +21,7 @@ object Renderer {
         graphics?.text(font, text, x, y, color, true)
     }
 
-    /** Horizontal or vertical line (diagonals aren't supported by the HUD draw target). */
+    // horizontal or vertical only — the HUD draw target can't do diagonals
     @JvmStatic fun drawLine(color: Int, x1: Int, y1: Int, x2: Int, y2: Int, width: Int) {
         val g = graphics ?: return
         if (y1 == y2) g.fill(minOf(x1, x2), y1, maxOf(x1, x2), y1 + width.coerceAtLeast(1), color)

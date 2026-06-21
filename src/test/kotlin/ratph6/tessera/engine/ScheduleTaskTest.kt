@@ -8,7 +8,6 @@ import java.nio.file.Files
 import kotlin.io.path.createDirectories
 import kotlin.io.path.writeText
 
-/** Verifies Tessera.scheduleTask fires after exactly N client-tick pumps (not before). */
 class ScheduleTaskTest {
 
     @Test fun `scheduleTask fires after N pumps`() {
@@ -29,13 +28,13 @@ class ScheduleTaskTest {
         TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
         try {
             fun fired() = captured.any { it.contains("fired") }
-            TesseraEngine.pump() // tick 1
-            TesseraEngine.pump() // tick 2
+            TesseraEngine.pump()
+            TesseraEngine.pump()
             assertEquals(false, fired(), "must not fire before 3 ticks elapse")
-            TesseraEngine.pump() // tick 3 → due
+            TesseraEngine.pump() // 3rd tick → due
             assertEquals(true, fired(), "should fire on the 3rd tick")
 
-            // one-shot: does not fire again
+            // one-shot
             captured.clear()
             TesseraEngine.pump()
             TesseraEngine.pump()

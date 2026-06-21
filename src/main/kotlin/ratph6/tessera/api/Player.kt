@@ -2,7 +2,7 @@ package ratph6.tessera.api
 
 import net.minecraft.util.Mth
 
-/** The local player. All getters return safe defaults when no player exists yet. */
+// The local player. Getters return safe defaults when no player exists yet.
 object Player {
     @JvmStatic fun getX(): Double = Mc.player?.x ?: 0.0
     @JvmStatic fun getY(): Double = Mc.player?.y ?: 0.0
@@ -12,7 +12,7 @@ object Player {
     @JvmStatic fun getMotionY(): Double = Mc.player?.deltaMovement?.y ?: 0.0
     @JvmStatic fun getMotionZ(): Double = Mc.player?.deltaMovement?.z ?: 0.0
 
-    /** Yaw normalized to [-180, 180) — Minecraft's raw yRot accumulates unbounded as you keep turning. */
+    // raw yRot accumulates unbounded, so wrap to [-180, 180)
     @JvmStatic fun getYaw(): Double = Mth.wrapDegrees((Mc.player?.yRot ?: 0f).toDouble())
     @JvmStatic fun getPitch(): Double = (Mc.player?.xRot ?: 0f).toDouble()
 
@@ -34,7 +34,6 @@ object Player {
 
     @JvmStatic fun getHeldItem(): ItemWrapper? = Mc.player?.mainHandItem?.let { ItemWrapper(it) }
 
-    /** Distance from the player to an entity. */
     @JvmStatic fun distanceTo(entity: EntityWrapper): Double =
         (Mc.player?.distanceTo(entity.handle) ?: 0f).toDouble()
 }
