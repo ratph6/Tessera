@@ -1,0 +1,8 @@
+{
+  "name": "hello-tessera",
+  "version": "1.0.0",
+  "author": "you",
+  "description": "Tessera starter example — chat trigger + client command",
+  "entry": "index.ts",
+  "priority": 0
+}

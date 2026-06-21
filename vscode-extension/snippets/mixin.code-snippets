@@ -1,0 +1,59 @@
+{
+  "Mixin HEAD inject": {
+    "prefix": "mixin",
+    "body": [
+      "Mixin.inject('${1:net.minecraft.client.Minecraft}', '${2:tick}', (ctx) => {",
+      "\t$0",
+      "});"
+    ],
+    "description": "Inject a callback at the HEAD of a Minecraft method (TS mixin)."
+  },
+  "Mixin cancel": {
+    "prefix": "mixincancel",
+    "body": [
+      "Mixin.inject('${1:net.minecraft.client.player.LocalPlayer}', '${2:aiStep}', 'HEAD', (ctx) => {",
+      "\tctx.cancel();",
+      "});"
+    ],
+    "description": "Cancel a Minecraft method entirely (HEAD mixin)."
+  },
+  "Mixin return override": {
+    "prefix": "mixinreturn",
+    "body": [
+      "Mixin.inject('${1:net.minecraft.client.player.LocalPlayer}', '${2:isSprinting}', 'RETURN', (ctx) => {",
+      "\tctx.setReturnValue(${3:true});",
+      "});"
+    ],
+    "description": "Override a Minecraft method's return value (RETURN mixin)."
+  },
+  "Access widen field": {
+    "prefix": "widenfield",
+    "body": ["AccessWidener.widenField('${1:net.minecraft.client.Minecraft}', '${2:gameMode}');"],
+    "description": "Make a private/final Minecraft field public + mutable (apply before the class loads)."
+  },
+  "Access widen method": {
+    "prefix": "widenmethod",
+    "body": ["AccessWidener.widenMethod('${1:net.minecraft.client.Minecraft}', '${2:setScreen}');"],
+    "description": "Make a private Minecraft method public (apply before the class loads)."
+  },
+  "Access make extendable": {
+    "prefix": "makeextendable",
+    "body": ["AccessWidener.makeExtendable('${1:net.minecraft.world.entity.Mob}');"],
+    "description": "Drop final on a Minecraft class so it can be subclassed (apply before the class loads)."
+  },
+  "Reflect get field": {
+    "prefix": "getfield",
+    "body": ["AccessWidener.getField(${1:obj}, '${2:fieldName}')"],
+    "description": "Read a private field via reflection (works on already-loaded classes)."
+  },
+  "Reflect set field": {
+    "prefix": "setfield",
+    "body": ["AccessWidener.setField(${1:obj}, '${2:fieldName}', ${3:value});"],
+    "description": "Write a private field via reflection (works on already-loaded classes)."
+  },
+  "Reflect invoke": {
+    "prefix": "reflectinvoke",
+    "body": ["AccessWidener.invoke(${1:obj}, '${2:methodName}'${3:, args});"],
+    "description": "Call a private method via reflection (works on already-loaded classes)."
+  }
+}

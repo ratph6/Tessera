@@ -1,0 +1,37 @@
+# Publishes the committed Dokka API docs (docs/) to GitHub Pages.
+# (The docs are committed as static HTML because Minecraft 26.1.2 isn't on public maven, so a CI
+# runner can't build them with Gradle. Regenerate locally with: ./gradlew dokkaGenerate && cp -r
+# build/dokka/html/. docs/)
+#
+# The same docs/ folder is what Cloudflare Pages serves at https://jim-1w4.pages.dev
+# (framework preset: none, build command: none, output directory: docs).
+name: docs
+
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - id: deployment
+        uses: actions/deploy-pages@v4

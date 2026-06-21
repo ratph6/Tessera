@@ -1,0 +1,8 @@
+{
+  "name": "cubed",
+  "version": "1.0.2",
+  "author": "ratph6, Slic_e (Tessera port)",
+  "description": "Player size & spin via entity-render matrix hooks. Command-based (no GUI). /cubed",
+  "entry": "index.ts",
+  "engine": "bytecode"
+}

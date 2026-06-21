@@ -1,0 +1,23 @@
+{
+	"required": true,
+	"package": "ratph6.tessera.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [],
+	"client": [
+		"client.MixinChatComponent",
+		"client.MixinClientLevel",
+		"client.MixinClientPacketListener",
+		"client.MixinConnection",
+		"client.MixinEntityRenderState",
+		"client.MixinEntityRenderDispatcher",
+		"client.MixinGui",
+		"client.MixinLivingEntity",
+		"client.MixinSoundEngine"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

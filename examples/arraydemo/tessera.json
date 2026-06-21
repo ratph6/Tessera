@@ -1,0 +1,8 @@
+{
+  "name": "arraydemo",
+  "version": "1.0.0",
+  "author": "ratph6",
+  "description": "Shows the GraalJS engine: real arrays, let, closures, template strings — no Store/Num/Args.",
+  "entry": "index.ts",
+  "engine": "graal"
+}

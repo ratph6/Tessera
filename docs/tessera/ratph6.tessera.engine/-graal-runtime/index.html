@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>GraalRuntime</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../index.html" tabindex="1">
+                    tessera
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+1.0.0        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    tessera
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="tessera::ratph6.tessera.engine/GraalRuntime///PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../../index.html">tessera</a><span class="delimiter">/</span><a href="../index.html">ratph6.tessera.engine</a><span class="delimiter">/</span><span class="current">GraalRuntime</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Graal</span><wbr></wbr><span><span>Runtime</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">GraalRuntime</a></div><p class="paragraph">The GraalJS execution engine — the &quot;real JavaScript&quot; path. A Tessera module's TypeScript is first transpiled to JavaScript by swc4j (here used as a plain TS→JS transpiler, <i>not</i> its bytecode compiler) and then evaluated as an ES module on a GraalJS <span data-unresolved-link="org.graalvm.polyglot/Context///PointingToDeclaration/">Context</span>. Scripts get full ECMAScript: real arrays with <code class="lang-kotlin">.map</code>/<code class="lang-kotlin">.filter</code>, closures over reassigned <code class="lang-kotlin">let</code>s, objects, JSON, etc. — none of the bytecode path's &quot;half-Java&quot; workarounds (<code class="lang-kotlin">Store</code>/<code class="lang-kotlin">Num</code>/<code class="lang-kotlin">Args</code>).</p><p class="paragraph">The Tessera API objects (<code class="lang-kotlin">Tessera</code>, <code class="lang-kotlin">Event</code>, <code class="lang-kotlin">ChatLib</code>, ...) are bound as JS globals, so the familiar <code class="lang-kotlin">import { Tessera, Event } from 'ratph6.tessera.api'</code> line is simply stripped before evaluation (the names resolve to the globals instead).</p><p class="paragraph">Single-threaded by construction: the <span data-unresolved-link="org.graalvm.polyglot/Context///PointingToDeclaration/">Context</span> is created on, and only ever touched from, the JS thread — which is also where module loading, dispatch and timers run. This matches GraalJS's single-thread-at-a-time contract; no locking needed.</p><p class="paragraph">Security: host access is broad on the <i>bound</i> objects, but <code class="lang-kotlin">allowHostClassLookup</code> is left off, so guest code cannot reach <code class="lang-kotlin">Runtime</code>/<code class="lang-kotlin">ProcessBuilder</code>/etc. — only the bound API surface and whatever it returns. Mirrors the intent of <a href="../-tessera-compiler/index.html">TesseraCompiler</a>'s import ban.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="632645213%2FFunctions%2F-251573632" anchor-label="evalSnippet" id="632645213%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="eval-snippet.html"><span>eval</span><wbr></wbr><span><span>Snippet</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="632645213%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="eval-snippet.html"><span class="token function">evalSnippet</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">code<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.graalvm.polyglot/Value///PointingToDeclaration/">Value</span></div><div class="brief "><p class="paragraph">Transpile + run a one-off snippet as a script (for <code class="lang-kotlin">/te eval</code>). Tessera + Minecraft names need no import.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1111631031%2FFunctions%2F-251573632" anchor-label="loadModule" id="1111631031%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load-module.html"><span>load</span><wbr></wbr><span><span>Module</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1111631031%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="load-module.html"><span class="token function">loadModule</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">manifest<span class="token operator">: </span><a href="../-tessera-manifest/index.html">TesseraManifest</a><span class="token punctuation">, </span></span><span class="parameter ">dir<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a><span class="token punctuation">, </span></span><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-graal-module/index.html">GraalModule</a></div><div class="brief "><p class="paragraph">Transpile + evaluate a module's TypeScript as an ES module. Top-level code runs immediately (so top-level <code class="lang-kotlin">Tessera.register(...)</code> calls register against module); the returned namespace holds any exported functions (for the <code class="lang-kotlin">main</code>/<code class="lang-kotlin">init</code> entry and trigger-name conventions).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-785916519%2FFunctions%2F-251573632" anchor-label="reset" id="-785916519%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reset.html"><span><span>reset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-785916519%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="reset.html"><span class="token function">reset</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Dispose the context so a reload starts from clean JS global state. Next load rebuilds it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1129918362%2FFunctions%2F-251573632" anchor-label="transpileTs" id="1129918362%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transpile-ts.html"><span>transpile</span><wbr></wbr><span><span>Ts</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1129918362%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="transpile-ts.html"><span class="token function">transpileTs</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">source<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">fileName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Transpile TypeScript (or JS) <a href="transpile-ts.html">source</a> to plain ES-module JavaScript.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>TriggerType</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../../index.html" tabindex="1">
+                    tessera
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+1.0.0        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    tessera
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="tessera::ratph6.tessera.triggers/TriggerType///PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../../index.html">tessera</a><span class="delimiter">/</span><a href="../index.html">ratph6.tessera.triggers</a><span class="delimiter">/</span><span class="current">TriggerType</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Trigger</span><wbr></wbr><span><span>Type</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">TriggerType</a></div><p class="paragraph">Canonical trigger-type strings accepted by <code class="lang-kotlin">register(type, cb)</code>, grouped as in the brief.</p><p class="paragraph">Each constant is the exact string a script passes. <a href="-c-a-n-c-e-l-l-a-b-l-e.html">CANCELLABLE</a> lists the types whose callback receives a cancellable event as its final argument; <a href="-c-h-a-t_-l-i-k-e.html">CHAT_LIKE</a> lists the types that honour <code class="lang-kotlin">.setCriteria()</code> / <code class="lang-kotlin">.setContains()</code> / ... pattern matching.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1236787810%2FProperties%2F-251573632" anchor-label="ACTION_BAR" id="1236787810%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-a-c-t-i-o-n_-b-a-r.html"><span>ACTION_</span><wbr></wbr><span>BAR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1236787810%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-a-c-t-i-o-n_-b-a-r.html">ACTION_BAR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2040355437%2FProperties%2F-251573632" anchor-label="ALL" id="2040355437%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-a-l-l.html"><span><span>ALL</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2040355437%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-a-l-l.html">ALL</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Every known trigger type string — used for convention-based auto-registration.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1495240223%2FProperties%2F-251573632" anchor-label="BLOCK_BREAK" id="-1495240223%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-b-l-o-c-k_-b-r-e-a-k.html"><span>BLOCK_</span><wbr></wbr><span>BREAK</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1495240223%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-b-l-o-c-k_-b-r-e-a-k.html">BLOCK_BREAK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="758485580%2FProperties%2F-251573632" anchor-label="BLOCK_HIGHLIGHT" id="758485580%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-b-l-o-c-k_-h-i-g-h-l-i-g-h-t.html"><span>BLOCK_</span><wbr></wbr><span>HIGHLIGHT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="758485580%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-b-l-o-c-k_-h-i-g-h-l-i-g-h-t.html">BLOCK_HIGHLIGHT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1784118302%2FProperties%2F-251573632" anchor-label="CANCELLABLE" id="-1784118302%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-a-n-c-e-l-l-a-b-l-e.html"><span><span>CANCELLABLE</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1784118302%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-c-a-n-c-e-l-l-a-b-l-e.html">CANCELLABLE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Types whose JS callback receives a cancellable event object as its final argument.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-151520140%2FProperties%2F-251573632" anchor-label="CHAT" id="-151520140%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-h-a-t.html"><span><span>CHAT</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-151520140%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-c-h-a-t.html">CHAT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-584116816%2FProperties%2F-251573632" anchor-label="CHAT_LIKE" id="-584116816%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-h-a-t_-l-i-k-e.html"><span>CHAT_</span><wbr></wbr><span>LIKE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-584116816%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-c-h-a-t_-l-i-k-e.html">CHAT_LIKE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Types that honour <code class="lang-kotlin">.setCriteria()</code> and the match-mode setters.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-204353661%2FProperties%2F-251573632" anchor-label="COMMAND" id="-204353661%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-o-m-m-a-n-d.html"><span><span>COMMAND</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-204353661%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-c-o-m-m-a-n-d.html">COMMAND</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1213438197%2FProperties%2F-251573632" anchor-label="DROP_ITEM" id="-1213438197%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-r-o-p_-i-t-e-m.html"><span>DROP_</span><wbr></wbr><span>ITEM</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1213438197%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-d-r-o-p_-i-t-e-m.html">DROP_ITEM</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-415621469%2FProperties%2F-251573632" anchor-label="ENTITY_DAMAGE" id="-415621469%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-e-n-t-i-t-y_-d-a-m-a-g-e.html"><span>ENTITY_</span><wbr></wbr><span>DAMAGE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-415621469%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-e-n-t-i-t-y_-d-a-m-a-g-e.html">ENTITY_DAMAGE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1806908884%2FProperties%2F-251573632" anchor-label="ENTITY_DEATH" id="1806908884%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-e-n-t-i-t-y_-d-e-a-t-h.html"><span>ENTITY_</span><wbr></wbr><span>DEATH</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1806908884%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-e-n-t-i-t-y_-d-e-a-t-h.html">ENTITY_DEATH</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-280398245%2FProperties%2F-251573632" anchor-label="GAME_LOAD" id="-280398245%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-a-m-e_-l-o-a-d.html"><span>GAME_</span><wbr></wbr><span>LOAD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-280398245%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-a-m-e_-l-o-a-d.html">GAME_LOAD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="343266692%2FProperties%2F-251573632" anchor-label="GAME_TICK" id="343266692%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-a-m-e_-t-i-c-k.html"><span>GAME_</span><wbr></wbr><span>TICK</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="343266692%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-a-m-e_-t-i-c-k.html">GAME_TICK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1179567910%2FProperties%2F-251573632" anchor-label="GUI_CLOSE" id="-1179567910%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-u-i_-c-l-o-s-e.html"><span>GUI_</span><wbr></wbr><span>CLOSE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1179567910%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-u-i_-c-l-o-s-e.html">GUI_CLOSE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-604816759%2FProperties%2F-251573632" anchor-label="GUI_DRAW_BACKGROUND" id="-604816759%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-u-i_-d-r-a-w_-b-a-c-k-g-r-o-u-n-d.html"><span>GUI_</span><wbr></wbr><span>DRAW_</span><wbr></wbr><span>BACKGROUND</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-604816759%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-u-i_-d-r-a-w_-b-a-c-k-g-r-o-u-n-d.html">GUI_DRAW_BACKGROUND</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="35088275%2FProperties%2F-251573632" anchor-label="GUI_KEY" id="35088275%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-u-i_-k-e-y.html"><span>GUI_</span><wbr></wbr><span>KEY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="35088275%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-u-i_-k-e-y.html">GUI_KEY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1225532036%2FProperties%2F-251573632" anchor-label="GUI_MOUSE_CLICK" id="1225532036%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-u-i_-m-o-u-s-e_-c-l-i-c-k.html"><span>GUI_</span><wbr></wbr><span>MOUSE_</span><wbr></wbr><span>CLICK</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1225532036%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-u-i_-m-o-u-s-e_-c-l-i-c-k.html">GUI_MOUSE_CLICK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-575847906%2FProperties%2F-251573632" anchor-label="GUI_OPEN" id="-575847906%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-u-i_-o-p-e-n.html"><span>GUI_</span><wbr></wbr><span>OPEN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-575847906%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-g-u-i_-o-p-e-n.html">GUI_OPEN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-957308967%2FProperties%2F-251573632" anchor-label="INVENTORY_CLOSE" id="-957308967%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-i-n-v-e-n-t-o-r-y_-c-l-o-s-e.html"><span>INVENTORY_</span><wbr></wbr><span>CLOSE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-957308967%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-i-n-v-e-n-t-o-r-y_-c-l-o-s-e.html">INVENTORY_CLOSE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1232437055%2FProperties%2F-251573632" anchor-label="INVENTORY_OPEN" id="1232437055%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-i-n-v-e-n-t-o-r-y_-o-p-e-n.html"><span>INVENTORY_</span><wbr></wbr><span>OPEN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1232437055%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-i-n-v-e-n-t-o-r-y_-o-p-e-n.html">INVENTORY_OPEN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-251130646%2FProperties%2F-251573632" anchor-label="KEY_DOWN" id="-251130646%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-k-e-y_-d-o-w-n.html"><span>KEY_</span><wbr></wbr><span>DOWN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-251130646%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-k-e-y_-d-o-w-n.html">KEY_DOWN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1445842735%2FProperties%2F-251573632" anchor-label="KEY_UP" id="-1445842735%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-k-e-y_-u-p.html"><span>KEY_</span><wbr></wbr><span>UP</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1445842735%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-k-e-y_-u-p.html">KEY_UP</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1154205988%2FProperties%2F-251573632" anchor-label="MESSAGE_SENT" id="-1154205988%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-e-s-s-a-g-e_-s-e-n-t.html"><span>MESSAGE_</span><wbr></wbr><span>SENT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1154205988%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-m-e-s-s-a-g-e_-s-e-n-t.html">MESSAGE_SENT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="871269984%2FProperties%2F-251573632" anchor-label="MOUSE_CLICK" id="871269984%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-o-u-s-e_-c-l-i-c-k.html"><span>MOUSE_</span><wbr></wbr><span>CLICK</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="871269984%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-m-o-u-s-e_-c-l-i-c-k.html">MOUSE_CLICK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-233548639%2FProperties%2F-251573632" anchor-label="MOUSE_MOVE" id="-233548639%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-o-u-s-e_-m-o-v-e.html"><span>MOUSE_</span><wbr></wbr><span>MOVE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-233548639%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-m-o-u-s-e_-m-o-v-e.html">MOUSE_MOVE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1938687489%2FProperties%2F-251573632" anchor-label="MOUSE_RELEASE" id="1938687489%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-o-u-s-e_-r-e-l-e-a-s-e.html"><span>MOUSE_</span><wbr></wbr><span>RELEASE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1938687489%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-m-o-u-s-e_-r-e-l-e-a-s-e.html">MOUSE_RELEASE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="654958118%2FProperties%2F-251573632" anchor-label="MOUSE_SCROLLED" id="654958118%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-o-u-s-e_-s-c-r-o-l-l-e-d.html"><span>MOUSE_</span><wbr></wbr><span>SCROLLED</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="654958118%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-m-o-u-s-e_-s-c-r-o-l-l-e-d.html">MOUSE_SCROLLED</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1862004479%2FProperties%2F-251573632" anchor-label="NOTE_BLOCK_CHANGE" id="1862004479%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-n-o-t-e_-b-l-o-c-k_-c-h-a-n-g-e.html"><span>NOTE_</span><wbr></wbr><span>BLOCK_</span><wbr></wbr><span>CHANGE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1862004479%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-n-o-t-e_-b-l-o-c-k_-c-h-a-n-g-e.html">NOTE_BLOCK_CHANGE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2039628923%2FProperties%2F-251573632" anchor-label="NOTE_BLOCK_PLAY" id="2039628923%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-n-o-t-e_-b-l-o-c-k_-p-l-a-y.html"><span>NOTE_</span><wbr></wbr><span>BLOCK_</span><wbr></wbr><span>PLAY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2039628923%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-n-o-t-e_-b-l-o-c-k_-p-l-a-y.html">NOTE_BLOCK_PLAY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-169607530%2FProperties%2F-251573632" anchor-label="PACKET_RECEIVED" id="-169607530%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-a-c-k-e-t_-r-e-c-e-i-v-e-d.html"><span>PACKET_</span><wbr></wbr><span>RECEIVED</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-169607530%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-a-c-k-e-t_-r-e-c-e-i-v-e-d.html">PACKET_RECEIVED</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-943392321%2FProperties%2F-251573632" anchor-label="PACKET_SENT" id="-943392321%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-a-c-k-e-t_-s-e-n-t.html"><span>PACKET_</span><wbr></wbr><span>SENT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-943392321%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-a-c-k-e-t_-s-e-n-t.html">PACKET_SENT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1673430632%2FProperties%2F-251573632" anchor-label="PICKUP_ITEM" id="-1673430632%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-i-c-k-u-p_-i-t-e-m.html"><span>PICKUP_</span><wbr></wbr><span>ITEM</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1673430632%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-i-c-k-u-p_-i-t-e-m.html">PICKUP_ITEM</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="998138118%2FProperties%2F-251573632" anchor-label="PLAYER_JOIN" id="998138118%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-l-a-y-e-r_-j-o-i-n.html"><span>PLAYER_</span><wbr></wbr><span>JOIN</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="998138118%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-l-a-y-e-r_-j-o-i-n.html">PLAYER_JOIN</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-455693261%2FProperties%2F-251573632" anchor-label="PLAYER_LEAVE" id="-455693261%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-l-a-y-e-r_-l-e-a-v-e.html"><span>PLAYER_</span><wbr></wbr><span>LEAVE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-455693261%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-l-a-y-e-r_-l-e-a-v-e.html">PLAYER_LEAVE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2015220939%2FProperties%2F-251573632" anchor-label="POST_GUI_RENDER" id="-2015220939%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-o-s-t_-g-u-i_-r-e-n-d-e-r.html"><span>POST_</span><wbr></wbr><span>GUI_</span><wbr></wbr><span>RENDER</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2015220939%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-o-s-t_-g-u-i_-r-e-n-d-e-r.html">POST_GUI_RENDER</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2038785569%2FProperties%2F-251573632" anchor-label="POST_RENDER_ENTITY" id="-2038785569%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-o-s-t_-r-e-n-d-e-r_-e-n-t-i-t-y.html"><span>POST_</span><wbr></wbr><span>RENDER_</span><wbr></wbr><span>ENTITY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2038785569%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-o-s-t_-r-e-n-d-e-r_-e-n-t-i-t-y.html">POST_RENDER_ENTITY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-617116124%2FProperties%2F-251573632" anchor-label="POST_RENDER_TILE_ENTITY" id="-617116124%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-o-s-t_-r-e-n-d-e-r_-t-i-l-e_-e-n-t-i-t-y.html"><span>POST_</span><wbr></wbr><span>RENDER_</span><wbr></wbr><span>TILE_</span><wbr></wbr><span>ENTITY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-617116124%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-p-o-s-t_-r-e-n-d-e-r_-t-i-l-e_-e-n-t-i-t-y.html">POST_RENDER_TILE_ENTITY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="128899499%2FProperties%2F-251573632" anchor-label="RENDER_AIR" id="128899499%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-a-i-r.html"><span>RENDER_</span><wbr></wbr><span>AIR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="128899499%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-a-i-r.html">RENDER_AIR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-166476458%2FProperties%2F-251573632" anchor-label="RENDER_ARMOR" id="-166476458%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-a-r-m-o-r.html"><span>RENDER_</span><wbr></wbr><span>ARMOR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-166476458%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-a-r-m-o-r.html">RENDER_ARMOR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="329832423%2FProperties%2F-251573632" anchor-label="RENDER_BOSS_HEALTH" id="329832423%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-b-o-s-s_-h-e-a-l-t-h.html"><span>RENDER_</span><wbr></wbr><span>BOSS_</span><wbr></wbr><span>HEALTH</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="329832423%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-b-o-s-s_-h-e-a-l-t-h.html">RENDER_BOSS_HEALTH</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1516038515%2FProperties%2F-251573632" anchor-label="RENDER_CHAT" id="-1516038515%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-c-h-a-t.html"><span>RENDER_</span><wbr></wbr><span>CHAT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1516038515%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-c-h-a-t.html">RENDER_CHAT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-474173485%2FProperties%2F-251573632" anchor-label="RENDER_CROSSHAIR" id="-474173485%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-c-r-o-s-s-h-a-i-r.html"><span>RENDER_</span><wbr></wbr><span>CROSSHAIR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-474173485%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-c-r-o-s-s-h-a-i-r.html">RENDER_CROSSHAIR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-912281918%2FProperties%2F-251573632" anchor-label="RENDER_DEBUG" id="-912281918%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-d-e-b-u-g.html"><span>RENDER_</span><wbr></wbr><span>DEBUG</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-912281918%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-d-e-b-u-g.html">RENDER_DEBUG</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="965296738%2FProperties%2F-251573632" anchor-label="RENDER_ENTITY" id="965296738%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-e-n-t-i-t-y.html"><span>RENDER_</span><wbr></wbr><span>ENTITY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="965296738%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-e-n-t-i-t-y.html">RENDER_ENTITY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-853248325%2FProperties%2F-251573632" anchor-label="RENDER_EXPERIENCE" id="-853248325%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-e-x-p-e-r-i-e-n-c-e.html"><span>RENDER_</span><wbr></wbr><span>EXPERIENCE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-853248325%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-e-x-p-e-r-i-e-n-c-e.html">RENDER_EXPERIENCE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1138511801%2FProperties%2F-251573632" anchor-label="RENDER_FOOD" id="-1138511801%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-f-o-o-d.html"><span>RENDER_</span><wbr></wbr><span>FOOD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1138511801%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-f-o-o-d.html">RENDER_FOOD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1442578090%2FProperties%2F-251573632" anchor-label="RENDER_HAND" id="-1442578090%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-h-a-n-d.html"><span>RENDER_</span><wbr></wbr><span>HAND</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1442578090%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-h-a-n-d.html">RENDER_HAND</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="340274697%2FProperties%2F-251573632" anchor-label="RENDER_HEALTH" id="340274697%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-h-e-a-l-t-h.html"><span>RENDER_</span><wbr></wbr><span>HEALTH</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="340274697%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-h-e-a-l-t-h.html">RENDER_HEALTH</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2047348456%2FProperties%2F-251573632" anchor-label="RENDER_HELMET" id="-2047348456%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-h-e-l-m-e-t.html"><span>RENDER_</span><wbr></wbr><span>HELMET</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2047348456%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-h-e-l-m-e-t.html">RENDER_HELMET</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1790734593%2FProperties%2F-251573632" anchor-label="RENDER_HOTBAR" id="-1790734593%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-h-o-t-b-a-r.html"><span>RENDER_</span><wbr></wbr><span>HOTBAR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1790734593%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-h-o-t-b-a-r.html">RENDER_HOTBAR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-44508989%2FProperties%2F-251573632" anchor-label="RENDER_JUMP_BAR" id="-44508989%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-j-u-m-p_-b-a-r.html"><span>RENDER_</span><wbr></wbr><span>JUMP_</span><wbr></wbr><span>BAR</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-44508989%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-j-u-m-p_-b-a-r.html">RENDER_JUMP_BAR</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1541964739%2FProperties%2F-251573632" anchor-label="RENDER_MOUNT_HEALTH" id="1541964739%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-m-o-u-n-t_-h-e-a-l-t-h.html"><span>RENDER_</span><wbr></wbr><span>MOUNT_</span><wbr></wbr><span>HEALTH</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1541964739%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-m-o-u-n-t_-h-e-a-l-t-h.html">RENDER_MOUNT_HEALTH</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1583370907%2FProperties%2F-251573632" anchor-label="RENDER_OVERLAY" id="-1583370907%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-o-v-e-r-l-a-y.html"><span>RENDER_</span><wbr></wbr><span>OVERLAY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1583370907%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-o-v-e-r-l-a-y.html">RENDER_OVERLAY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1074028583%2FProperties%2F-251573632" anchor-label="RENDER_PLAYER_LIST" id="-1074028583%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-p-l-a-y-e-r_-l-i-s-t.html"><span>RENDER_</span><wbr></wbr><span>PLAYER_</span><wbr></wbr><span>LIST</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1074028583%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-p-l-a-y-e-r_-l-i-s-t.html">RENDER_PLAYER_LIST</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-846947847%2FProperties%2F-251573632" anchor-label="RENDER_PORTAL" id="-846947847%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-p-o-r-t-a-l.html"><span>RENDER_</span><wbr></wbr><span>PORTAL</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-846947847%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-p-o-r-t-a-l.html">RENDER_PORTAL</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2111616977%2FProperties%2F-251573632" anchor-label="RENDER_SCOREBOARD" id="2111616977%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-s-c-o-r-e-b-o-a-r-d.html"><span>RENDER_</span><wbr></wbr><span>SCOREBOARD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2111616977%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-s-c-o-r-e-b-o-a-r-d.html">RENDER_SCOREBOARD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1855766401%2FProperties%2F-251573632" anchor-label="RENDER_TILE_ENTITY" id="1855766401%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-t-i-l-e_-e-n-t-i-t-y.html"><span>RENDER_</span><wbr></wbr><span>TILE_</span><wbr></wbr><span>ENTITY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1855766401%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-t-i-l-e_-e-n-t-i-t-y.html">RENDER_TILE_ENTITY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1624261213%2FProperties%2F-251573632" anchor-label="RENDER_TITLE" id="1624261213%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-t-i-t-l-e.html"><span>RENDER_</span><wbr></wbr><span>TITLE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1624261213%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-t-i-t-l-e.html">RENDER_TITLE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2000305763%2FProperties%2F-251573632" anchor-label="RENDER_WORLD" id="2000305763%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-r-e-n-d-e-r_-w-o-r-l-d.html"><span>RENDER_</span><wbr></wbr><span>WORLD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2000305763%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-r-e-n-d-e-r_-w-o-r-l-d.html">RENDER_WORLD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="630207998%2FProperties%2F-251573632" anchor-label="SERVER_CONNECT" id="630207998%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-e-r-v-e-r_-c-o-n-n-e-c-t.html"><span>SERVER_</span><wbr></wbr><span>CONNECT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="630207998%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-e-r-v-e-r_-c-o-n-n-e-c-t.html">SERVER_CONNECT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1654984970%2FProperties%2F-251573632" anchor-label="SERVER_DISCONNECT" id="-1654984970%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-e-r-v-e-r_-d-i-s-c-o-n-n-e-c-t.html"><span>SERVER_</span><wbr></wbr><span>DISCONNECT</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1654984970%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-e-r-v-e-r_-d-i-s-c-o-n-n-e-c-t.html">SERVER_DISCONNECT</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1099600773%2FProperties%2F-251573632" anchor-label="SLOT_CLICK" id="1099600773%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-l-o-t_-c-l-i-c-k.html"><span>SLOT_</span><wbr></wbr><span>CLICK</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1099600773%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-l-o-t_-c-l-i-c-k.html">SLOT_CLICK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1205894776%2FProperties%2F-251573632" anchor-label="SOUND_PLAY" id="-1205894776%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-o-u-n-d_-p-l-a-y.html"><span>SOUND_</span><wbr></wbr><span>PLAY</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1205894776%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-o-u-n-d_-p-l-a-y.html">SOUND_PLAY</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1025564258%2FProperties%2F-251573632" anchor-label="SPAWN_PARTICLE" id="1025564258%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-p-a-w-n_-p-a-r-t-i-c-l-e.html"><span>SPAWN_</span><wbr></wbr><span>PARTICLE</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1025564258%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-p-a-w-n_-p-a-r-t-i-c-l-e.html">SPAWN_PARTICLE</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1281256576%2FProperties%2F-251573632" anchor-label="STEP" id="-1281256576%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-t-e-p.html"><span><span>STEP</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1281256576%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-s-t-e-p.html">STEP</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="135620047%2FProperties%2F-251573632" anchor-label="TICK" id="135620047%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-t-i-c-k.html"><span><span>TICK</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="135620047%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-t-i-c-k.html">TICK</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-949271281%2FProperties%2F-251573632" anchor-label="WIRED" id="-949271281%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-w-i-r-e-d.html"><span><span>WIRED</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-949271281%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-w-i-r-e-d.html">WIRED</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Events that have a live source hook in this build (Fabric event, mixin, or engine pump) and so actually fire. Registering any other <a href="-a-l-l.html">ALL</a> type is accepted but warns, since its callback would never run — input (<code class="lang-kotlin">keyDown</code>/<code class="lang-kotlin">mouse*</code>) and per-element HUD renders aren't hookable on this MC version (reworked input + layered HUD); the rest are added incrementally.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-805666983%2FProperties%2F-251573632" anchor-label="WORLD_LOAD" id="-805666983%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-w-o-r-l-d_-l-o-a-d.html"><span>WORLD_</span><wbr></wbr><span>LOAD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-805666983%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-w-o-r-l-d_-l-o-a-d.html">WORLD_LOAD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1192370464%2FProperties%2F-251573632" anchor-label="WORLD_UNLOAD" id="-1192370464%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-w-o-r-l-d_-u-n-l-o-a-d.html"><span>WORLD_</span><wbr></wbr><span>UNLOAD</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1192370464%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">const </span><span class="token keyword">val </span><a href="-w-o-r-l-d_-u-n-l-o-a-d.html">WORLD_UNLOAD</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-1682854728%2FFunctions%2F-251573632" anchor-label="isCancellable" id="-1682854728%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-cancellable.html"><span>is</span><wbr></wbr><span><span>Cancellable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1682854728%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-cancellable.html"><span class="token function">isCancellable</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-628963406%2FFunctions%2F-251573632" anchor-label="isUnwired" id="-628963406%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-unwired.html"><span>is</span><wbr></wbr><span><span>Unwired</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-628963406%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-unwired.html"><span class="token function">isUnwired</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">A known event type that currently has no source hook (registrable, but won't fire).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

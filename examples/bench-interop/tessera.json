@@ -1,0 +1,7 @@
+{
+  "name": "bench-interop",
+  "version": "1.0.0",
+  "author": "tessera",
+  "description": "Interop benchmark — creating Minecraft BlockPos objects (auto-runs on load; /benchinterop)",
+  "entry": "index.ts"
+}

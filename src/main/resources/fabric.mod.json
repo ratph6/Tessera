@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "tessera",
+	"version": "${version}",
+	"name": "Tessera",
+	"description": "JavaScript In Minecraft — a TypeScript-first scripting runtime for Minecraft, powered by swc4j + Javet (V8). A modern spiritual successor to ChatTriggers.",
+	"authors": [
+		"ratph6"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/tessera/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "ratph6.tessera.Tessera",
+				"adapter": "kotlin"
+			}
+		],
+		"client": [
+			{
+				"value": "ratph6.tessera.TesseraClient",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"tessera.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1.2",
+		"java": ">=25",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	}
+}
