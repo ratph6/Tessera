@@ -3,7 +3,7 @@
 # runner can't build them with Gradle. Regenerate locally with: ./gradlew dokkaGenerate && cp -r
 # build/dokka/html/. docs/)
 #
-# The same docs/ folder is what Cloudflare Pages serves at https://jim-1w4.pages.dev
+# The same docs/ folder can also be served by Cloudflare Pages
 # (framework preset: none, build command: none, output directory: docs).
 name: docs
 

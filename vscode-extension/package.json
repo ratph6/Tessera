@@ -2,7 +2,7 @@
   "name": "tessera-intellisense",
   "displayName": "Tessera — JavaScript In Minecraft",
   "description": "IntelliSense and autocompletion for Tessera scripts: the ratph6.tessera.api functions and the full Mojang-mapped Minecraft API (net.minecraft.*).",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "publisher": "ratph6",
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Programming Languages", "Snippets"],

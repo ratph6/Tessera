@@ -1,5 +1,5 @@
 /**
- * Tessera — JavaScript In Minecraft — TypeScript API declarations.
+ * Tessera — TypeScript scripting for Minecraft — API declarations.
  *
  * Point your editor at this file (it ships in the mod jar at `tessera/types/tessera.d.ts` and is written to
  * `.minecraft/tessera/tessera.d.ts` on first run) for completion and type-checking.
@@ -65,7 +65,8 @@ declare module 'ratph6.tessera.api' {
    *   SERVER_CONNECT  (ip: string, port: number)
    *   SERVER_DISCONNECT (reason: string)
    *   RENDER_OVERLAY  ()                                       draw HUD via the Renderer API
-   *   RENDER_ENTITY / POST_RENDER_ENTITY  (entity: EntityWrapper)   entity.getName()/getX()/isPlayer()/...
+   *   RENDER_WORLD    ()                                       per frame, after the level renders (set player/camera state here; .setFps() ignored)
+   *   RENDER_ENTITY / POST_RENDER_ENTITY  (entity: EntityWrapper)   entity.getName()/getX()/isPlayer()/...; filter with .setFilteredClass("Bat")
    *   ENTITY_DEATH    (entity: EntityWrapper)
    *   BLOCK_BREAK     (block: BlockWrapper)                    block.getX()/getType()/isAir() — cancel to veto
    *   SOUND_PLAY      (name: string)                           sound id, e.g. "minecraft:block.note_block.harp"
@@ -114,7 +115,8 @@ declare module 'ratph6.tessera.api' {
     setSound(sound: string): TriggerHandle;
     filterClass(className: string): TriggerHandle;
     /** Only fire when the event's value is an instance of this class (simple or full name, incl.
-     *  superclasses). e.g. PACKET_RECEIVED + setFilteredClass("ClientboundSetHealthPacket"). */
+     *  superclasses). For entity events (RENDER_ENTITY, ENTITY_DEATH) it matches the wrapped entity,
+     *  so `setFilteredClass("Bat")` works. e.g. PACKET_RECEIVED + setFilteredClass("ClientboundSetHealthPacket"). */
     setFilteredClass(className: string): TriggerHandle;
     unregister(): TriggerHandle;
   }
@@ -140,7 +142,8 @@ declare module 'ratph6.tessera.api' {
     function reload(): void;
     function getLoadedModules(): string[];
     function log(message: string): void;
-    /** Milliseconds timestamp for benchmarking (use instead of System.*). */
+    /** Monotonic millisecond clock for benchmarking and time-based easing (NOT a wall-clock/epoch
+     *  timestamp — the origin is arbitrary). Use deltas: `const dt = Tessera.millis() - start`. */
     function millis(): number;
   }
 
