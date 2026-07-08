@@ -22,8 +22,11 @@ object GraalRuntime {
     private val log = org.slf4j.LoggerFactory.getLogger("Tessera")
     private val swc4j = Swc4j()
 
-    @Volatile private var engine: Engine? = null
-    @Volatile private var ctx: Context? = null
+    @Volatile
+    private var engine: Engine? = null
+
+    @Volatile
+    private var ctx: Context? = null
 
     private fun engine(): Engine = engine ?: synchronized(this) {
         engine ?: Engine.newBuilder("js")
@@ -66,9 +69,8 @@ object GraalRuntime {
         val c = Context.newBuilder("js")
             .engine(engine())
             .allowHostAccess(hostAccess)
-            // Java.type allowed only for Tessera API + Minecraft; Runtime & friends stay refused.
-            .allowHostClassLookup { it.startsWith("ratph6.tessera.api.") || it.startsWith("net.minecraft.") }
-            // resolve Java.type against the loader that sees those classes (Knot in-game)
+            // Claude decided it would be a good idea to restrict access to standard Java Classes. This is stupid.
+            .allowHostClassLookup { true }
             .hostClassLoader(GraalRuntime::class.java.classLoader)
             .allowExperimentalOptions(true)
             .option("js.ecmascript-version", "2024")
