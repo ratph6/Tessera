@@ -20,15 +20,19 @@ impl zed::Extension for TesseraExtension {
         _language_server_id: &zed::LanguageServerId,
         _worktree: &zed::Worktree,
     ) -> Result<zed::Command> {
-        // The extension is unpacked into its own working directory; the server ships inside it.
-        let server_path = env::current_dir()
+        // current_dir() is the extension's WORK dir (extensions/work/<id>) — Zed keeps it empty;
+        // the files a dev extension ships live in extensions/installed/<id>. Swap the segment.
+        let work_dir = env::current_dir()
             .map_err(|e| format!("could not resolve extension dir: {e}"))?
-            .join("server")
-            .join("server.js");
+            .to_string_lossy()
+            .into_owned();
+        let ext_dir = work_dir
+            .replace("/extensions/work/", "/extensions/installed/")
+            .replace("\\extensions\\work\\", "\\extensions\\installed\\");
+        let mut server_arg = format!("{ext_dir}/server/server.js");
 
         // The WASI sandbox reports Windows paths as /C:/Users/... — Node can't resolve that form,
         // so strip the leading slash before the drive letter (zed-industries/zed#17571).
-        let mut server_arg = server_path.to_string_lossy().into_owned();
         if let (zed::Os::Windows, _) = zed::current_platform() {
             if server_arg.len() > 2 && server_arg.starts_with('/') && server_arg.as_bytes()[2] == b':' {
                 server_arg.remove(0);
