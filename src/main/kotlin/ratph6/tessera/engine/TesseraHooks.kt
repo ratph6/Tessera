@@ -38,4 +38,11 @@ object TesseraHooks {
     @JvmStatic
     fun onActionBar(text: String): Boolean =
         TesseraEngine.fireChat(TriggerType.ACTION_BAR, text, FORMATTING.replace(text, ""))
+
+    // raw in-world clicks; true if a script cancelled it (mixin vetoes the physical click)
+    @JvmStatic
+    fun onMouseLeft(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_LEFT)
+
+    @JvmStatic
+    fun onMouseRight(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_RIGHT)
 }

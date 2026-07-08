@@ -12,6 +12,7 @@
 		"client.MixinEntityRenderDispatcher",
 		"client.MixinHud",
 		"client.MixinLivingEntity",
+		"client.MixinMouseHandler",
 		"client.MixinSoundEngine"
 	],
 	"injectors": {

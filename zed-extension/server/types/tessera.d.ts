@@ -88,6 +88,7 @@ declare module 'ratph6.tessera.api' {
     const ENTITY_DAMAGE: string; const ENTITY_DEATH: string;
     const SOUND_PLAY: string; const NOTE_BLOCK_PLAY: string; const NOTE_BLOCK_CHANGE: string;
     const CLICKED: string; const SCROLLED: string; const DRAGGED: string; const KEY_DOWN: string; const KEY_UP: string;
+    const MOUSE_LEFT: string; const MOUSE_RIGHT: string;
     const PICKUP_ITEM: string; const DROP_ITEM: string; const SLOT_CLICK: string; const INVENTORY_OPEN: string; const INVENTORY_CLOSE: string;
     const GUI_OPENED: string; const GUI_CLOSED: string; const GUI_KEY: string; const GUI_MOUSE_CLICK: string;
     const GUI_MOUSE_RELEASE: string; const GUI_DRAW_BACKGROUND: string; const POST_GUI_RENDER: string;

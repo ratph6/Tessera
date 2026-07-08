@@ -42,6 +42,9 @@ object Event {
     const val DRAGGED = "mouseDrag"
     const val KEY_DOWN = "keyDown"
     const val KEY_UP = "keyUp"
+    // in-world clicks (fire on the actual attack / use-item action; cancel to veto the click)
+    const val MOUSE_LEFT = "mouseLeft"
+    const val MOUSE_RIGHT = "mouseRight"
 
     // items / inventory
     const val PICKUP_ITEM = "pickupItem"

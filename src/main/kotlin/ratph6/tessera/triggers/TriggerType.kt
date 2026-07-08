@@ -74,6 +74,8 @@ object TriggerType {
     const val MOUSE_DRAG = "mouseDrag"
     const val GUI_MOUSE_RELEASE = "guiMouseRelease"
     const val GAME_UNLOAD = "gameUnload"
+    const val MOUSE_LEFT = "mouseLeft"
+    const val MOUSE_RIGHT = "mouseRight"
 
     const val PACKET_RECEIVED = "packetReceived"
     const val PACKET_SENT = "packetSent"
@@ -85,6 +87,7 @@ object TriggerType {
     // scripts a cancel() that silently does nothing.
     val CANCELLABLE: Set<String> = setOf(
         CHAT, ACTION_BAR, MESSAGE_SENT, BLOCK_BREAK, GUI_KEY, GUI_MOUSE_CLICK,
+        MOUSE_LEFT, MOUSE_RIGHT,
     )
 
     // types that honour .setCriteria() and the match-mode setters
@@ -103,6 +106,7 @@ object TriggerType {
         GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_MOUSE_RELEASE, GUI_DRAW_BACKGROUND, POST_GUI_RENDER,
         INVENTORY_OPEN, INVENTORY_CLOSE, SLOT_CLICK, PICKUP_ITEM, DROP_ITEM,
         KEY_DOWN, KEY_UP, MOUSE_CLICK, MOUSE_RELEASE, MOUSE_SCROLLED, MOUSE_MOVE, MOUSE_DRAG,
+        MOUSE_LEFT, MOUSE_RIGHT,
         PACKET_RECEIVED, PACKET_SENT, SERVER_CONNECT, SERVER_DISCONNECT,
     )
 
@@ -118,6 +122,7 @@ object TriggerType {
         SOUND_PLAY, SPAWN_PARTICLE, ENTITY_DEATH, MESSAGE_SENT, ACTION_BAR, BLOCK_BREAK,
         GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_DRAW_BACKGROUND,
         INVENTORY_OPEN, INVENTORY_CLOSE,
+        MOUSE_LEFT, MOUSE_RIGHT,
     )
 
     // known type with no source hook: registrable, but won't fire
