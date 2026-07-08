@@ -107,7 +107,7 @@
   <div class="breadcrumbs"><a href="../../../index.html">tessera</a><span class="delimiter">/</span><a href="../index.html">ratph6.tessera.triggers</a><span class="delimiter">/</span><span class="current">TriggerRegistry</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Trigger</span><wbr></wbr><span><span>Registry</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">TriggerRegistry</a></div><p class="paragraph">Central registry of all live triggers, indexed by type. Registration happens while a module's <code class="lang-kotlin">main()</code> runs (JS thread); lookups happen on whatever thread an event fires on, so everything is held in concurrent collections.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">TriggerRegistry</a></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -139,7 +139,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="by-type.html"><span class="token function">byType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-trigger-meta/index.html">TriggerMeta</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All enabled triggers of a type, in priority order (lowest priority value first).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="by-type.html"><span class="token function">byType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-trigger-meta/index.html">TriggerMeta</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -229,7 +229,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has-type.html"><span class="token function">hasType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Cheap check (no list allocation) for whether any enabled trigger of <a href="has-type.html">type</a> exists.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="has-type.html"><span class="token function">hasType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -274,7 +274,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remove-module.html"><span class="token function">removeModule</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">module<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Remove every trigger owned by a module (clean unload).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="remove-module.html"><span class="token function">removeModule</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">module<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>

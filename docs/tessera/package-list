@@ -88,6 +88,7 @@ $dokka.location:ratph6.tessera.api/Event/DROP_ITEM/#/PointingToDeclaration/tess
 $dokka.location:ratph6.tessera.api/Event/ENTITY_DAMAGE/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-e-n-t-i-t-y_-d-a-m-a-g-e.html
 $dokka.location:ratph6.tessera.api/Event/ENTITY_DEATH/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-e-n-t-i-t-y_-d-e-a-t-h.html
 $dokka.location:ratph6.tessera.api/Event/GAME_LOAD/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-g-a-m-e_-l-o-a-d.html
+$dokka.location:ratph6.tessera.api/Event/GAME_TICK/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-g-a-m-e_-t-i-c-k.html
 $dokka.location:ratph6.tessera.api/Event/GAME_UNLOAD/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-g-a-m-e_-u-n-l-o-a-d.html
 $dokka.location:ratph6.tessera.api/Event/GUI_CLOSED/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-g-u-i_-c-l-o-s-e-d.html
 $dokka.location:ratph6.tessera.api/Event/GUI_DRAW_BACKGROUND/#/PointingToDeclaration/tessera/ratph6.tessera.api/-event/-g-u-i_-d-r-a-w_-b-a-c-k-g-r-o-u-n-d.html
@@ -414,6 +415,7 @@ $dokka.location:ratph6.tessera.engine/TesseraCompiler///PointingToDeclaration/t
 $dokka.location:ratph6.tessera.engine/TesseraCompiler/check/#kotlin.String#kotlin.String/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-compiler/check.html
 $dokka.location:ratph6.tessera.engine/TesseraCompiler/compile/#kotlin.String#kotlin.String#java.lang.ClassLoader/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-compiler/compile.html
 $dokka.location:ratph6.tessera.engine/TesseraEngine///PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-engine/index.html
+$dokka.location:ratph6.tessera.engine/TesseraEngine/attachConsole/#kotlin.Function1[ratph6.tessera.engine.TesseraLogLine,kotlin.Unit]/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-engine/attach-console.html
 $dokka.location:ratph6.tessera.engine/TesseraEngine/booted/#/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-engine/booted.html
 $dokka.location:ratph6.tessera.engine/TesseraEngine/bootstrap/#java.nio.file.Path#java.lang.ClassLoader/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-engine/bootstrap.html
 $dokka.location:ratph6.tessera.engine/TesseraEngine/cancelCurrentEvent/#/PointingToDeclaration/tessera/ratph6.tessera.engine/-tessera-engine/cancel-current-event.html
@@ -516,8 +518,8 @@ $dokka.location:ratph6.tessera.mixin.client/MixinEntityRenderState///PointingToD
 $dokka.location:ratph6.tessera.mixin.client/MixinEntityRenderState/MixinEntityRenderState/#/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-entity-render-state/-mixin-entity-render-state.html
 $dokka.location:ratph6.tessera.mixin.client/MixinEntityRenderState/tessera$entity/#/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-entity-render-state/tessera$entity.html
 $dokka.location:ratph6.tessera.mixin.client/MixinEntityRenderState/tessera$setEntity/#net.minecraft.world.entity.Entity/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-entity-render-state/tessera$set-entity.html
-$dokka.location:ratph6.tessera.mixin.client/MixinGui///PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-gui/index.html
-$dokka.location:ratph6.tessera.mixin.client/MixinGui/MixinGui/#/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-gui/-mixin-gui.html
+$dokka.location:ratph6.tessera.mixin.client/MixinHud///PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-hud/index.html
+$dokka.location:ratph6.tessera.mixin.client/MixinHud/MixinHud/#/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-hud/-mixin-hud.html
 $dokka.location:ratph6.tessera.mixin.client/MixinLivingEntity///PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-living-entity/index.html
 $dokka.location:ratph6.tessera.mixin.client/MixinLivingEntity/MixinLivingEntity/#/PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-living-entity/-mixin-living-entity.html
 $dokka.location:ratph6.tessera.mixin.client/MixinSoundEngine///PointingToDeclaration/tessera/ratph6.tessera.mixin.client/-mixin-sound-engine/index.html
@@ -576,10 +578,12 @@ $dokka.location:ratph6.tessera.triggers/TriggerType/ENTITY_DAMAGE/#/PointingToDe
 $dokka.location:ratph6.tessera.triggers/TriggerType/ENTITY_DEATH/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-e-n-t-i-t-y_-d-e-a-t-h.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GAME_LOAD/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-a-m-e_-l-o-a-d.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GAME_TICK/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-a-m-e_-t-i-c-k.html
+$dokka.location:ratph6.tessera.triggers/TriggerType/GAME_UNLOAD/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-a-m-e_-u-n-l-o-a-d.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GUI_CLOSE/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-c-l-o-s-e.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GUI_DRAW_BACKGROUND/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-d-r-a-w_-b-a-c-k-g-r-o-u-n-d.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GUI_KEY/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-k-e-y.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GUI_MOUSE_CLICK/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-m-o-u-s-e_-c-l-i-c-k.html
+$dokka.location:ratph6.tessera.triggers/TriggerType/GUI_MOUSE_RELEASE/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-m-o-u-s-e_-r-e-l-e-a-s-e.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/GUI_OPEN/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-g-u-i_-o-p-e-n.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/INVENTORY_CLOSE/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-i-n-v-e-n-t-o-r-y_-c-l-o-s-e.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/INVENTORY_OPEN/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-i-n-v-e-n-t-o-r-y_-o-p-e-n.html
@@ -587,6 +591,7 @@ $dokka.location:ratph6.tessera.triggers/TriggerType/KEY_DOWN/#/PointingToDeclara
 $dokka.location:ratph6.tessera.triggers/TriggerType/KEY_UP/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-k-e-y_-u-p.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/MESSAGE_SENT/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-e-s-s-a-g-e_-s-e-n-t.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/MOUSE_CLICK/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-o-u-s-e_-c-l-i-c-k.html
+$dokka.location:ratph6.tessera.triggers/TriggerType/MOUSE_DRAG/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-o-u-s-e_-d-r-a-g.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/MOUSE_MOVE/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-o-u-s-e_-m-o-v-e.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/MOUSE_RELEASE/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-o-u-s-e_-r-e-l-e-a-s-e.html
 $dokka.location:ratph6.tessera.triggers/TriggerType/MOUSE_SCROLLED/#/PointingToDeclaration/tessera/ratph6.tessera.triggers/-trigger-type/-m-o-u-s-e_-s-c-r-o-l-l-e-d.html

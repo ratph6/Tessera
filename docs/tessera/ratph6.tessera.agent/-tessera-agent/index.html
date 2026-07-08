@@ -107,7 +107,7 @@
   <div class="breadcrumbs"><a href="../../../index.html">tessera</a><span class="delimiter">/</span><a href="../index.html">ratph6.tessera.agent</a><span class="delimiter">/</span><span class="current">TesseraAgent</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Tessera</span><wbr></wbr><span><span>Agent</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TesseraAgent</a></div><p class="paragraph">Tiny java.lang.instrument agent holder. Tessera self-attaches to its own JVM at runtime (see <code class="lang-java">InstrumentationLoader</code>) so TypeScript-defined mixins can retransform already-loaded Minecraft classes — something a static <code class="lang-java">.mixins.json</code> cannot do once the game is up. </p><p class="paragraph">This class is loaded twice with two distinct identities: once by Knot (as part of the mod) and once by the system class loader when the attach API loads the generated agent jar. Only the system-loader copy's <a href="inst.html">inst</a> is populated by <a href="agentmain.html">agentmain</a>; the loader reads it back via <code class="lang-java">ClassLoader.getSystemClassLoader()</code>. Keep this class dependency-free so it loads cleanly from the bare agent jar.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TesseraAgent</a></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -124,7 +124,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">var </span><a href="inst.html">inst</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/Instrumentation.html">Instrumentation</a></div><div class="brief ">Set by <a href="agentmain.html">agentmain</a>/<a href="premain.html">premain</a> on the system-loader copy of this class.</div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">var </span><a href="inst.html">inst</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.instrument/java/lang/instrument/Instrumentation.html">Instrumentation</a></div></div></div>
                 </div>
               </div>
             </div>

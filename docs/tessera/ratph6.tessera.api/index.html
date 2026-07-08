@@ -123,7 +123,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-access-widener/index.html">AccessWidener</a></div><div class="brief "><p class="paragraph">Open up private / protected / final Minecraft members at runtime — the scripting equivalent of a Fabric access widener, but applied live from a Tessera module. A widened member becomes <code class="lang-kotlin">public</code> (and loses <code class="lang-kotlin">final</code>), so scripts can then read/write/call it through the normal API (GraalJS host access or the bytecode engine).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-access-widener/index.html">AccessWidener</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -138,7 +138,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-args/index.html">Args</a></div><div class="brief "><p class="paragraph">Safe access to a command callback's argument array. A <code class="lang-kotlin">command</code> trigger's value is a <code class="lang-kotlin">string[]</code>, but JS-style indexing (<code class="lang-kotlin">args[0]</code>, <code class="lang-kotlin">args.length</code>) isn't guaranteed by the bytecode compiler — these helpers are plain method calls, which always compile cleanly.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-args/index.html">Args</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-block-wrapper/index.html">BlockWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.level.block.state/BlockState///PointingToDeclaration/">BlockState</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>pos<span class="token operator">: </span><span data-unresolved-link="net.minecraft.core/BlockPos///PointingToDeclaration/">BlockPos</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Lightweight wrapper around a block at a position.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-block-wrapper/index.html">BlockWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.level.block.state/BlockState///PointingToDeclaration/">BlockState</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>pos<span class="token operator">: </span><span data-unresolved-link="net.minecraft.core/BlockPos///PointingToDeclaration/">BlockPos</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-cancellable-event/index.html">CancellableEvent</a></div><div class="brief "><p class="paragraph">Passed as the final argument to cancellable trigger callbacks. Call <a href="-cancellable-event/cancel.html">cancel</a> to stop the underlying game action (e.g. hide a chat message). Scripts:</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-cancellable-event/index.html">CancellableEvent</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-chat-lib/index.html">ChatLib</a></div><div class="brief "><p class="paragraph">Chat helpers. <code class="lang-kotlin">import { ChatLib } from 'ratph6.tessera.api'</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-chat-lib/index.html">ChatLib</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-display/index.html">Display</a></div><div class="brief "><p class="paragraph">A persistent multi-line HUD overlay. <code class="lang-kotlin">import { Display } from 'ratph6.tessera.api'</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-display/index.html">Display</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -213,7 +213,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-display-manager/index.html">DisplayManager</a></div><div class="brief "><p class="paragraph">Tracks every <a href="-display/index.html">Display</a> so the HUD hook can render them each frame.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-display-manager/index.html">DisplayManager</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -228,7 +228,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-entity-wrapper/index.html">EntityWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>handle<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.entity/Entity///PointingToDeclaration/">Entity</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Lightweight wrapper around a Minecraft entity, returned to scripts.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-entity-wrapper/index.html">EntityWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>handle<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.entity/Entity///PointingToDeclaration/">Entity</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -243,7 +243,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-event/index.html">Event</a></div><div class="brief "><p class="paragraph">The catalogue of events you can register a trigger for, in the spirit of ChatTriggers' <code class="lang-kotlin">TriggerType</code>. Pass one to <a href="-tessera/register.html">Tessera.register</a>:</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-event/index.html">Event</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -258,7 +258,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-item-wrapper/index.html">ItemWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>stack<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.item/ItemStack///PointingToDeclaration/">ItemStack</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Lightweight wrapper around an item stack.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-item-wrapper/index.html">ItemWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>stack<span class="token operator">: </span><span data-unresolved-link="net.minecraft.world.item/ItemStack///PointingToDeclaration/">ItemStack</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -273,7 +273,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-key-bind/index.html">KeyBind</a></div><div class="brief "><p class="paragraph">Raw key state. <code class="lang-kotlin">import { KeyBind } from 'ratph6.tessera.api'</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-key-bind/index.html">KeyBind</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -288,7 +288,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-mixin/index.html">Mixin</a></div><div class="brief "><p class="paragraph">Inject TypeScript callbacks straight into Minecraft methods at runtime — the scripting equivalent of a Fabric mixin, but defined live from a Tessera module (no restart, no <code class="lang-kotlin">.mixins.json</code>).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-mixin/index.html">Mixin</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -303,7 +303,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mixin-context/index.html">MixinContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>method<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>self<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">The object handed to a <a href="-mixin/index.html">Mixin</a> injection callback. It is the live link between the running Minecraft method and the script: read the receiver and arguments, cancel the call, or substitute its return value.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mixin-context/index.html">MixinContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>method<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>self<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>args<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -318,7 +318,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mixin-handle/index.html">MixinHandle</a></div><div class="brief "><p class="paragraph">Handle to a live injection; call <a href="-mixin-handle/remove.html">remove</a> to detach it (the target method reverts to original).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-mixin-handle/index.html">MixinHandle</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -333,7 +333,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-num/index.html">Num</a></div><div class="brief "><p class="paragraph">Small numeric helpers for scripts. swc4j compiles to JVM bytecode, not a JS engine, so JS globals like <code class="lang-kotlin">parseFloat</code> aren't guaranteed — use these to parse command arguments (which arrive as strings) into numbers.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-num/index.html">Num</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -348,7 +348,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-player/index.html">Player</a></div><div class="brief "><p class="paragraph">The local player. All getters return safe defaults when no player exists yet.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-player/index.html">Player</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -363,7 +363,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-player-scales/index.html">PlayerScales</a></div><div class="brief "><p class="paragraph">A remote, per-player scale table fetched from a URL — the engine primitive behind &quot;global sizes&quot; style scripts. The JSON is an object of <code class="lang-kotlin">{ &quot;PlayerName&quot;: { &quot;x&quot;: 2, &quot;y&quot;: 2, &quot;z&quot;: 2 }, ... }</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-player-scales/index.html">PlayerScales</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -378,7 +378,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-renderer/index.html">Renderer</a></div><div class="brief "><p class="paragraph">2D HUD drawing. Only valid inside a <code class="lang-kotlin">renderOverlay</code> / HUD trigger, where Tessera sets <a href="-renderer/graphics.html">graphics</a> to the frame's draw target (the 26.1.2 <code class="lang-kotlin">GuiGraphicsExtractor</code>, i.e. the renamed GuiGraphics).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-renderer/index.html">Renderer</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -393,7 +393,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-scoreboard/index.html">Scoreboard</a></div><div class="brief "><p class="paragraph">Sidebar scoreboard. The 26.1.2 scoreboard read path is non-trivial under the new render model; these are best-effort and may be expanded later.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-scoreboard/index.html">Scoreboard</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -408,7 +408,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-server/index.html">Server</a></div><div class="brief "><p class="paragraph">Current server info. <code class="lang-kotlin">import { Server } from 'ratph6.tessera.api'</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-server/index.html">Server</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -423,7 +423,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-store/index.html">Store</a></div><div class="brief "><p class="paragraph">A simple global key→value store for script state (numbers, booleans, strings).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-store/index.html">Store</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -438,7 +438,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tab-list/index.html">TabList</a></div><div class="brief "><p class="paragraph">Player-list (tab) info.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tab-list/index.html">TabList</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -453,7 +453,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tessellator/index.html">Tessellator</a></div><div class="brief "><p class="paragraph">Matrix transforms for world rendering, in the spirit of ChatTriggers' <code class="lang-kotlin">Tessellator</code>. Only valid inside a <code class="lang-kotlin">renderEntity</code> / <code class="lang-kotlin">postRenderEntity</code> trigger, where Tessera binds <a href="-tessellator/pose.html">pose</a> to the entity's live pose stack (already positioned at the entity's origin).</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tessellator/index.html">Tessellator</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -468,7 +468,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tessera/index.html">Tessera</a></div><div class="brief "><p class="paragraph">The primary scripting entry point. Register triggers with an <a href="-event/index.html">Event</a> and an arrow-function callback that takes a single argument (the event's primary value):</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-tessera/index.html">Tessera</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -483,7 +483,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-trigger-handle/index.html">TriggerHandle</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">meta<span class="token operator">: </span><a href="../ratph6.tessera.triggers/-trigger-meta/index.html">TriggerMeta</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Fluent, chainable handle returned by <a href="-tessera/register.html">Tessera.register</a>. Every setter returns <code class="lang-kotlin">this</code> so scripts can write <code class="lang-kotlin">Tessera.register(&quot;chat&quot;, &quot;onChat&quot;).setContains().setCriteria(&quot;hi&quot;).setPriority(10)</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-trigger-handle/index.html">TriggerHandle</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">meta<span class="token operator">: </span><a href="../ratph6.tessera.triggers/-trigger-meta/index.html">TriggerMeta</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -498,7 +498,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-world/index.html">World</a></div><div class="brief "><p class="paragraph">World / level queries. <code class="lang-kotlin">import { World } from 'ratph6.tessera.api'</code>.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-world/index.html">World</a></div></div></div>
                 </div>
               </div>
             </div>
