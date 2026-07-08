@@ -5,6 +5,7 @@
 // Runs once on load (30^3 = 27,000, matching the comparison's 27k row).
 
 import { Tessera, ChatLib } from 'ratph6.tessera.api';
+import { BlockPos } from 'net.minecraft.core';
 
 const n = 30;
 const x = -1674;

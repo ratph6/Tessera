@@ -16,7 +16,8 @@ import java.nio.file.Path
 
 // The GraalJS "real JavaScript" path: swc4j transpiles TS→JS, then GraalJS evaluates it as an ES
 // module with full ECMAScript. The Context is single-threaded — only ever touched from the JS thread,
-// so no locking needed. allowHostClassLookup is restricted, so guest code can't reach Runtime/etc.
+// so no locking needed. allowHostClassLookup is unrestricted (maintainer choice, PR #1): scripts can
+// Java.type ANY host class, incl. java.lang.Runtime — only install modules you trust.
 object GraalRuntime {
 
     private val log = org.slf4j.LoggerFactory.getLogger("Tessera")

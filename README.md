@@ -149,7 +149,7 @@ Set `"engine"` in `tessera.json`:
 
 Reach for `graal` (the default) for almost everything — it's normal JavaScript. Use `bytecode` only
 for hot per-frame work, like a `RENDER_ENTITY` hook that fires for every entity every frame, where
-the native dispatch and direct interop pay off. [`examples/arraydemo`](examples/arraydemo) runs on
+the native dispatch and direct interop pay off. [`examples/hello-tessera`](examples/hello-tessera) runs on
 graal; [`examples/cubed`](examples/cubed) pins `"engine": "bytecode"`.
 
 ### `bytecode` engine constraints
