@@ -46,6 +46,16 @@ declare function clearInterval(id: number): void;
 /** Resolve after `ms` milliseconds — `await sleep(500)`. */
 declare function sleep(ms: number): Promise<void>;
 
+// GraalJS host-interop global (graal engine). `Java.type("fully.qualified.Class")` returns the host
+// class; nested classes use `$`, e.g. `Java.type("net.minecraft.network.chat.ClickEvent$RunCommand")`.
+declare const Java: {
+  type(className: string): any;
+  from(javaData: any): any[];
+  to(jsArray: any[], toType?: string): any;
+  isType(obj: any): boolean;
+  typeName(obj: any): string | undefined;
+};
+
 declare module 'ratph6.tessera.api' {
   type Callback = (value: any) => void;
 
