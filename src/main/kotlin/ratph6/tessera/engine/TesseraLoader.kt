@@ -36,12 +36,12 @@ object TesseraLoader {
             ?: entryCandidates.map { dir.resolve(it) }.firstOrNull { Files.exists(it) }
             ?: throw IllegalStateException("module '${manifest.name}' has no entry file (looked for ${manifest.entry} / index.*)")
 
-        val source = entryFile.readText()
+        val bundled = ModuleSourceBundler.bundle(manifest, dir, entryFile)
         return if (manifest.engine == Engines.BYTECODE) {
-            val runner = TesseraCompiler.compile(source, "${manifest.name}/${entryFile.name}", classLoader)
+            val runner = TesseraCompiler.compile(bundled.source, bundled.fileName, classLoader)
             BytecodeModule(manifest, dir, runner)
         } else {
-            GraalRuntime.loadModule(manifest, dir, source)
+            GraalRuntime.loadModule(manifest, dir, bundled.source, bundled.fileName)
         }
     }
 

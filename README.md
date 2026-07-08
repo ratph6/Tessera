@@ -85,6 +85,11 @@ A module is a folder under `.minecraft/tessera/modules/<name>/` containing an `i
 optional `tessera.json`). Scripts are plain TypeScript: no `main()`, no `export`, top-level code runs
 once on load, and you register callbacks against `Event`.
 
+Sibling `.ts`/`.js` helper files in the module folder are bundled before the entry file and share the
+same module scope, so `utils.ts` can define `function helper() { ... }` and `index.ts` can call
+`helper()` without importing it. Local side-effect imports also work: `import "./utils.js"` resolves
+to `utils.js` or `utils.ts`, matching the TypeScript convention of writing `.js` in import specifiers.
+
 ```ts
 import { Tessera, Event, ChatLib, Player } from 'ratph6.tessera.api';
 

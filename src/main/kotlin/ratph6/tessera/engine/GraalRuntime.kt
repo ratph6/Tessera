@@ -141,13 +141,13 @@ object GraalRuntime {
                 val orig = parts[0].trim()
                 if (orig.isEmpty()) return@mapNotNull null
                 val local = (parts.getOrNull(1) ?: orig).trim()
-                bound.add(local)
+                if (!bound.add(local)) return@mapNotNull null
                 "const $local = Java.type('$spec.$orig');"
             }.joinToString(" ")
         }
         out = defaultImport.replace(out) { m ->
             val local = m.groupValues[1]
-            bound.add(local)
+            if (!bound.add(local)) return@replace ""
             "const $local = Java.type('${m.groupValues[2]}');"
         }
         // fail with a clear message instead of GraalJS's opaque module-resolution error
@@ -184,8 +184,8 @@ object GraalRuntime {
 
     // Transpile + evaluate as an ES module. Top-level code runs immediately (so top-level
     // Tessera.register calls attach to `module`); the returned namespace holds exported functions.
-    fun loadModule(manifest: TesseraManifest, dir: Path, source: String): GraalModule {
-        val js = prepare(source, "${manifest.name}/${manifest.entry}")
+    fun loadModule(manifest: TesseraManifest, dir: Path, source: String, fileName: String = "${manifest.name}/${manifest.entry}"): GraalModule {
+        val js = prepare(source, fileName)
         val module = GraalModule(manifest, dir)
         val c = context()
         TesseraEngine.withCurrentModule(module) {

@@ -198,4 +198,54 @@ class GraalRuntimeTest {
             TriggerRegistry.clear()
         }
     }
+
+    @Test
+    fun `local js imports and sibling helper files are bundled into the module scope`() {
+        TriggerRegistry.clear()
+        GraalRuntime.reset()
+        val captured = mutableListOf<String>()
+        TesseraEngine.chatSink = { captured.add(it) }
+
+        val modules = Files.createTempDirectory("tessera-bundle").resolve("modules")
+        modules.resolve("bundle").createDirectories()
+        modules.resolve("bundle/auto.ts").writeText(
+            """
+            import { Tessera } from 'ratph6.tessera.api';
+            function autoHelper(value: string): string {
+              return value + ":auto";
+            }
+            """.trimIndent(),
+        )
+        modules.resolve("bundle/side.ts").writeText(
+            """
+            function sideHelper(): string {
+              return "side";
+            }
+            """.trimIndent(),
+        )
+        modules.resolve("bundle/index.ts").writeText(
+            """
+            import { Tessera, Event } from 'ratph6.tessera.api';
+            import "./side.js";
+
+            Tessera.register(Event.COMMAND, () => {
+              Tessera.log(autoHelper(sideHelper()));
+            }).setName("bundle");
+            """.trimIndent(),
+        )
+
+        TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
+        try {
+            captured.clear()
+            TesseraEngine.dispatchCommand("bundle", emptyArray())
+            assertTrue(
+                captured.any { it.contains("side:auto") },
+                "local import and auto helper should be visible in index.ts: $captured",
+            )
+        } finally {
+            TesseraEngine.shutdown()
+            GraalRuntime.reset()
+            TriggerRegistry.clear()
+        }
+    }
 }
