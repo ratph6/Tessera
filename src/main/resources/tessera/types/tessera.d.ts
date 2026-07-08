@@ -82,7 +82,7 @@ declare module 'ratph6.tessera.api' {
    */
   namespace Event {
     const CHAT: string; const ACTION_BAR: string; const MESSAGE_SENT: string; const COMMAND: string;
-    const TICK: string; const STEP: string; const GAME_LOAD: string; const GAME_UNLOAD: string;
+    const TICK: string; const GAME_TICK: string; const STEP: string; const GAME_LOAD: string; const GAME_UNLOAD: string;
     const WORLD_LOAD: string; const WORLD_UNLOAD: string; const SERVER_CONNECT: string; const SERVER_DISCONNECT: string;
     const BLOCK_BREAK: string; const SPAWN_PARTICLE: string; const PLAYER_JOIN: string; const PLAYER_LEAVE: string;
     const ENTITY_DAMAGE: string; const ENTITY_DEATH: string;

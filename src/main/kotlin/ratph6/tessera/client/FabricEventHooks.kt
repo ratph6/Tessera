@@ -53,7 +53,14 @@ object FabricEventHooks {
 
         ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { _, _, client ->
             TesseraEngine.dispatch(TriggerType.WORLD_LOAD)
-            client.currentServer?.let { TesseraEngine.dispatch(TriggerType.SERVER_CONNECT, it.ip, 25565) }
+            client.currentServer?.let {
+                // ServerData.ip is the raw address string and may carry its own :port
+                val raw = it.ip
+                val colon = raw.lastIndexOf(':')
+                val port = if (colon > 0 && raw.indexOf(':') == colon) raw.substring(colon + 1).toIntOrNull() else null
+                val host = if (port != null) raw.substring(0, colon) else raw
+                TesseraEngine.dispatch(TriggerType.SERVER_CONNECT, host, port ?: 25565)
+            }
         })
         ClientPlayConnectionEvents.DISCONNECT.register(ClientPlayConnectionEvents.Disconnect { _, _ ->
             TesseraEngine.dispatch(TriggerType.WORLD_UNLOAD)
@@ -84,12 +91,13 @@ object FabricEventHooks {
             ScreenEvents.afterBackground(screen).register(ScreenEvents.AfterBackground { _, _, _, _, _ ->
                 TesseraEngine.dispatch(TriggerType.GUI_DRAW_BACKGROUND, name)
             })
-            // MC 26.1.2 delivers input as KeyEvent / MouseButtonEvent objects
-            ScreenKeyboardEvents.afterKeyPress(screen).register(ScreenKeyboardEvents.AfterKeyPress { _, keyEvent ->
-                TesseraEngine.dispatch(TriggerType.GUI_KEY, keyEvent)
+            // MC 26.2 delivers input as KeyEvent / MouseButtonEvent objects. The allow* phase makes
+            // these genuinely cancellable: returning false swallows the input.
+            ScreenKeyboardEvents.allowKeyPress(screen).register(ScreenKeyboardEvents.AllowKeyPress { _, keyEvent ->
+                !TesseraEngine.dispatch(TriggerType.GUI_KEY, keyEvent)
             })
-            ScreenMouseEvents.afterMouseClick(screen).register(ScreenMouseEvents.AfterMouseClick { _, mouseEvent, _ ->
-                TesseraEngine.dispatch(TriggerType.GUI_MOUSE_CLICK, mouseEvent)
+            ScreenMouseEvents.allowMouseClick(screen).register(ScreenMouseEvents.AllowMouseClick { _, mouseEvent ->
+                !TesseraEngine.dispatch(TriggerType.GUI_MOUSE_CLICK, mouseEvent)
             })
         })
 

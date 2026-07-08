@@ -32,13 +32,13 @@ object ReflectAccess {
     }
 
     fun invoke(target: Any, name: String, args: Array<out Any?>): Any? {
-        val m = resolveMethod(target.javaClass, name, args.size)
+        val m = resolveMethod(target.javaClass, name, args)
         return m.invoke(target, *coerceArgs(args, m))
     }
 
     fun invokeStatic(className: String, name: String, args: Array<out Any?>): Any? {
         val cls = loadClass(className)
-        val m = resolveMethod(cls, name, args.size)
+        val m = resolveMethod(cls, name, args)
         return m.invoke(null, *coerceArgs(args, m))
     }
 
@@ -61,20 +61,52 @@ object ReflectAccess {
         throw NoSuchFieldException("no field '$name' on ${start.name} (or its superclasses)")
     }
 
-    private fun resolveMethod(start: Class<*>, name: String, argCount: Int): Method {
-        val key = "${start.name}#$name/$argCount"
+    // Overload resolution: exact type match first, then coercion-compatible, then bare arity as a
+    // last resort. declaredMethods order is unspecified by the JVM — picking "first with N args"
+    // nondeterministically bound a different overload between runs.
+    private fun resolveMethod(start: Class<*>, name: String, args: Array<out Any?>): Method {
+        val sig = args.joinToString(",") { it?.javaClass?.name ?: "null" }
+        val key = "${start.name}#$name/${args.size}/$sig"
         methodCache[key]?.let { return it }
+        var arity: Method? = null
+        var compatible: Method? = null
         var c: Class<*>? = start
         while (c != null) {
-            val m = c.declaredMethods.firstOrNull { it.name == name && it.parameterCount == argCount }
-            if (m != null) {
+            val candidates = c.declaredMethods.filter { it.name == name && it.parameterCount == args.size }
+            candidates.firstOrNull { typesExact(it.parameterTypes, args) }?.let { m ->
                 m.isAccessible = true
                 methodCache[key] = m
                 return m
             }
+            if (compatible == null) compatible = candidates.firstOrNull { typesCompatible(it.parameterTypes, args) }
+            if (arity == null) arity = candidates.firstOrNull()
             c = c.superclass
         }
-        throw NoSuchMethodException("no method '$name' with $argCount arg(s) on ${start.name} (or its superclasses)")
+        val m = compatible ?: arity
+            ?: throw NoSuchMethodException("no method '$name' with ${args.size} arg(s) on ${start.name} (or its superclasses)")
+        m.isAccessible = true
+        methodCache[key] = m
+        return m
+    }
+
+    private fun typesExact(types: Array<Class<*>>, args: Array<out Any?>): Boolean =
+        types.indices.all { i -> args[i]?.let { a -> !types[i].isPrimitive && types[i] == a.javaClass } ?: !types[i].isPrimitive }
+
+    private fun typesCompatible(types: Array<Class<*>>, args: Array<out Any?>): Boolean {
+        for (i in types.indices) {
+            val t = types[i]
+            val a = args[i]
+            if (a == null) {
+                if (t.isPrimitive) return false else continue
+            }
+            when {
+                t.isInstance(a) -> {}
+                a is Number && (t.isPrimitive && t != java.lang.Boolean.TYPE || Number::class.java.isAssignableFrom(t) || t == Character.TYPE) -> {}
+                a is Boolean && (t == java.lang.Boolean.TYPE || t == java.lang.Boolean::class.java) -> {}
+                else -> return false
+            }
+        }
+        return true
     }
 
     private fun coerceArgs(args: Array<out Any?>, m: Method): Array<Any?> {

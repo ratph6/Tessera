@@ -30,6 +30,11 @@ object MixinTransformer : ClassFileTransformer {
     private const val HEAD_DESC = "(ILjava/lang/Object;[Ljava/lang/Object;)L$CTX;"
     private const val RET_DESC = "(ILjava/lang/Object;[Ljava/lang/Object;Ljava/lang/Object;)L$CTX;"
 
+    // Widenings actually baked into a class at first load. A retransform is always fed the ORIGINAL
+    // bytes and its result may not change modifiers relative to the live class — so these must be
+    // reapplied on every retransform, even after the registry entry is gone (unload/clear).
+    private val appliedWidenings = java.util.concurrent.ConcurrentHashMap<String, List<AccessRegistry.Widen>>()
+
     override fun transform(
         loader: ClassLoader?,
         className: String?,
@@ -42,21 +47,28 @@ object MixinTransformer : ClassFileTransformer {
         // still-being-defined MixinRegistry/MixinHooks triggers a re-entrant load.
         if (className.startsWith("ratph6/tessera/")) return null
         val hooks = MixinRegistry.hooksFor(className)
-        val widenings = AccessRegistry.forClass(className)
+        val initialLoad = classBeingRedefined == null
+        // Initial load: apply what's registered. Retransform: reapply exactly what the live class was
+        // defined with — new widenings can't apply (JVM rejects modifier changes on retransform), and
+        // dropping the old ones would also be a rejected modifier change.
+        val widenings = if (initialLoad) AccessRegistry.forClass(className) else appliedWidenings[className].orEmpty()
         if (hooks.isEmpty() && widenings.isEmpty()) return null
 
         return try {
             val cn = ClassNode()
             ClassReader(classfileBuffer).accept(cn, ClassReader.EXPAND_FRAMES)
 
-            // Access widening (flag flips) only at initial load — the JVM rejects modifier changes on a
-            // redefine/retransform. classBeingRedefined == null ⇒ first load.
-            val accessChanged = if (classBeingRedefined == null) applyAccess(cn, widenings) else false
+            val accessChanged = applyAccess(cn, widenings)
+            if (initialLoad && accessChanged) appliedWidenings[className] = widenings
             var injected = false
             for (mn in cn.methods.toList()) {
                 if (mn.name == "<init>" || mn.name == "<clinit>") continue
                 if (mn.access and (Opcodes.ACC_ABSTRACT or Opcodes.ACC_NATIVE) != 0) continue
-                val matching = hooks.filter { it.method == mn.name && (it.descriptor == null || it.descriptor == mn.desc) }
+                val matching = hooks.filter {
+                    it.method == mn.name && (it.descriptor == null || it.descriptor == mn.desc) &&
+                        // a name-only hook must not also catch the compiler-generated bridge (double fire)
+                        (it.descriptor != null || mn.access and (Opcodes.ACC_SYNTHETIC or Opcodes.ACC_BRIDGE) == 0)
+                }
                 for (hook in matching) {
                     when (hook.at) {
                         MixinAt.HEAD -> { injectHead(mn, hook.id); injected = true }

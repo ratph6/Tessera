@@ -105,11 +105,18 @@ object InstrumentationLoader {
         val proc = ProcessBuilder(cmd)
             .redirectErrorStream(true)
             .start()
-        val output = proc.inputStream.readBytes().decodeToString().trim()
+        // drain stdout on a side thread — reading inline blocks forever if the helper hangs,
+        // freezing the render thread and making the 30s timeout below unreachable
+        val outputRef = java.util.concurrent.atomic.AtomicReference("")
+        val drain = Thread({
+            runCatching { outputRef.set(proc.inputStream.readBytes().decodeToString().trim()) }
+        }, "tessera-attach-drain").apply { isDaemon = true; start() }
         if (!proc.waitFor(30, TimeUnit.SECONDS)) {
             proc.destroyForcibly()
             throw IllegalStateException("attach helper timed out")
         }
+        drain.join(2_000)
+        val output = outputRef.get()
         if (proc.exitValue() != 0) {
             throw IllegalStateException("attach helper failed (exit ${proc.exitValue()})" + if (output.isNotEmpty()) ": $output" else "")
         }

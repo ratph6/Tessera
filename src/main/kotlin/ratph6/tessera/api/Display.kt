@@ -6,12 +6,17 @@ import java.util.concurrent.CopyOnWriteArrayList
 object DisplayManager {
     val displays = CopyOnWriteArrayList<Display>()
     fun clear() = displays.clear()
-    fun renderAll() { for (d in displays) d.render() }
+    // one bad display must not take down the HUD render pass
+    fun renderAll() {
+        for (d in displays) runCatching { d.render() }
+            .onFailure { ratph6.tessera.engine.TesseraEngine.recordError("display", it) }
+    }
 }
 
 // A persistent multi-line HUD overlay.
 class Display {
-    private val lines = ArrayList<String>()
+    // scripts may mutate from off-thread (mixin hooks); render iterates on the render thread
+    private val lines = CopyOnWriteArrayList<String>()
     private var x = 2
     private var y = 2
     private var textColor = 0xFFFFFFFF.toInt()
@@ -36,13 +41,21 @@ class Display {
     fun remove() { DisplayManager.displays.remove(this) }
 
     internal fun render() {
-        if (!visible || lines.isEmpty()) return
+        if (!visible) return
+        val snapshot = lines.toList() // consistent view: width, count and draw all agree
+        if (snapshot.isEmpty()) return
         val lineHeight = Renderer.getFontHeight() + 1
         if (backgroundColor != 0) {
-            val width = lines.maxOf { Renderer.getStringWidth(it) }
-            Renderer.drawRect(backgroundColor, x - 1, y - 1, width + 2, lines.size * lineHeight + 1)
+            val width = snapshot.maxOf { Renderer.getStringWidth(it) }
+            // the rect must track the text's alignment, not assume left-aligned
+            val left = when (align) {
+                "right" -> x - width
+                "center" -> x - width / 2
+                else -> x
+            }
+            Renderer.drawRect(backgroundColor, left - 1, y - 1, width + 2, snapshot.size * lineHeight + 1)
         }
-        lines.forEachIndexed { i, text ->
+        snapshot.forEachIndexed { i, text ->
             val lineX = when (align) {
                 "right" -> x - Renderer.getStringWidth(text)
                 "center" -> x - Renderer.getStringWidth(text) / 2

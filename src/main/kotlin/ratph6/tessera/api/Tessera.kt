@@ -10,10 +10,25 @@ object Tessera {
     fun register(type: String, callback: Consumer<Any?>): TriggerHandle =
         TriggerHandle(TesseraEngine.registerTrigger(type, callback))
 
+    // every Event catalogue value — used to catch on()/register() mixups
+    private val BUILTIN_EVENTS: Set<String> by lazy {
+        Event::class.java.declaredFields
+            .filter { java.lang.reflect.Modifier.isStatic(it.modifiers) && it.type == String::class.java }
+            .mapNotNull { runCatching { it.apply { isAccessible = true }.get(null) as String }.getOrNull() }
+            .toSet()
+    }
+
     // listen for a custom event (see emit) or a built-in tessera:* event
     @JvmStatic
-    fun on(eventName: String, callback: Consumer<Any?>): TriggerHandle =
-        TriggerHandle(TesseraEngine.registerTrigger("@evt:$eventName", callback))
+    fun on(eventName: String, callback: Consumer<Any?>): TriggerHandle {
+        // on(Event.CHAT) registers "@evt:chat", which no built-in hook ever emits — flag it
+        if (eventName in BUILTIN_EVENTS) {
+            TesseraEngine.recordError(
+                "Tessera.on",
+                "'$eventName' is a built-in Event — use Tessera.register(Event....); on() is only for emit() events and tessera:* bus events")
+        }
+        return TriggerHandle(TesseraEngine.registerTrigger("@evt:$eventName", callback))
+    }
 
     // fire a custom event; every on() handler runs with the payload
     @JvmStatic
@@ -56,7 +71,7 @@ object Tessera {
     @JvmStatic
     fun log(message: String) = TesseraEngine.consoleLog("info", message)
 
-    // high-res ms timestamp; use instead of System.*
+    // high-res monotonic ms — for measuring deltas only; NOT wall-clock, origin is arbitrary
     @JvmStatic
     fun millis(): Double = System.nanoTime() / 1_000_000.0
 }

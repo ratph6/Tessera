@@ -1,11 +1,15 @@
 package ratph6.tessera.engine
 import org.junit.jupiter.api.Test
 class CaptureRepro {
-  private fun show(tag: String, src: String) {
-    try { val r = TesseraCompiler.compile(src, "$tag/index.ts", TesseraCompiler::class.java.classLoader)
+  // returns success so the test can assert on the paths that must work (a swallowing
+  // print-only "test" stays green even when everything fails)
+  private fun show(tag: String, src: String): Boolean {
+    return try { val r = TesseraCompiler.compile(src, "$tag/index.ts", TesseraCompiler::class.java.classLoader)
       System.err.println("[$tag] OK ${r.defaultClass.declaredMethods.joinToString { it.name }}")
+      true
     } catch (t: Throwable) { var c: Throwable = t; while (c.cause != null && c.cause !== c) c = c.cause!!
-      System.err.println("[$tag] FAIL ${c::class.simpleName}: ${(c.message ?: "").take(40)}") }
+      System.err.println("[$tag] FAIL ${c::class.simpleName}: ${(c.message ?: "").take(40)}")
+      false }
   }
   @Test fun t() {
     // many reassigned+captured module lets in one lambda -> swc4j max_stack bug
@@ -15,9 +19,10 @@ class CaptureRepro {
     show("captures10", "import { Tessera, Event, ChatLib } from 'ratph6.tessera.api';\n$lets\n" +
       "Tessera.register(Event.TICK, () => { ChatLib.chat(\"\" + ($reads)); });\n" +
       "Tessera.register(Event.COMMAND, (args) => { $reassign }).setName(\"r\");")
-    // same logic but state in a static API, no captures
-    show("nocapture", "import { Tessera, Event, ChatLib, Store } from 'ratph6.tessera.api';\n" +
+    // same logic but state in a static API, no captures — this path MUST compile
+    val nocapture = show("nocapture", "import { Tessera, Event, ChatLib, Store } from 'ratph6.tessera.api';\n" +
       "Tessera.register(Event.TICK, () => { ChatLib.chat(\"\" + Store.getNum(\"v1\", 0)); });\n" +
       "Tessera.register(Event.COMMAND, (args) => { Store.setNum(\"v1\", Store.getNum(\"v1\", 0) + 1); }).setName(\"r2\");")
+    org.junit.jupiter.api.Assertions.assertTrue(nocapture, "no-capture module failed to compile (regression)")
   }
 }

@@ -28,10 +28,10 @@ object MixinManager {
         ensureTransformer()
         AccessRegistry.add(target, kind, member, descriptor, TesseraEngine.currentModule())
         // JVM forbids modifier changes on a loaded class — if already loaded, widening only applies on a
-        // later load, so warn instead of silently doing nothing.
-        val alreadyLoaded = runCatching {
-            Class.forName(target, false, TesseraEngine.scriptClassLoader)
-        }.getOrNull() != null
+        // later load, so warn instead of silently doing nothing. Probe via allLoadedClasses: Class.forName
+        // would itself trigger the load (and then always "find" the class, warning on every call).
+        val alreadyLoaded = InstrumentationLoader.instrumentationOrNull()
+            ?.allLoadedClasses?.any { it.name == target } == true
         if (alreadyLoaded) {
             TesseraEngine.recordError(
                 "accessWidener",

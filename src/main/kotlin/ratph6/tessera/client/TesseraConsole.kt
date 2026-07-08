@@ -100,9 +100,12 @@ object TesseraConsole {
             setLocationRelativeTo(null)
         }
 
-        // replay history, then stream new lines
-        for (line in TesseraEngine.recentLog()) append(line)
-        TesseraEngine.consoleSink = { line -> SwingUtilities.invokeLater { append(line) } }
+        // attach + replay in one EDT task: the sink's invokeLater lines queue behind this task,
+        // so history renders first and nothing is lost or duplicated
+        SwingUtilities.invokeLater {
+            val history = TesseraEngine.attachConsole { line -> SwingUtilities.invokeLater { append(line) } }
+            history.forEach { append(it) }
+        }
     }
 
     private fun colorFor(level: String): Color = when (level) {

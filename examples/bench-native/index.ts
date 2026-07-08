@@ -14,11 +14,11 @@ for (let i = 0; i < n; i++) {
   let prime = true;
   if (i < 2) {
     prime = false;
-  } else if (i % 2 === 0) {
-    prime = i === 2;
+  } else if (i % 2 == 0) {
+    prime = i == 2;
   } else {
     for (let j = 3; j * j <= i; j += 2) {
-      if (i % j === 0) { prime = false; break; }
+      if (i % j == 0) { prime = false; break; }
     }
   }
   if (prime) count++;

@@ -136,11 +136,17 @@ abstract class GenMinecraftDtsTask : DefaultTask() {
         mapOut.parentFile.mkdirs()
         mapOut.writeText(json.toString())
         logger.lifecycle("genMinecraftDts: ${unique.size} unique-named classes exposed as no-import globals")
+
+        // release the jar handles (kept open until here — emitType resolves member types lazily);
+        // the Gradle daemon would otherwise keep loom-cache jars locked on Windows
+        loader.close()
     }
 
     private fun emitType(sb: StringBuilder, c: Class<*>, willEmit: Set<String>) {
-        val kind = if (c.isInterface) "interface" else "class"
-        sb.append("  export ").append(kind).append(' ').append(c.simpleName).append(" {\n")
+        // Java interfaces are emitted as ambient classes too: TS interfaces can't declare `static`
+        // members (Minecraft interfaces have many), and interfaces have no value binding so the
+        // generated `const X: typeof import(...)` globals would be ts2749 errors.
+        sb.append("  export class ").append(c.simpleName).append(" {\n")
 
         // Constructors (concrete classes only).
         if (!c.isInterface && !Modifier.isAbstract(c.modifiers)) {

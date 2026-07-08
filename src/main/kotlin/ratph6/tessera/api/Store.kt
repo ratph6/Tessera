@@ -5,6 +5,10 @@ import java.util.concurrent.ConcurrentHashMap
 // Global key→value store for script state. Use instead of many captured `let`s: swc4j boxes each
 // reassigned captured var and miscomputes the stack when one callback captures many (VerifyError);
 // going through Store keeps callbacks capture-free.
+//
+// Caveats scripts must know: the namespace is GLOBAL (prefix keys with your module name to avoid
+// collisions), clear() wipes every module's state, values are memory-only (lost on game restart)
+// and survive /te reload.
 object Store {
     private val nums = ConcurrentHashMap<String, Double>()
     private val bools = ConcurrentHashMap<String, Boolean>()

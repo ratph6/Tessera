@@ -75,7 +75,11 @@ object TesseraScaffold {
         val windows = System.getProperty("os.name").orEmpty().lowercase().contains("win")
         val cmd = if (windows) listOf("cmd", "/c", "codium", dir.toString())
         else listOf("codium", dir.toString())
-        ProcessBuilder(cmd).inheritIO().start()
-        Unit
+        val proc = ProcessBuilder(cmd).inheritIO().start()
+        // `cmd /c` starts fine even when codium is missing — it exits fast and non-zero, so give it
+        // a moment and check; a still-running (or clean-exit) launcher counts as success
+        if (proc.waitFor(3, java.util.concurrent.TimeUnit.SECONDS) && proc.exitValue() != 0) {
+            throw IllegalStateException("editor launcher exited with ${proc.exitValue()} — is codium on PATH?")
+        }
     }
 }

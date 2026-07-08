@@ -1,6 +1,7 @@
 package ratph6.tessera.api
 
-// Passed last to cancellable callbacks; cancel() stops the underlying game action.
+// Cancel-flag holder for the event currently being dispatched. Scripts don't receive this object —
+// call Tessera.cancelEvent() inside a callback to cancel; the engine reads the flag afterwards.
 class CancellableEvent {
     @JvmField var cancelled: Boolean = false
 

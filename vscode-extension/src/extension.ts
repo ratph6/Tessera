@@ -241,7 +241,7 @@ function loadApi(extPath: string): Map<string, string[]> {
     }
     if (cls) {
       const m = methodRe.exec(line);
-      if (m && m[1] !== 'new' && !methods.includes(m[1])) {
+      if (m && m[1] !== 'constructor' && !methods.includes(m[1])) {
         methods.push(m[1]);
         continue;
       }
@@ -289,8 +289,12 @@ async function configureWorkspace(typeFiles: string[]) {
   const jsons = await vscode.workspace.findFiles('**/tessera.json', '**/node_modules/**', 2000);
   const roots = new Set<string>();
   for (const j of jsons) {
-    // Put one tsconfig at the modules root (parent of each module dir) so it covers all modules.
-    roots.add(path.dirname(path.dirname(j.fsPath)));
+    // Put one tsconfig at the modules root (parent of each module dir) so it covers all modules —
+    // but never above the workspace folder (a tessera.json at the workspace root would otherwise
+    // make us write into an unrelated parent directory).
+    const ws = vscode.workspace.getWorkspaceFolder(j)?.uri.fsPath;
+    const candidate = path.dirname(path.dirname(j.fsPath));
+    roots.add(ws && !candidate.startsWith(ws) ? path.dirname(j.fsPath) : candidate);
   }
   for (const root of roots) {
     try {
@@ -327,7 +331,7 @@ async function writeTsconfig(folder: vscode.Uri, typeFiles: string[], force: boo
       strict: false,
     },
     files: typeFiles.map(toPosix),
-    include: ['**/*.ts'],
+    include: ['**/*.ts', '**/*.js'],
   };
   fs.writeFileSync(file, JSON.stringify(tsconfig, null, 2) + '\n');
 }

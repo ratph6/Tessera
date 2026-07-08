@@ -67,25 +67,38 @@ object TesseraCommand {
     }
 
     // executes body looks the trigger up by name at invoke time, so a node registered once survives reloads
-    private fun registerScriptCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
+    private fun registerScriptCommands(dispatcher: CommandDispatcher<FabricClientCommandSource>): Boolean {
+        var added = false
         for (cmd in TriggerRegistry.allCommands()) {
             val name = cmd.name ?: continue
             if (!registered.add(name)) continue // already a node in the live dispatcher
+            added = true
             dispatcher.register(
                 ClientCommands.literal(name)
-                    .executes { TesseraEngine.dispatchCommand(name, emptyArray()); 1 }
+                    .executes { runScriptCommand(name, emptyArray()); 1 }
                     .then(
                         ClientCommands.argument("args", StringArgumentType.greedyString()).executes { ctx ->
-                            TesseraEngine.dispatchCommand(name, splitArgs(ctx)); 1
+                            runScriptCommand(name, splitArgs(ctx)); 1
                         },
                     ),
             )
+        }
+        return added
+    }
+
+    // surface "nothing happened" — the node outlives its trigger when the module is unloaded
+    private fun runScriptCommand(name: String, args: Array<String>) {
+        if (!TesseraEngine.dispatchCommand(name, args)) {
+            ChatLib.chat("§7[§bTessera§7]§r §cno module currently registers §f/$name§c (was it unloaded?)")
         }
     }
 
     // call after reload/module load, else commands from late-loaded modules parse as "unknown"
     fun refreshScriptCommands() {
-        dispatcher?.let { registerScriptCommands(it) }
+        dispatcher?.let {
+            // completions are cached client-side; without a refresh new commands run but don't tab-complete
+            if (registerScriptCommands(it)) runCatching { ClientCommands.refreshCommandCompletions() }
+        }
     }
 
     private fun splitArgs(ctx: CommandContext<FabricClientCommandSource>): Array<String> =

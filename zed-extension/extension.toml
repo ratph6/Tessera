@@ -1,0 +1,19 @@
+id = "tessera"
+name = "Tessera — JavaScript In Minecraft"
+version = "0.1.0"
+schema_version = 1
+authors = ["ratph6"]
+description = "IntelliSense, Mixin/AccessWidener string-literal completion, and snippets for Tessera scripts (Minecraft modding in TypeScript/JavaScript)."
+repository = "https://github.com/ratph6/tessera"
+
+# A small Node-based language server that supplies the string-literal completions VS Code's built-in
+# TypeScript service can't: fully-qualified Minecraft class names, their methods/fields, and the
+# Mixin injection points. It also writes a managed tsconfig.json (pointing the editor's own TS server
+# at the bundled .d.ts files) into every Tessera module folder on startup — the same job the VS Code
+# extension did from JS, moved into the server process because Zed extensions run in a sandbox with no
+# project file access.
+[language_servers.tessera-mixin]
+name = "Tessera Mixin"
+languages = ["TypeScript", "JavaScript", "TSX"]
+
+snippets = ["./snippets/typescript.json", "./snippets/javascript.json"]

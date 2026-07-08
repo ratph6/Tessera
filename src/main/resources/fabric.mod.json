@@ -3,13 +3,13 @@
 	"id": "tessera",
 	"version": "${version}",
 	"name": "Tessera",
-	"description": "JavaScript In Minecraft — a TypeScript-first scripting runtime for Minecraft, powered by swc4j + Javet (V8). A modern spiritual successor to ChatTriggers.",
+	"description": "JavaScript In Minecraft — a TypeScript-first scripting runtime for Minecraft, powered by swc4j (TS→JVM bytecode) + GraalJS. A modern spiritual successor to ChatTriggers.",
 	"authors": [
 		"ratph6"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://tessera-5d7.pages.dev/",
+		"sources": "https://github.com/ratph6/Tessera"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/tessera/icon.png",
@@ -33,7 +33,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.19.3",
-		"minecraft": "~26.1.2",
+		"minecraft": "~26.2",
 		"java": ">=25",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*"

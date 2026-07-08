@@ -7,7 +7,7 @@ import ratph6.tessera.api.ChatLib
 object BenchNative {
 
     fun run() {
-        ChatLib.chat("§7[§bTessera§7]§r §fnative JVM baseline (kotlinc) — compare with §a/benchnative §7&§b /benchinterop")
+        ChatLib.chat("§7[§bTessera§7]§r §fnative JVM baseline (kotlinc) — compare with the §abench-native§7/§bbench-interop§f example modules (run on load / /te reload)")
         nativeCompute()
         nativeInterop()
     }

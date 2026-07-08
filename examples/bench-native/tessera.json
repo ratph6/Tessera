@@ -2,6 +2,7 @@
   "name": "bench-native",
   "version": "1.0.0",
   "author": "tessera",
-  "description": "Native compute benchmark — isPrime over N numbers (auto-runs on load; /benchnative)",
-  "entry": "index.ts"
+  "description": "Native compute benchmark \u2014 isPrime over N numbers (auto-runs on load and /te reload)",
+  "entry": "index.ts",
+  "engine": "bytecode"
 }

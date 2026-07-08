@@ -30,9 +30,12 @@ object TesseraHooks {
     fun onEntityDeath(entity: net.minecraft.world.entity.Entity) =
         TesseraEngine.dispatchAsync(TriggerType.ENTITY_DEATH, ratph6.tessera.api.EntityWrapper(entity))
 
+    // chat-like: must go through fireChat so .setCriteria()/match modes are honoured
     @JvmStatic
-    fun onMessageSent(message: String): Boolean = TesseraEngine.dispatch(TriggerType.MESSAGE_SENT, message)
+    fun onMessageSent(message: String): Boolean =
+        TesseraEngine.fireChat(TriggerType.MESSAGE_SENT, message, FORMATTING.replace(message, ""))
 
     @JvmStatic
-    fun onActionBar(text: String): Boolean = TesseraEngine.dispatch(TriggerType.ACTION_BAR, text)
+    fun onActionBar(text: String): Boolean =
+        TesseraEngine.fireChat(TriggerType.ACTION_BAR, text, FORMATTING.replace(text, ""))
 }

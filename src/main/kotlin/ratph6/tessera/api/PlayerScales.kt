@@ -6,7 +6,6 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.util.concurrent.ConcurrentHashMap
 
 // Remote per-player scale table fetched from a URL: { "PlayerName": { "x": 2, "y": 2, "z": 2 } }.
 // Lookups are case-insensitive.
@@ -14,15 +13,21 @@ object PlayerScales {
 
     private class Scale(val x: Double, val y: Double, val z: Double)
 
-    private val table = ConcurrentHashMap<String, Scale>()
+    // single volatile reference: the render thread never sees a half-swapped table
+    @Volatile private var table: Map<String, Scale> = emptyMap()
+
+    // one shared client with a connect timeout — a per-fetch client leaks its selector thread
+    private val client: HttpClient by lazy {
+        HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(10)).build()
+    }
 
     // fetch off-thread (HTTP can't run on the render thread); replaces the table on success
     @JvmStatic
     fun fetch(url: String) {
         Thread({
             runCatching {
-                val client = HttpClient.newHttpClient()
-                val request = HttpRequest.newBuilder(URI.create(url)).GET().build()
+                val request = HttpRequest.newBuilder(URI.create(url))
+                    .timeout(java.time.Duration.ofSeconds(20)).GET().build()
                 val body = client.send(request, HttpResponse.BodyHandlers.ofString()).body()
                 val root = JsonParser.parseString(body).asJsonObject
                 val fresh = HashMap<String, Scale>()
@@ -30,8 +35,7 @@ object PlayerScales {
                     val o = value.asJsonObject
                     fresh[name.lowercase()] = Scale(o.get("x").asDouble, o.get("y").asDouble, o.get("z").asDouble)
                 }
-                table.clear()
-                table.putAll(fresh)
+                table = fresh
                 TesseraEngine.enqueue { TesseraEngine.chat("§aloaded ${fresh.size} player size(s)") }
             }.onFailure {
                 TesseraEngine.recordError("PlayerScales.fetch", it.message ?: it.toString())

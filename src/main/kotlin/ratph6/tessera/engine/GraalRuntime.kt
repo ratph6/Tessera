@@ -74,6 +74,9 @@ object GraalRuntime {
             .hostClassLoader(GraalRuntime::class.java.classLoader)
             .allowExperimentalOptions(true)
             .option("js.ecmascript-version", "2024")
+            // without this, eval of an ES module Source returns the completion value, not the
+            // namespace — module.attach() would get undefined and exported functions would be lost
+            .option("js.esm-eval-returns-exports", "true")
             .build()
         bootstrapJs(c)
         ctx = c
@@ -108,7 +111,8 @@ object GraalRuntime {
 
     fun transpileTs(source: String, fileName: String): String {
         val options = Swc4jTranspileOptions()
-            .setSpecifier(URI.create("file:///$fileName").toURL())
+            // multi-arg URI constructor percent-encodes — module dir names with spaces must not throw
+            .setSpecifier(URI("file", "", "/$fileName", null).toURL())
             .setMediaType(mediaTypeFor(fileName))
             .setParseMode(Swc4jParseMode.Module)
             .setModuleKind(Swc4jModuleKind.Esm)
@@ -119,13 +123,17 @@ object GraalRuntime {
     // Modules are single-file: their `import { X } from 'spec'` lines have no JS module to resolve, so
     // each is rewritten to `const X = Java.type('spec.X')`.
     private val braceImport = Regex("""import\s*\{([^}]*)\}\s*from\s*['"]([^'"]+)['"]\s*;?""")
+    // `import X from 'a.b.X'` — treat the specifier as the FQCN
+    private val defaultImport = Regex("""import\s+([A-Za-z_$][A-Za-z0-9_$]*)\s+from\s*['"]([^'"]+)['"]\s*;?""")
+    // any import statement that survived the rewrites (namespace, mixed, bare) — unsupported
+    private val leftoverImport = Regex("""(?m)^\s*import[\s{*]""")
     private val identifier = Regex("""[A-Za-z_$][A-Za-z0-9_$]*""")
     private val asSplit = Regex("""\s+as\s+""")
 
     // returns the new source and the names it bound
     private fun rewriteImports(js: String): Pair<String, Set<String>> {
         val bound = HashSet<String>()
-        val out = braceImport.replace(js) { m ->
+        var out = braceImport.replace(js) { m ->
             val spec = m.groupValues[2]
             m.groupValues[1].split(',').mapNotNull { raw ->
                 val parts = raw.trim().split(asSplit)
@@ -136,16 +144,33 @@ object GraalRuntime {
                 "const $local = Java.type('$spec.$orig');"
             }.joinToString(" ")
         }
+        out = defaultImport.replace(out) { m ->
+            val local = m.groupValues[1]
+            bound.add(local)
+            "const $local = Java.type('${m.groupValues[2]}');"
+        }
+        // fail with a clear message instead of GraalJS's opaque module-resolution error
+        leftoverImport.find(out)?.let {
+            val line = out.substring(it.range.first).lineSequence().first().trim()
+            throw IllegalArgumentException(
+                "unsupported import form: `$line` — use `import { A, B } from 'package'` (or `import X from 'fq.class.Name'`)")
+        }
         return out to bound
     }
 
-    // bind every no-import global the script references (and didn't import) to its host type
+    // top-level (and, conservatively, nested) declarations — never shadow these with a global binding
+    private val declaredName = Regex("""(?m)^\s*(?:export\s+)?(?:const|let|var|function|class)\s+([A-Za-z_$][A-Za-z0-9_$]*)""")
+
+    // bind every no-import global the script references (and didn't import or declare) to its host type
     private fun globalsPrelude(js: String, alreadyBound: Set<String>): String {
         val used = identifier.findAll(js).mapTo(HashSet()) { it.value }
+        val declared = declaredName.findAll(js).mapTo(HashSet()) { it.groupValues[1] }
         val sb = StringBuilder()
         for ((name, fqcn) in globals) {
-            if (name !in alreadyBound && name in used) {
-                sb.append("const ").append(name).append(" = Java.type('").append(fqcn).append("');\n")
+            if (name !in alreadyBound && name !in declared && name in used) {
+                // let + try/catch: a stale FQCN (class renamed by an MC update) must not kill the module
+                sb.append("let ").append(name).append("; try { ").append(name)
+                    .append(" = Java.type('").append(fqcn).append("'); } catch (e) {}\n")
             }
         }
         return sb.toString()
@@ -174,7 +199,9 @@ object GraalRuntime {
     // one-off snippet for `/te eval`
     fun evalSnippet(code: String): Value {
         val js = prepare(code, "tessera-eval.ts")
-        return TesseraEngine.withCurrentModule(null) { context().eval("js", js) }
+        // IIFE keeps the prelude's bindings snippet-local — bare declarations would land in the
+        // shared global scope and make the second eval of the same name a SyntaxError
+        return TesseraEngine.withCurrentModule(null) { context().eval("js", "(() => {\n$js\n})()") }
     }
 
     // dispose the context so a reload starts from clean JS global state

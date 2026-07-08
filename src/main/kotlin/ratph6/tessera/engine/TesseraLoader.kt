@@ -61,7 +61,11 @@ object TesseraLoader {
                 entry = json.stringOr("entry", "index.ts"),
                 engine = json.stringOr("engine", Engines.DEFAULT).lowercase(),
             )
-        }.getOrDefault(TesseraManifest(name = fallbackName))
+        }.getOrElse {
+            // don't silently fall back — a broken manifest means the wrong engine/entry gets used
+            TesseraEngine.recordError("manifest:$fallbackName", "tessera.json is malformed (${it.message}); using defaults")
+            TesseraManifest(name = fallbackName)
+        }
     }
 
     private fun JsonObject.stringOr(key: String, default: String): String =

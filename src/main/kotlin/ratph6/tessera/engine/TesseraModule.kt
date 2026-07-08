@@ -49,6 +49,9 @@ class BytecodeModule(
     val defaultClass: Class<*> = runner.defaultClass
 
     private val handleCache = ConcurrentHashMap<String, MethodHandle>()
+    // resolve the Method once per name — two independent firstOrNull calls over declaredMethods
+    // (whose order is unspecified) could pick different overloads for handle vs. paramCount
+    private val methodCache = ConcurrentHashMap<String, java.lang.reflect.Method>()
 
     override val exportedFunctions: List<String> by lazy {
         defaultClass.declaredMethods
@@ -57,17 +60,20 @@ class BytecodeModule(
             .distinct()
     }
 
+    private fun methodFor(functionName: String): java.lang.reflect.Method? =
+        methodCache[functionName] ?: defaultClass.declaredMethods.firstOrNull { it.name == functionName }
+            ?.also { methodCache[functionName] = it }
+
     fun handleFor(functionName: String): MethodHandle? {
         handleCache[functionName]?.let { return it }
-        val method = defaultClass.declaredMethods.firstOrNull { it.name == functionName } ?: return null
+        val method = methodFor(functionName) ?: return null
         method.isAccessible = true
         val handle = MethodHandles.lookup().unreflect(method)
         handleCache[functionName] = handle
         return handle
     }
 
-    fun parameterCount(functionName: String): Int =
-        defaultClass.declaredMethods.firstOrNull { it.name == functionName }?.parameterCount ?: 0
+    fun parameterCount(functionName: String): Int = methodFor(functionName)?.parameterCount ?: 0
 
     override fun callbackFor(functionName: String): TesseraCallback? =
         handleFor(functionName)?.let { HandleCallback(it, parameterCount(functionName)) }

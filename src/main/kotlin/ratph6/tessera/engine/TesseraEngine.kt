@@ -283,6 +283,10 @@ object TesseraEngine {
         if (filter != null && !classMatches(filter, args.firstOrNull())) return false
 
         val event = if (meta.cancelable) CancellableEvent() else null
+        // save/restore, not clear: a handler can dispatch nested events (emitEvent runs inline),
+        // and clearing would drop the outer module + lose the outer cancelEvent() flag
+        val prevModule = currentModuleTL.get()
+        val prevEvent = currentEventTL.get()
         currentModuleTL.set(meta.module)
         currentEventTL.set(event)
         try {
@@ -290,14 +294,21 @@ object TesseraEngine {
         } catch (e: Throwable) {
             recordError("trigger:${meta.type}", e)
         } finally {
-            currentEventTL.set(null)
-            currentModuleTL.set(null)
+            currentEventTL.set(prevEvent)
+            currentModuleTL.set(prevModule)
         }
         return event?.cancelled == true
     }
 
     // called from MixinHooks on whatever thread the target method runs
     fun invokeMixin(hook: MixinRegistry.Hook, ctx: ratph6.tessera.api.MixinContext) {
+        // GraalJS contexts are single-threaded: a guest callback touched from another thread throws
+        // "multi threaded access requested". Marshal it — observe-only there (the target method has
+        // returned by the time it runs, so cancel/return-override can't apply off-thread).
+        if (hook.callback is GraalCallback && !isOnJsThread()) {
+            enqueue { invokeMixin(hook, ctx) }
+            return
+        }
         val prev = currentModuleTL.get()
         currentModuleTL.set(hook.module)
         try {
@@ -310,24 +321,26 @@ object TesseraEngine {
     }
 
     private fun fireTimer(t: Timer) {
+        val prev = currentModuleTL.get()
         currentModuleTL.set(t.module)
         try {
             t.callback.invoke(emptyList())
         } catch (e: Throwable) {
             recordError("timer", e)
         } finally {
-            currentModuleTL.set(null)
+            currentModuleTL.set(prev)
         }
     }
 
     private fun fireTickTask(t: TickTask) {
+        val prev = currentModuleTL.get()
         currentModuleTL.set(t.module)
         try {
             t.callback.invoke(emptyList())
         } catch (e: Throwable) {
             recordError("scheduleTask", e)
         } finally {
-            currentModuleTL.set(null)
+            currentModuleTL.set(prev)
         }
     }
 
@@ -402,13 +415,20 @@ object TesseraEngine {
 
     fun recentLog(): List<TesseraLogLine> = synchronized(logBuffer) { logBuffer.toList() }
 
+    // attach a console sink and get the replay history atomically — no window where a line
+    // lands in neither the returned history nor the new sink
+    fun attachConsole(sink: (TesseraLogLine) -> Unit): List<TesseraLogLine> = synchronized(logBuffer) {
+        consoleSink = sink
+        logBuffer.toList()
+    }
+
     private fun emitConsole(level: String, where: String, message: String, detail: String?) {
         val line = TesseraLogLine(level, where, message, detail, tickCount)
         synchronized(logBuffer) {
             logBuffer.addLast(line)
             while (logBuffer.size > MAX_LOG) logBuffer.removeFirst()
+            runCatching { consoleSink(line) }
         }
-        runCatching { consoleSink(line) }
     }
 
     // deepest cause as `Type: message`

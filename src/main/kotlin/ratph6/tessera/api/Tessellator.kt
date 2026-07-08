@@ -14,7 +14,12 @@ object Tessellator {
     // pushes since begin(); used to auto-pop leftovers in end()
     private var depth = 0
 
+    // saved outer (pose, depth) frames — entity renders can nest (e.g. a renderer that draws
+    // another entity); a flat slot would zero the outer depth and leak its pushes
+    private val frames = ArrayDeque<Pair<PoseStack?, Int>>()
+
     internal fun begin(stack: PoseStack) {
+        frames.addLast(pose to depth)
         pose = stack
         depth = 0
     }
@@ -22,8 +27,9 @@ object Tessellator {
     internal fun end() {
         val p = pose
         if (p != null) while (depth > 0) { p.popPose(); depth-- }
-        pose = null
-        depth = 0
+        val prev = frames.removeLastOrNull()
+        pose = prev?.first
+        depth = prev?.second ?: 0
     }
 
     @JvmStatic fun pushMatrix() {

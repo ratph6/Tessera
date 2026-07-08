@@ -1,9 +1,9 @@
 # Tessera
 
-TypeScript scripting for Minecraft 26.1.2 (Fabric, Kotlin). Write a `.ts` file, drop it in a
+TypeScript scripting for Minecraft 26.2 (Fabric, Kotlin). Write a `.ts` file, drop it in a
 folder, reload in game. In the spirit of ChatTriggers, rebuilt on a modern toolchain.
 
-API docs: [tessera-1w4.pages.dev](https://tessera-5d7.pages.dev/) · runnable examples in [`examples/`](examples)
+API docs: [tessera-5d7.pages.dev](https://tessera-5d7.pages.dev/) · runnable examples in [`examples/`](examples)
 
 ## Two engines
 
@@ -49,12 +49,25 @@ The baseline lives in `BenchNative.kt`; the script versions are in `examples/ben
 
 | | |
 |---|---|
-| Minecraft | 26.1.2 (Fabric) |
+| Minecraft | 26.2 (Fabric) |
 | Dependencies | Fabric API, [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin) |
-| Java | 25 |
+| Java | 25 (GraalVM JDK 25 recommended — see below) |
 
 swc4j ships inside the mod jar, including its small Rust native (used only at compile time) for macOS
 (arm64/x64), Linux (x64) and Windows (x64). Nothing else to install.
+
+### Run on GraalVM (recommended)
+
+Tessera works on any JDK 25, but the `graal` engine is at its best when Minecraft itself runs on
+[GraalVM JDK 25](https://www.graalvm.org/downloads/). On a stock JDK, GraalJS attaches its optimizing
+compiler (jargraal) as a library — good, but it shares the JVM with everything else and warms up
+slower. On GraalVM the Graal compiler *is* the JVM's JIT: your scripts compile to native code faster,
+peak throughput is higher, and the rest of Minecraft (world gen, chunk meshing) gets the stronger
+compiler for free too.
+
+To switch: install GraalVM JDK 25, then point your launcher's Java executable at it
+(vanilla launcher → Installations → your profile → *Java executable*; Prism/MultiMC → Settings →
+Java). No mod or config changes needed — Tessera detects the runtime automatically.
 
 ## Build & install
 
@@ -115,7 +128,7 @@ Events with a live source hook in this build:
 - **Network** — `PACKET_RECEIVED`/`PACKET_SENT` (observe-only)
 - The custom bus (`Tessera.on` / `Tessera.emit`) and the built-in `tessera:*` events
 
-Some catalogue entries have no source hook on MC 26.1.2 — global `keyDown`/`mouse*` and the
+Some catalogue entries have no source hook on MC 26.2 — global `keyDown`/`mouse*` and the
 per-element HUD renders, because of the reworked input system and layered HUD, plus a few obscure
 ones. Registering one is allowed but logs a warning, so a typo never fails silently. The
 `run/tessera/modules/events-test` module (run `/events`) lights up each event as it fires, handy for
@@ -183,7 +196,7 @@ just the message, and has an input box that evaluates a line of TypeScript.
 
 ## API docs site
 
-The site at [tessera-1w4.pages.dev](https://tessera-1w4.pages.dev) is the Dokka HTML, committed to
+The site at [tessera-5d7.pages.dev](https://tessera-5d7.pages.dev) is the Dokka HTML, committed to
 [`docs/`](docs) and served statically (Cloudflare Pages: framework preset *none*, output directory
 `docs`; or GitHub Pages via [`.github/workflows/docs.yml`](.github/workflows/docs.yml)).
 
@@ -193,5 +206,5 @@ Regenerate after API changes:
 ./gradlew dokkaGenerate && cp -r build/dokka/html/. docs/
 ```
 
-Minecraft 26.1.2 isn't on public Maven, so the docs are committed as static HTML rather than built in
-CI — `build.yml` only passes on a runner that can resolve MC 26.1.2.
+Minecraft 26.2 isn't on public Maven, so the docs are committed as static HTML rather than built in
+CI — `build.yml` only passes on a runner that can resolve MC 26.2.

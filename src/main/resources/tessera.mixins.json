@@ -10,7 +10,7 @@
 		"client.MixinConnection",
 		"client.MixinEntityRenderState",
 		"client.MixinEntityRenderDispatcher",
-		"client.MixinGui",
+		"client.MixinHud",
 		"client.MixinLivingEntity",
 		"client.MixinSoundEngine"
 	],

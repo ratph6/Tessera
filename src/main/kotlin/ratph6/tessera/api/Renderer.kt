@@ -24,8 +24,9 @@ object Renderer {
     // horizontal or vertical only — the HUD draw target can't do diagonals
     @JvmStatic fun drawLine(color: Int, x1: Int, y1: Int, x2: Int, y2: Int, width: Int) {
         val g = graphics ?: return
-        if (y1 == y2) g.fill(minOf(x1, x2), y1, maxOf(x1, x2), y1 + width.coerceAtLeast(1), color)
-        else if (x1 == x2) g.fill(x1, minOf(y1, y2), x1 + width.coerceAtLeast(1), maxOf(y1, y2), color)
+        // fill()'s second corner is exclusive — +1 so the far endpoint pixel is included
+        if (y1 == y2) g.fill(minOf(x1, x2), y1, maxOf(x1, x2) + 1, y1 + width.coerceAtLeast(1), color)
+        else if (x1 == x2) g.fill(x1, minOf(y1, y2), x1 + width.coerceAtLeast(1), maxOf(y1, y2) + 1, color)
     }
 
     @JvmStatic fun color(r: Int, g: Int, b: Int): Int = color(r, g, b, 255)

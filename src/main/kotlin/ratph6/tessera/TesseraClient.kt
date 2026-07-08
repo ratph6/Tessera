@@ -26,7 +26,7 @@ object TesseraClient : ClientModInitializer {
         // engine output -> in-game chat, marshalled onto the render thread
         TesseraEngine.chatSink = { message ->
             val mc = Minecraft.getInstance()
-            val show = Runnable { runCatching { mc.gui.chat.addClientSystemMessage(Component.literal(message)) } }
+            val show = Runnable { runCatching { mc.gui.hud.chat.addClientSystemMessage(Component.literal(message)) } }
             if (mc.isSameThread) show.run() else mc.execute(show)
         }
 

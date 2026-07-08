@@ -23,11 +23,20 @@ object TabList {
     @JvmStatic fun getUnformattedNames(): Array<String> = getNames()
 }
 
-// Sidebar scoreboard — stubbed; the 26.1.2 read path is non-trivial under the new render model.
+// Sidebar scoreboard — stubbed; the 26.2 read path is non-trivial under the new render model.
 object Scoreboard {
-    @JvmStatic fun getTitle(): String = ""
-    @JvmStatic fun getUnformattedTitle(): String = ""
-    @JvmStatic fun getLines(): Array<String> = emptyArray()
+    // stub returns empty — warn once so scripts don't parse nothing forever without a clue
+    private var warned = false
+    private fun warnStub() {
+        if (warned) return
+        warned = true
+        ratph6.tessera.engine.TesseraEngine.recordError(
+            "Scoreboard", "Scoreboard API is stubbed on MC 26.2 — getTitle/getLines always return empty")
+    }
+
+    @JvmStatic fun getTitle(): String { warnStub(); return "" }
+    @JvmStatic fun getUnformattedTitle(): String { warnStub(); return "" }
+    @JvmStatic fun getLines(): Array<String> { warnStub(); return emptyArray() }
 }
 
 // Raw key state.

@@ -1,5 +1,5 @@
 # Publishes the committed Dokka API docs (docs/) to GitHub Pages.
-# (The docs are committed as static HTML because Minecraft 26.1.2 isn't on public maven, so a CI
+# (The docs are committed as static HTML because Minecraft 26.2 isn't on public maven, so a CI
 # runner can't build them with Gradle. Regenerate locally with: ./gradlew dokkaGenerate && cp -r
 # build/dokka/html/. docs/)
 #

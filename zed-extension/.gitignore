@@ -1,0 +1,8 @@
+# Rust / Zed build output
+target/
+*.wasm
+
+# Bundled type declarations are generated artifacts copied in by scripts/sync-zed-types.*
+# (tessera.d.ts is small and committed; the two big generated files are not).
+server/types/minecraft.d.ts
+server/types/minecraft-globals.d.ts

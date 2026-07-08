@@ -33,13 +33,15 @@ object TesseraCompiler {
 
     private val bannedImports = listOf("Runtime", "ProcessBuilder", "ProcessHandle")
 
+    // spans newlines: a line-based check is trivially defeated by `import {\n Runtime \n} from ...`
+    private val importStatement = Regex("""import\s[\s\S]*?from\s*['"][^'"]+['"]""")
+
     class CompileViolation(message: String) : RuntimeException(message)
 
     fun check(source: String, fileName: String) {
-        for (line in source.lineSequence()) {
-            if (!line.contains("import")) continue
+        for (stmt in importStatement.findAll(source)) {
             for (banned in bannedImports) {
-                if (Regex("""\b${Regex.escape(banned)}\b""").containsMatchIn(line)) {
+                if (Regex("""\b${Regex.escape(banned)}\b""").containsMatchIn(stmt.value)) {
                     throw CompileViolation("$fileName: importing '$banned' is not allowed in Tessera scripts")
                 }
             }
@@ -139,9 +141,39 @@ object TesseraCompiler {
     // access passed alongside a lambda arg, but compiles the literal cleanly.
     private fun inlineEvents(source: String): String {
         if (!source.contains("Event.") || eventConstants.isEmpty()) return source
+        val inCode = codeMask(source)
         return Regex("""\bEvent\.([A-Za-z_][A-Za-z0-9_]*)\b""").replace(source) { m ->
-            eventConstants[m.groupValues[1]]?.let { "\"$it\"" } ?: m.value
+            // never rewrite inside string literals or comments — `chat("Event.CHAT fired")` must survive
+            if (!inCode[m.range.first]) m.value
+            else eventConstants[m.groupValues[1]]?.let { "\"$it\"" } ?: m.value
         }
+    }
+
+    // true where the index is executable code (not inside a string literal or comment)
+    private fun codeMask(source: String): BooleanArray {
+        val mask = BooleanArray(source.length)
+        var state = 0 // 0 code, 1 'single', 2 "double", 3 `template`, 4 //line, 5 /*block*/
+        var i = 0
+        while (i < source.length) {
+            val ch = source[i]
+            when (state) {
+                0 -> when {
+                    ch == '\'' -> state = 1
+                    ch == '"' -> state = 2
+                    ch == '`' -> state = 3
+                    ch == '/' && i + 1 < source.length && source[i + 1] == '/' -> state = 4
+                    ch == '/' && i + 1 < source.length && source[i + 1] == '*' -> state = 5
+                    else -> mask[i] = true
+                }
+                1 -> when (ch) { '\\' -> i++; '\'' -> state = 0 }
+                2 -> when (ch) { '\\' -> i++; '"' -> state = 0 }
+                3 -> when (ch) { '\\' -> i++; '`' -> state = 0 }
+                4 -> if (ch == '\n') state = 0
+                5 -> if (ch == '*' && i + 1 < source.length && source[i + 1] == '/') { i++; state = 0 }
+            }
+            i++
+        }
+        return mask
     }
 
     private fun mediaTypeFor(fileName: String): Swc4jMediaType = when (fileName.substringAfterLast('.', "").lowercase()) {
@@ -154,19 +186,31 @@ object TesseraCompiler {
     // AST equivalent of textualWrapTopLevel; returns null if parsing fails or nothing to move.
     private fun wrapTopLevel(source: String, fileName: String): String? {
         val options = Swc4jParseOptions()
-            .setSpecifier(URI.create("file:///$fileName").toURL())
+            .setSpecifier(URI("file", "", "/$fileName", null).toURL())
             .setMediaType(mediaTypeFor(fileName))
             .setParseMode(Swc4jParseMode.Module)
             .setCaptureAst(true)
-        val program = parser.parse(source, options).program ?: return null
+        // fresh parser per parse: the shared instance's spans drift forward across its lifetime
+        val parsed = Swc4j().parse(source, options)
+        val program = parsed.program ?: return null
         val body = program.javaClass.getMethod("getBody").invoke(program) as? List<*> ?: return null
+
+        // swc4j spans are UTF-8 BYTE offsets relative to the program's own span start — normalize
+        // to the program base and convert to char indices, or any `§`/non-ASCII shifts every slice
+        val programSpan = program.javaClass.getMethod("getSpan").invoke(program)
+        val base = (programSpan.javaClass.getMethod("getStart").invoke(programSpan) as Number).toInt()
+        val byteToChar = byteToCharMap(source)
 
         data class Seg(val keep: Boolean, val start: Int, val end: Int)
         val segs = body.filterNotNull().map { node ->
             val span = node.javaClass.getMethod("getSpan").invoke(node)
-            val start = (span.javaClass.getMethod("getStart").invoke(span) as Number).toInt()
-            val end = (span.javaClass.getMethod("getEnd").invoke(span) as Number).toInt()
-            Seg(isDeclaration(node.javaClass.simpleName), start, end)
+            val startB = (span.javaClass.getMethod("getStart").invoke(span) as Number).toInt() - base
+            val endB = (span.javaClass.getMethod("getEnd").invoke(span) as Number).toInt() - base
+            Seg(
+                isDeclaration(node.javaClass.simpleName),
+                byteToChar[startB.coerceIn(0, byteToChar.size - 1)],
+                byteToChar[endB.coerceIn(0, byteToChar.size - 1)],
+            )
         }.sortedBy { it.start }
 
         if (segs.none { !it.keep }) return null // nothing to move; compile as-is
@@ -177,6 +221,27 @@ object TesseraCompiler {
             for (s in segs) if (!s.keep) append(slice(source, s.start, s.end)).append('\n')
             append("}\n")
         }
+    }
+
+    // map[utf8ByteOffset] -> char index into the String
+    private fun byteToCharMap(source: String): IntArray {
+        val map = IntArray(source.toByteArray(Charsets.UTF_8).size + 1)
+        var b = 0
+        var c = 0
+        while (c < source.length) {
+            val cp = source.codePointAt(c)
+            val byteWidth = when {
+                cp < 0x80 -> 1
+                cp < 0x800 -> 2
+                cp < 0x10000 -> 3
+                else -> 4
+            }
+            repeat(byteWidth) { map[b + it] = c }
+            b += byteWidth
+            c += Character.charCount(cp)
+        }
+        map[b] = source.length
+        return map
     }
 
     private fun isDeclaration(simpleName: String): Boolean =

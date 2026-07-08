@@ -12,6 +12,7 @@ object Event {
 
     // ticking
     const val TICK = "tick"
+    const val GAME_TICK = "gameTick"
     const val STEP = "step"
     const val GAME_LOAD = "gameLoad"
     const val GAME_UNLOAD = "gameUnload"

@@ -30,8 +30,11 @@ object World {
     @JvmStatic fun getEntitiesOfType(type: String): Array<EntityWrapper> =
         getAllEntities().filter { it.getType().contains(type, ignoreCase = true) }.toTypedArray()
 
-    @JvmStatic fun getNearestEntity(type: String, radius: Double): EntityWrapper? =
-        getEntitiesOfType(type)
+    @JvmStatic fun getNearestEntity(type: String, radius: Double): EntityWrapper? {
+        val self = Mc.player
+        return getEntitiesOfType(type)
+            .filter { it.handle !== self } // "nearest player" must not mean yourself (distance 0)
             .filter { Player.distanceTo(it) <= radius }
             .minByOrNull { Player.distanceTo(it) }
+    }
 }
