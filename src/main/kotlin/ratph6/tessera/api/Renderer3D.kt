@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.CompareOp
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
+import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.rendertype.LayeringTransform
@@ -17,7 +18,6 @@ import net.minecraft.client.renderer.state.level.CameraRenderState
 import net.minecraft.resources.Identifier
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
-import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 
 // World-space 3D drawing. Only valid inside a RENDER_WORLD trigger — every call is a no-op otherwise,
@@ -251,26 +251,48 @@ object Renderer3D {
     // text
     // ------------------------------------------------------------------------------------------------
 
+    // vanilla NAMETAG_SCALE — the base glyph size at scale 1.0, matching a normal name tag
+    private const val NAMETAG_BASE = 0.025f
+
     @JvmStatic
     fun drawText3D(text: String, x: Double, y: Double, z: Double, color: Int) =
-        drawText3D(text, x, y, z, color, 1.0, true)
+        drawText3D(text, x, y, z, color, defaultScale, true)
 
-    // Rendered through the vanilla name-tag path: always billboards toward the camera, auto-centres,
-    // and (when depth is off) shows through terrain. `scale` multiplies the base glyph size; `billboard`
-    // is accepted for API symmetry (this path always billboards). Colour is the glyph colour, alpha
-    // ignored — build it with color(r, g, b).
+    // scale-only overload (the common one): text at (x,y,z), camera-billboarded, `scale`× glyph size.
     @JvmStatic
-    fun drawText3D(text: String, x: Double, y: Double, z: Double, color: Int, scale: Double, billboard: Boolean) {
+    fun drawText3D(text: String, x: Double, y: Double, z: Double, color: Int, scale: Double) =
+        drawText3D(text, x, y, z, color, scale, true)
+
+    // Billboarded world text, genuinely scalable. We build the camera-facing pose ourselves (translate →
+    // face camera → scale) and submit through submitText, which copies the FULL pose matrix — so `scale`
+    // actually reaches the glyphs. (The old name-tag path ignored pose scale: submitNameTag rebuilds its
+    // own fixed NAMETAG_SCALE billboard from the camera, so any pose scale was silently dropped.)
+    // `shadow` is accepted for API symmetry (kept true). Colour is ARGB — build it with color(r,g,b[,a]);
+    // §-codes in the string still override per-glyph. depth(false) draws through terrain.
+    @JvmStatic
+    fun drawText3D(text: String, x: Double, y: Double, z: Double, color: Int, scale: Double, shadow: Boolean) {
         val col = collector ?: return
         val ps = pose ?: return
         val cam = camera ?: return
+        val font = Mc.client.font
+
         ps.pushPose()
         ps.translate(x, y, z)
-        val s = scale.toFloat()
-        if (s > 0f && s != 1f) ps.scale(s, s, s)
-        val label = Component.literal(text).withColor(color and 0xFFFFFF)
-        // pos = ZERO (the pose is already at the point); bg 0 = no plate; seeThrough matches the depth mode
-        col.submitNameTag(ps, Vec3.ZERO, 0, label, !depth, FULL_BRIGHT, cam)
+        ps.mulPose(cam.orientation)                 // face the camera
+        val s = NAMETAG_BASE * scale.toFloat()
+        ps.scale(-s, -s, s)                         // flip X/Y into text space, apply scale
+
+        val fcs = Component.literal(text).getVisualOrderText()
+        val width = font.width(text)
+        val mode = if (depth) Font.DisplayMode.NORMAL else Font.DisplayMode.SEE_THROUGH
+        // centre on the point (x=-width/2, y=-lineHeight/2); bg 0 = no plate, outline 0 = none
+        col.submitText(ps, -width / 2f, -font.lineHeight / 2f, fcs, shadow, mode, FULL_BRIGHT, color, 0, 0)
         ps.popPose()
     }
+
+    // set a persistent default scale that every drawText3D call without an explicit scale uses.
+    @Volatile private var defaultScale = 1.0
+
+    @JvmStatic fun setTextScale(scale: Double) { defaultScale = if (scale > 0) scale else 1.0 }
+    @JvmStatic fun getTextScale(): Double = defaultScale
 }

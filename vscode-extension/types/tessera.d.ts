@@ -262,10 +262,15 @@ declare module 'ratph6.tessera.api' {
     /** Line from the camera (screen centre) to an arbitrary world point. */
     function drawTracer(x: number, y: number, z: number, color: number, lineWidth: number): void;
 
-    /** Billboarded text at a world position (faces the camera). */
+    /** Billboarded text at a world position (uses the persistent setTextScale, default 1). */
     function drawText3D(text: string, x: number, y: number, z: number, color: number): void;
-    /** Text at a world position. `scale` multiplies the base glyph size; `billboard` faces the camera. */
-    function drawText3D(text: string, x: number, y: number, z: number, color: number, scale: number, billboard: boolean): void;
+    /** Billboarded text; `scale` multiplies the base glyph size (genuinely scalable). */
+    function drawText3D(text: string, x: number, y: number, z: number, color: number, scale: number): void;
+    /** Billboarded text; `scale` × size, `shadow` toggles the drop shadow. */
+    function drawText3D(text: string, x: number, y: number, z: number, color: number, scale: number, shadow: boolean): void;
+    /** Persistent default scale for drawText3D calls that don't pass one. */
+    function setTextScale(scale: number): void;
+    function getTextScale(): number;
   }
 
   /** Remote, case-insensitive per-player scale table: `{ "Name": { x, y, z } }` fetched from a URL. */
