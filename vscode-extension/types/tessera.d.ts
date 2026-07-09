@@ -134,6 +134,9 @@ declare module 'ratph6.tessera.api' {
     /** Re-activate this trigger after `.unregister()`. Reuses the same handle; idempotent while
      *  already active. Lets you toggle a listener on and off without re-declaring it. */
     register(): TriggerHandle;
+    /** Toggle on/off. */
+    setRegistered(on: boolean): TriggerHandle;
+    isRegistered(): boolean;
   }
 
   namespace Tessera {

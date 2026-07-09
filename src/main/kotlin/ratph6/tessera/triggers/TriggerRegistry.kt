@@ -19,14 +19,6 @@ object TriggerRegistry {
         return meta
     }
 
-    // Re-activate a trigger previously unregister()'d through its handle, reusing the same id and
-    // callback. Idempotent while the trigger is still live. Lets scripts toggle a handle on and off.
-    fun reregister(meta: TriggerMeta) {
-        meta.enabled = true
-        byId[meta.id] = meta
-        index(meta)
-    }
-
     private fun index(meta: TriggerMeta) {
         val list = byType.getOrPut(meta.type) { CopyOnWriteArrayList() }
         if (meta !in list) {
@@ -55,6 +47,15 @@ object TriggerRegistry {
         meta.enabled = false
         byType[meta.type]?.remove(meta)
     }
+
+    // re-add a previously unregistered trigger (same meta/id) — the counterpart to unregister()
+    fun reregister(meta: TriggerMeta) {
+        meta.enabled = true
+        byId[meta.id] = meta
+        index(meta)
+    }
+
+    fun isRegistered(id: Int): Boolean = byId.containsKey(id)
 
     fun removeModule(module: String) {
         val removed = byId.values.filter { it.module?.name == module }

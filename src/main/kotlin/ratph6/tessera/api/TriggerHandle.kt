@@ -24,8 +24,12 @@ class TriggerHandle(private val meta: TriggerMeta) {
     fun setEventClass(className: String): TriggerHandle { meta.eventClass = className; return this }
     fun unregister(): TriggerHandle { TriggerRegistry.unregister(meta.id); return this }
 
-    // re-activate this trigger after unregister(); idempotent while it's already active
+    // re-enable a trigger you previously unregister()'d — toggle it back on
     fun register(): TriggerHandle { TriggerRegistry.reregister(meta); return this }
+
+    // convenience toggle + state
+    fun setRegistered(on: Boolean): TriggerHandle = if (on) register() else unregister()
+    fun isRegistered(): Boolean = TriggerRegistry.isRegistered(meta.id)
 
     fun id(): Int = meta.id
 }
