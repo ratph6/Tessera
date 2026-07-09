@@ -37,7 +37,7 @@ object GraalRuntime {
 
     // Tessera API names -> FQCN, reached via Java.type (binding the bare Class would expose java.lang.Class).
     private val tesseraApi: Map<String, String> = listOf(
-        "Tessera", "ChatLib", "Player", "World", "Renderer", "Tessellator", "PlayerScales",
+        "Tessera", "ChatLib", "Player", "World", "Renderer", "Renderer3D", "Tessellator", "PlayerScales",
         "Num", "Args", "Store", "Server", "TabList", "Scoreboard", "KeyBind",
         "Event", "Display", "CancellableEvent", "Mixin", "MixinContext", "AccessWidener",
     ).associateWith { "ratph6.tessera.api.$it" }
