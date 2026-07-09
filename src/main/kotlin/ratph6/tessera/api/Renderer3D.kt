@@ -280,7 +280,9 @@ object Renderer3D {
         ps.translate(x, y, z)
         ps.mulPose(cam.orientation)                 // face the camera
         val s = NAMETAG_BASE * scale.toFloat()
-        ps.scale(-s, -s, s)                         // flip X/Y into text space, apply scale
+        // match vanilla name tags exactly: +X, -Y, +Z. A negative X mirrors the text AND flips the
+        // quad winding, which backface-culls the glyphs (invisible) — only Y is negated.
+        ps.scale(s, -s, s)
 
         val fcs = Component.literal(text).getVisualOrderText()
         val width = font.width(text)
