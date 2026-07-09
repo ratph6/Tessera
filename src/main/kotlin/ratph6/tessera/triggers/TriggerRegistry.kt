@@ -48,6 +48,15 @@ object TriggerRegistry {
         byType[meta.type]?.remove(meta)
     }
 
+    // re-add a previously unregistered trigger (same meta/id) — the counterpart to unregister()
+    fun reregister(meta: TriggerMeta) {
+        meta.enabled = true
+        byId[meta.id] = meta
+        index(meta)
+    }
+
+    fun isRegistered(id: Int): Boolean = byId.containsKey(id)
+
     fun removeModule(module: String) {
         val removed = byId.values.filter { it.module?.name == module }
         for (m in removed) {

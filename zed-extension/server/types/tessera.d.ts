@@ -130,6 +130,11 @@ declare module 'ratph6.tessera.api' {
      *  so `setFilteredClass("Bat")` works. e.g. PACKET_RECEIVED + setFilteredClass("ClientboundSetHealthPacket"). */
     setFilteredClass(className: string): TriggerHandle;
     unregister(): TriggerHandle;
+    /** Re-enable a trigger you previously unregister()'d. */
+    register(): TriggerHandle;
+    /** Toggle on/off. */
+    setRegistered(on: boolean): TriggerHandle;
+    isRegistered(): boolean;
   }
 
   namespace Tessera {
