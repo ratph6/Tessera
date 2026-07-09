@@ -256,7 +256,7 @@ object Renderer3D {
 
     @JvmStatic
     fun drawText3D(text: String, x: Double, y: Double, z: Double, color: Int) =
-        drawText3D(text, x, y, z, color, defaultScale, true)
+        drawText3D(text, x, y, z, color, 1.0, true)
 
     // scale-only overload (the common one): text at (x,y,z), camera-billboarded, `scale`× glyph size.
     @JvmStatic
@@ -279,7 +279,9 @@ object Renderer3D {
         ps.pushPose()
         ps.translate(x, y, z)
         ps.mulPose(cam.orientation)                 // face the camera
-        val s = NAMETAG_BASE * scale.toFloat()
+        // per-call scale × the persistent setTextScale multiplier — so setTextScale() scales text even
+        // if a host-interop overload picked the no-scale form and dropped the explicit arg.
+        val s = NAMETAG_BASE * (scale * defaultScale).toFloat()
         // match vanilla name tags exactly: +X, -Y, +Z. A negative X mirrors the text AND flips the
         // quad winding, which backface-culls the glyphs (invisible) — only Y is negated.
         ps.scale(s, -s, s)
