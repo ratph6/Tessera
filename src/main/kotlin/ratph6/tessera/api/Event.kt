@@ -61,6 +61,8 @@ object Event {
     const val GUI_MOUSE_RELEASE = "guiMouseRelease"
     const val GUI_DRAW_BACKGROUND = "guiDrawBackground"
     const val POST_GUI_RENDER = "postGuiRender"
+    // fires every frame while Tessera's blank GUI screen is open (Gui.open); callback gets (mouseX, mouseY)
+    const val GUI_SCREEN_RENDER = "guiScreenRender"
 
     // HUD rendering
     const val RENDER_OVERLAY = "renderOverlay"

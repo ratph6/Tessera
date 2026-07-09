@@ -102,6 +102,8 @@ declare module 'ratph6.tessera.api' {
     const PICKUP_ITEM: string; const DROP_ITEM: string; const SLOT_CLICK: string; const INVENTORY_OPEN: string; const INVENTORY_CLOSE: string;
     const GUI_OPENED: string; const GUI_CLOSED: string; const GUI_KEY: string; const GUI_MOUSE_CLICK: string;
     const GUI_MOUSE_RELEASE: string; const GUI_DRAW_BACKGROUND: string; const POST_GUI_RENDER: string;
+    /** Fires each frame while Tessera's blank GUI screen (Gui.open) is open. Callback: (mouseX, mouseY), gui-scaled. */
+    const GUI_SCREEN_RENDER: string;
     const RENDER_OVERLAY: string; const RENDER_CROSSHAIR: string; const RENDER_HOTBAR: string; const RENDER_HEALTH: string;
     const RENDER_FOOD: string; const RENDER_ARMOR: string; const RENDER_EXPERIENCE: string; const RENDER_AIR: string;
     const RENDER_PORTAL: string; const RENDER_JUMP_BAR: string; const RENDER_CHAT: string; const RENDER_HELMET: string;
@@ -320,6 +322,8 @@ declare module 'ratph6.tessera.api' {
   namespace TabList { function getNames(): string[]; function getUnformattedNames(): string[]; }
   namespace Scoreboard { function getTitle(): string; function getLines(): string[]; }
   namespace KeyBind { function isKeyDown(keyCode: number): boolean; }
+  /** A blank, input-blocking screen for script GUIs. Draw in a GUI_SCREEN_RENDER trigger with Renderer. */
+  namespace Gui { function open(): void; function close(): void; function toggle(): void; function isOpen(): boolean; }
 
   class Display {
     constructor();
