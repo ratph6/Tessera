@@ -332,6 +332,8 @@ declare module 'ratph6.tessera.api' {
   }
 
   class EntityWrapper {
+    /** The raw net.minecraft Entity this wraps (e.handle). */
+    readonly handle: import('net.minecraft.world.entity').Entity;
     getX(): number; getY(): number; getZ(): number;
     getName(): string; getUUID(): string; getType(): string;
     distanceTo(other: EntityWrapper): number; isPlayer(): boolean;
