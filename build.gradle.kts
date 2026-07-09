@@ -125,6 +125,10 @@ tasks.test {
 
 // swc4j loads a Rust native via System.load; on Java 25 that needs native access granted.
 loom {
+	// Widen RenderType.create + RenderPipelines.LINES_SNIPPET so Renderer3D can build a custom
+	// no-depth-test LINES render type for through-walls (ESP) drawing.
+	accessWidenerPath = file("src/main/resources/tessera.accesswidener")
+
 	runs {
 		configureEach {
 			vmArgs("--enable-native-access=ALL-UNNAMED")

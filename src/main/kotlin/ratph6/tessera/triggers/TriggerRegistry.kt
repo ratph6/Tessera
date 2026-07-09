@@ -19,6 +19,14 @@ object TriggerRegistry {
         return meta
     }
 
+    // Re-activate a trigger previously unregister()'d through its handle, reusing the same id and
+    // callback. Idempotent while the trigger is still live. Lets scripts toggle a handle on and off.
+    fun reregister(meta: TriggerMeta) {
+        meta.enabled = true
+        byId[meta.id] = meta
+        index(meta)
+    }
+
     private fun index(meta: TriggerMeta) {
         val list = byType.getOrPut(meta.type) { CopyOnWriteArrayList() }
         if (meta !in list) {

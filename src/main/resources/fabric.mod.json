@@ -14,6 +14,7 @@
 	"license": "CC0-1.0",
 	"icon": "assets/tessera/icon.png",
 	"environment": "client",
+	"accessWidener": "tessera.accesswidener",
 	"entrypoints": {
 		"main": [
 			{

@@ -24,5 +24,8 @@ class TriggerHandle(private val meta: TriggerMeta) {
     fun setEventClass(className: String): TriggerHandle { meta.eventClass = className; return this }
     fun unregister(): TriggerHandle { TriggerRegistry.unregister(meta.id); return this }
 
+    // re-activate this trigger after unregister(); idempotent while it's already active
+    fun register(): TriggerHandle { TriggerRegistry.reregister(meta); return this }
+
     fun id(): Int = meta.id
 }

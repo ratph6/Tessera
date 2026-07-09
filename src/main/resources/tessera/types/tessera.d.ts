@@ -129,7 +129,11 @@ declare module 'ratph6.tessera.api' {
      *  superclasses). For entity events (RENDER_ENTITY, ENTITY_DEATH) it matches the wrapped entity,
      *  so `setFilteredClass("Bat")` works. e.g. PACKET_RECEIVED + setFilteredClass("ClientboundSetHealthPacket"). */
     setFilteredClass(className: string): TriggerHandle;
+    /** Stop this trigger from firing. Re-activate it later with `.register()`. */
     unregister(): TriggerHandle;
+    /** Re-activate this trigger after `.unregister()`. Reuses the same handle; idempotent while
+     *  already active. Lets you toggle a listener on and off without re-declaring it. */
+    register(): TriggerHandle;
   }
 
   namespace Tessera {
@@ -218,6 +222,47 @@ declare module 'ratph6.tessera.api' {
     function translate(x: number, y: number, z: number): void;
     /** Rotate `angle` degrees about the axis (x, y, z); the axis is normalised for you. */
     function rotate(angle: number, x: number, y: number, z: number): void;
+  }
+
+  /**
+   * World-space 3D drawing — boxes, lines, tracers and billboarded text at absolute world coordinates.
+   * Valid ONLY inside a `RENDER_WORLD` trigger; every call is a silent no-op elsewhere. Colours are
+   * packed ARGB (build them with `Renderer3D.color`).
+   *
+   *   Tessera.register(Event.RENDER_WORLD, () => {
+   *     const red = Renderer3D.color(255, 40, 40);
+   *     World.getAllEntities().forEach((e) => Renderer3D.renderEntityBox(e, red, 2));
+   *   });
+   */
+  namespace Renderer3D {
+    /** Pack r,g,b(,a) (each 0–255) into an ARGB colour int. Alpha defaults to 255. */
+    function color(r: number, g: number, b: number, a?: number): number;
+    /** `false` (default) draws all geometry — lines, boxes, filled boxes and text — through terrain
+     *  (ESP-style); `true` makes it occlude like blocks. */
+    function setDepth(enabled: boolean): void;
+
+    /** Line between two world points. `lineWidth` is in pixels. */
+    function drawLine(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, color: number, lineWidth: number): void;
+    /** Outlined axis-aligned box spanning the two corners. */
+    function drawBox(minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number, color: number, lineWidth: number): void;
+    /** Outlined box centred on (cx,cy,cz) with the given full extents. */
+    function drawBoxAt(cx: number, cy: number, cz: number, sizeX: number, sizeY: number, sizeZ: number, color: number, lineWidth: number): void;
+    /** Solid translucent box spanning the two corners (use a low alpha in `color`). */
+    function drawFilledBox(minX: number, minY: number, minZ: number, maxX: number, maxY: number, maxZ: number, color: number): void;
+
+    /** Outline an entity's interpolated hitbox with an r,g,b colour. */
+    function renderEntityBox(entity: EntityWrapper, r: number, g: number, b: number, lineWidth: number): void;
+    /** Outline an entity's interpolated hitbox with a packed ARGB colour. */
+    function renderEntityBox(entity: EntityWrapper, color: number, lineWidth: number): void;
+    /** Line from the camera to the entity's centre. */
+    function renderEntityTracer(entity: EntityWrapper, color: number, lineWidth: number): void;
+    /** Line from the camera (screen centre) to an arbitrary world point. */
+    function drawTracer(x: number, y: number, z: number, color: number, lineWidth: number): void;
+
+    /** Billboarded text at a world position (faces the camera). */
+    function drawText3D(text: string, x: number, y: number, z: number, color: number): void;
+    /** Text at a world position. `scale` multiplies the base glyph size; `billboard` faces the camera. */
+    function drawText3D(text: string, x: number, y: number, z: number, color: number, scale: number, billboard: boolean): void;
   }
 
   /** Remote, case-insensitive per-player scale table: `{ "Name": { x, y, z } }` fetched from a URL. */

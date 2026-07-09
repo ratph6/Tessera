@@ -1,0 +1,8 @@
+accessWidener	v2	official
+
+# Tessera needs these to build custom no-depth-test render types (lines + filled boxes) for
+# Renderer3D through-walls (ESP) rendering. RenderType.create is package-private; the *_SNIPPET
+# pipeline bases are private.
+accessible	method	net/minecraft/client/renderer/rendertype/RenderType	create	(Ljava/lang/String;Lnet/minecraft/client/renderer/rendertype/RenderSetup;)Lnet/minecraft/client/renderer/rendertype/RenderType;
+accessible	field	net/minecraft/client/renderer/RenderPipelines	LINES_SNIPPET	Lcom/mojang/blaze3d/pipeline/RenderPipeline$Snippet;
+accessible	field	net/minecraft/client/renderer/RenderPipelines	DEBUG_FILLED_SNIPPET	Lcom/mojang/blaze3d/pipeline/RenderPipeline$Snippet;

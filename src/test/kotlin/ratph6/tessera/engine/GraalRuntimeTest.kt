@@ -67,6 +67,87 @@ class GraalRuntimeTest {
     }
 
     @Test
+    fun `a handle can be unregistered and registered again`() {
+        TriggerRegistry.clear()
+        GraalRuntime.reset()
+        val captured = mutableListOf<String>()
+        TesseraEngine.chatSink = { captured.add(it) }
+
+        val modules = Files.createTempDirectory("tessera-toggle").resolve("modules")
+        modules.resolve("t").createDirectories()
+        // keep the handle, then drive it off/on from commands — the exact toggle pattern scripts use
+        modules.resolve("t/index.ts").writeText(
+            """
+            import { Tessera, Event } from 'ratph6.tessera.api';
+            const h = Tessera.register("toggle", () => Tessera.log("fired"));
+            Tessera.register(Event.COMMAND, () => h.unregister()).setName("off");
+            Tessera.register(Event.COMMAND, () => h.register()).setName("on");
+            """.trimIndent(),
+        )
+
+        TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
+        try {
+            captured.clear()
+            TesseraEngine.dispatch("toggle", 1)                       // initially active -> fires
+            assertTrue(captured.any { it.contains("fired") }, "fresh trigger should fire: $captured")
+
+            captured.clear()
+            TesseraEngine.dispatchCommand("off", emptyArray())        // h.unregister()
+            assertEquals(0, TriggerRegistry.byType("toggle").size, "unregister removes it")
+            TesseraEngine.dispatch("toggle", 2)                       // must not fire
+            assertTrue(captured.none { it.contains("fired") }, "unregistered trigger must not fire: $captured")
+
+            captured.clear()
+            TesseraEngine.dispatchCommand("on", emptyArray())         // h.register() again
+            assertEquals(1, TriggerRegistry.byType("toggle").size, "register re-activates it")
+            TesseraEngine.dispatch("toggle", 3)                       // fires again
+            assertTrue(captured.any { it.contains("fired") }, "re-registered trigger should fire again: $captured")
+        } finally {
+            TesseraEngine.shutdown()
+            GraalRuntime.reset()
+            TriggerRegistry.clear()
+        }
+    }
+
+    @Test
+    fun `Renderer3D resolves as a global and draw calls are safe outside RENDER_WORLD`() {
+        TriggerRegistry.clear()
+        GraalRuntime.reset()
+        val captured = mutableListOf<String>()
+        TesseraEngine.chatSink = { captured.add(it) }
+
+        val modules = Files.createTempDirectory("tessera-r3d").resolve("modules")
+        modules.resolve("r").createDirectories()
+        // no import: Renderer3D must resolve as a global; every draw is a no-op with no bound render
+        // context and must NOT throw (proves the graceful-degradation contract).
+        modules.resolve("r/index.ts").writeText(
+            """
+            Tessera.register(Event.COMMAND, () => {
+              Renderer3D.setDepth(true);
+              const c = Renderer3D.color(255, 0, 0);
+              Renderer3D.drawBox(0, 0, 0, 1, 1, 1, c, 2);
+              Renderer3D.drawLine(0, 0, 0, 1, 1, 1, c, 1);
+              Renderer3D.drawFilledBox(0, 0, 0, 1, 1, 1, c);
+              Renderer3D.drawText3D("hi", 0, 0, 0, c);
+              Tessera.log("r3d ok c=" + c);
+            }).setName("r3d");
+            """.trimIndent(),
+        )
+
+        TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
+        try {
+            captured.clear()
+            TesseraEngine.dispatchCommand("r3d", emptyArray())
+            // color(255,0,0) packs to 0xFFFF0000 = -65536; the log proves every call ran without error
+            assertTrue(captured.any { it.contains("r3d ok c=-65536") }, "Renderer3D global + no-op draws: $captured")
+        } finally {
+            TesseraEngine.shutdown()
+            GraalRuntime.reset()
+            TriggerRegistry.clear()
+        }
+    }
+
+    @Test
     fun `setFilteredClass gates dispatch by the event value's class`() {
         TriggerRegistry.clear()
         GraalRuntime.reset()

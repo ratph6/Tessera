@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult
 import ratph6.tessera.api.BlockWrapper
 import ratph6.tessera.api.DisplayManager
 import ratph6.tessera.api.Renderer
+import ratph6.tessera.api.Renderer3D
 import ratph6.tessera.engine.TesseraEngine
 import ratph6.tessera.triggers.TriggerType
 import java.nio.file.Path
@@ -46,9 +47,16 @@ object FabricEventHooks {
             },
         )
 
-        // fires every frame, so scripts can do frame-rate-independent work
-        LevelRenderEvents.END_MAIN.register(LevelRenderEvents.EndMain { _ ->
-            TesseraEngine.dispatch(TriggerType.RENDER_WORLD)
+        // COLLECT_SUBMITS is the frame stage where custom geometry can still be added to the submit
+        // collector and be flushed (submits added in END_MAIN are already drawn). Bind Renderer3D so
+        // RENDER_WORLD scripts can draw boxes/lines/text in world space; try/finally pops the pose.
+        LevelRenderEvents.COLLECT_SUBMITS.register(LevelRenderEvents.CollectSubmits { ctx ->
+            Renderer3D.begin(ctx)
+            try {
+                TesseraEngine.dispatch(TriggerType.RENDER_WORLD)
+            } finally {
+                Renderer3D.end()
+            }
         })
 
         ClientPlayConnectionEvents.JOIN.register(ClientPlayConnectionEvents.Join { _, _, client ->
