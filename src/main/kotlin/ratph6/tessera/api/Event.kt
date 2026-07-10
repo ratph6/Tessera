@@ -13,6 +13,9 @@ object Event {
     // ticking
     const val TICK = "tick"
     const val GAME_TICK = "gameTick"
+    // tick boundaries: START_TICK fires before the client tick runs, END_TICK after (same beat as TICK)
+    const val START_TICK = "startTick"
+    const val END_TICK = "endTick"
     const val STEP = "step"
     const val GAME_LOAD = "gameLoad"
     const val GAME_UNLOAD = "gameUnload"
@@ -39,6 +42,9 @@ object Event {
     // input
     const val CLICKED = "mouseClick"
     const val SCROLLED = "mouseScrolled"
+    // cursor move, gui-scaled: callback gets [x, y]
+    const val MOUSE_MOVE = "mouseMove"
+    // move with a button held: callback gets [dx, dy, x, y, button]
     const val DRAGGED = "mouseDrag"
     const val KEY_DOWN = "keyDown"
     const val KEY_UP = "keyUp"
@@ -101,4 +107,6 @@ object Event {
     // network
     const val PACKET_SENT = "packetSent"
     const val PACKET_RECEIVED = "packetReceived"
+    // before a packet goes out — cancel to block the send (main-thread sends only)
+    const val PRE_PACKET_SEND = "prePacketSend"
 }

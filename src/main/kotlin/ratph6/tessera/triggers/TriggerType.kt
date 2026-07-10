@@ -39,6 +39,8 @@ object TriggerType {
     const val BLOCK_BREAK = "blockBreak"
     const val TICK = "tick"
     const val GAME_TICK = "gameTick"
+    const val START_TICK = "startTick"
+    const val END_TICK = "endTick"
     const val STEP = "step"
     const val GAME_LOAD = "gameLoad"
 
@@ -83,6 +85,7 @@ object TriggerType {
 
     const val PACKET_RECEIVED = "packetReceived"
     const val PACKET_SENT = "packetSent"
+    const val PRE_PACKET_SEND = "prePacketSend"
     const val SERVER_CONNECT = "serverConnect"
     const val SERVER_DISCONNECT = "serverDisconnect"
 
@@ -90,8 +93,9 @@ object TriggerType {
     // observe-only (dispatched async or from an after-the-fact hook) — listing it here would hand
     // scripts a cancel() that silently does nothing.
     val CANCELLABLE: Set<String> = setOf(
-        CHAT, ACTION_BAR, MESSAGE_SENT, BLOCK_BREAK, GUI_KEY, GUI_MOUSE_CLICK,
+        CHAT, ACTION_BAR, MESSAGE_SENT, BLOCK_BREAK, GUI_KEY, GUI_MOUSE_CLICK, GUI_MOUSE_RELEASE,
         MOUSE_LEFT, MOUSE_RIGHT, MOUSE_LEFT_RELEASE, MOUSE_RIGHT_RELEASE,
+        PRE_PACKET_SEND, // vetoes the send only for main-thread sends; off-thread it degrades to observe
     )
 
     // types that honour .setCriteria() and the match-mode setters
@@ -104,7 +108,7 @@ object TriggerType {
         RENDER_HELMET, RENDER_HAND, RENDER_SCOREBOARD, RENDER_TITLE, RENDER_DEBUG, RENDER_BOSS_HEALTH,
         RENDER_PLAYER_LIST, RENDER_WORLD, RENDER_ENTITY, POST_RENDER_ENTITY, RENDER_TILE_ENTITY,
         POST_RENDER_TILE_ENTITY, BLOCK_HIGHLIGHT,
-        WORLD_LOAD, WORLD_UNLOAD, BLOCK_BREAK, TICK, GAME_TICK, STEP, GAME_LOAD, GAME_UNLOAD,
+        WORLD_LOAD, WORLD_UNLOAD, BLOCK_BREAK, TICK, GAME_TICK, START_TICK, END_TICK, STEP, GAME_LOAD, GAME_UNLOAD,
         ENTITY_DAMAGE, ENTITY_DEATH, SPAWN_PARTICLE, PLAYER_JOIN, PLAYER_LEAVE,
         SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
         GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_MOUSE_RELEASE, GUI_DRAW_BACKGROUND, POST_GUI_RENDER,
@@ -112,7 +116,7 @@ object TriggerType {
         INVENTORY_OPEN, INVENTORY_CLOSE, SLOT_CLICK, PICKUP_ITEM, DROP_ITEM,
         KEY_DOWN, KEY_UP, MOUSE_CLICK, MOUSE_RELEASE, MOUSE_SCROLLED, MOUSE_MOVE, MOUSE_DRAG,
         MOUSE_LEFT, MOUSE_RIGHT, MOUSE_LEFT_RELEASE, MOUSE_RIGHT_RELEASE,
-        PACKET_RECEIVED, PACKET_SENT, SERVER_CONNECT, SERVER_DISCONNECT,
+        PACKET_RECEIVED, PACKET_SENT, PRE_PACKET_SEND, SERVER_CONNECT, SERVER_DISCONNECT,
     )
 
     fun isCancellable(type: String): Boolean = type in CANCELLABLE
@@ -120,14 +124,15 @@ object TriggerType {
     // types that actually have a source hook in this build and so fire; others warn on register.
     // input + per-element HUD renders aren't hookable on this MC version.
     val WIRED: Set<String> = setOf(
-        CHAT, COMMAND, TICK, GAME_TICK, STEP, GAME_LOAD,
+        CHAT, COMMAND, TICK, GAME_TICK, START_TICK, END_TICK, STEP, GAME_LOAD,
         WORLD_LOAD, WORLD_UNLOAD, SERVER_CONNECT, SERVER_DISCONNECT,
         RENDER_OVERLAY, RENDER_WORLD, RENDER_ENTITY, POST_RENDER_ENTITY,
-        PACKET_RECEIVED, PACKET_SENT,
-        SOUND_PLAY, SPAWN_PARTICLE, ENTITY_DEATH, MESSAGE_SENT, ACTION_BAR, BLOCK_BREAK,
-        GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_DRAW_BACKGROUND,
+        PACKET_RECEIVED, PACKET_SENT, PRE_PACKET_SEND,
+        SOUND_PLAY, SPAWN_PARTICLE, ENTITY_DAMAGE, ENTITY_DEATH, MESSAGE_SENT, ACTION_BAR, BLOCK_BREAK,
+        GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_MOUSE_RELEASE, GUI_DRAW_BACKGROUND,
         INVENTORY_OPEN, INVENTORY_CLOSE,
         MOUSE_LEFT, MOUSE_RIGHT, MOUSE_LEFT_RELEASE, MOUSE_RIGHT_RELEASE,
+        MOUSE_MOVE, MOUSE_DRAG,
         GUI_SCREEN_RENDER, GUI_SCREEN_MOUSE,
     )
 

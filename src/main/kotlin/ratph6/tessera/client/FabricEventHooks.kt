@@ -26,11 +26,17 @@ import java.nio.file.Path
 object FabricEventHooks {
 
     fun register(modulesDir: Path, classLoader: ClassLoader) {
+        ClientTickEvents.START_CLIENT_TICK.register(ClientTickEvents.StartTick {
+            ensureBootstrapped(modulesDir, classLoader)
+            TesseraEngine.dispatch(TriggerType.START_TICK, TesseraEngine.tickCount)
+        })
+
         ClientTickEvents.END_CLIENT_TICK.register(ClientTickEvents.EndTick {
             ensureBootstrapped(modulesDir, classLoader)
             TesseraEngine.pump()
             TesseraEngine.dispatch(TriggerType.TICK, TesseraEngine.tickCount)
             TesseraEngine.dispatch(TriggerType.GAME_TICK, TesseraEngine.tickCount)
+            TesseraEngine.dispatch(TriggerType.END_TICK, TesseraEngine.tickCount)
         })
 
         // runs last so Tessera draws on top
@@ -106,6 +112,9 @@ object FabricEventHooks {
             })
             ScreenMouseEvents.allowMouseClick(screen).register(ScreenMouseEvents.AllowMouseClick { _, mouseEvent ->
                 !TesseraEngine.dispatch(TriggerType.GUI_MOUSE_CLICK, mouseEvent)
+            })
+            ScreenMouseEvents.allowMouseRelease(screen).register(ScreenMouseEvents.AllowMouseRelease { _, mouseEvent ->
+                !TesseraEngine.dispatch(TriggerType.GUI_MOUSE_RELEASE, mouseEvent)
             })
         })
 

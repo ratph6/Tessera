@@ -1,5 +1,6 @@
 package ratph6.tessera.engine
 
+import ratph6.tessera.triggers.TriggerRegistry
 import ratph6.tessera.triggers.TriggerType
 
 // Static entry points the Java mixins call into; kept dependency-light.
@@ -30,6 +31,12 @@ object TesseraHooks {
     fun onEntityDeath(entity: net.minecraft.world.entity.Entity) =
         TesseraEngine.dispatchAsync(TriggerType.ENTITY_DEATH, ratph6.tessera.api.EntityWrapper(entity))
 
+    // client-side damage pulse (driven by ClientboundDamageEventPacket). Observe-only. Wrapper first so
+    // setFilteredClass matches the entity; damageType reaches multi-param (bytecode) callbacks
+    @JvmStatic
+    fun onEntityDamage(entity: net.minecraft.world.entity.Entity, damageType: String) =
+        TesseraEngine.dispatchAsync(TriggerType.ENTITY_DAMAGE, ratph6.tessera.api.EntityWrapper(entity), damageType)
+
     // chat-like: must go through fireChat so .setCriteria()/match modes are honoured
     @JvmStatic
     fun onMessageSent(message: String): Boolean =
@@ -51,4 +58,26 @@ object TesseraHooks {
 
     @JvmStatic
     fun onMouseRightRelease(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_RIGHT_RELEASE)
+
+    // cursor move on the render thread, gui-scaled coords. MOUSE_MOVE gets [x, y]; MOUSE_DRAG fires
+    // only while a button is held (button 0/1/2; -1 = none) and gets [dx, dy, x, y, button].
+    // hasType-guarded — this runs for every pixel of cursor travel
+    @JvmStatic
+    fun onMouseMove(x: Double, y: Double, dx: Double, dy: Double, button: Int) {
+        if (TriggerRegistry.hasType(TriggerType.MOUSE_MOVE))
+            TesseraEngine.dispatch(TriggerType.MOUSE_MOVE, arrayOf(x, y))
+        if (button >= 0 && TriggerRegistry.hasType(TriggerType.MOUSE_DRAG))
+            TesseraEngine.dispatch(TriggerType.MOUSE_DRAG, arrayOf<Any>(dx, dy, x, y, button))
+    }
+
+    // before a packet goes out. On the JS thread this is synchronous and cancellable (true = veto the
+    // send); sends from other threads (netty keepalives etc.) can't be vetoed — observe-only there
+    @JvmStatic
+    fun onPrePacketSend(packet: Any): Boolean {
+        if (!TriggerRegistry.hasType(TriggerType.PRE_PACKET_SEND)) return false
+        if (TesseraEngine.isOnJsThread())
+            return TesseraEngine.dispatch(TriggerType.PRE_PACKET_SEND, packet, packet.javaClass.simpleName)
+        TesseraEngine.dispatchAsync(TriggerType.PRE_PACKET_SEND, packet, packet.javaClass.simpleName)
+        return false
+    }
 }

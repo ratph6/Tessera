@@ -69,6 +69,8 @@ declare module 'ratph6.tessera.api' {
    *   MESSAGE_SENT    (message: string)                       outgoing chat — cancel to block it
    *   ACTION_BAR      (text: string)                          overlay message — cancel to hide
    *   TICK/GAME_TICK  (tick: number)                          client tick count
+   *   START_TICK      (tick: number)                          before the client tick runs
+   *   END_TICK        (tick: number)                          after the client tick (same beat as TICK)
    *   STEP            (dt: number)                            seconds since last step (set rate via .setFps()/.setDelay())
    *   GAME_LOAD       ()                                       client finished starting
    *   WORLD_LOAD      ()  /  WORLD_UNLOAD ()                   joined / left a world
@@ -78,26 +80,33 @@ declare module 'ratph6.tessera.api' {
    *   RENDER_WORLD    ()                                       per frame, after the level renders (set player/camera state here; .setFps() ignored)
    *   RENDER_ENTITY / POST_RENDER_ENTITY  (entity: EntityWrapper)   entity.getName()/getX()/isPlayer()/...; filter with .setFilteredClass("Bat")
    *   ENTITY_DEATH    (entity: EntityWrapper)
+   *   ENTITY_DAMAGE   (entity: EntityWrapper)                 fires when a visible entity takes damage (observe-only; setFilteredClass works)
+   *   MOUSE_MOVE      ([x, y])                                cursor move, gui-scaled coords
+   *   DRAGGED         ([dx, dy, x, y, button])                cursor move while a button is held (0 left / 1 right / 2 middle)
    *   BLOCK_BREAK     (block: BlockWrapper)                    block.getX()/getType()/isAir() — cancel to veto
    *   SOUND_PLAY      (name: string)                           sound id, e.g. "minecraft:block.note_block.harp"
    *   SPAWN_PARTICLE  (name: string, x: number, y: number, z: number)
    *   GUI_OPENED / GUI_CLOSED / GUI_DRAW_BACKGROUND  (screenClassName: string)
    *   INVENTORY_OPEN / INVENTORY_CLOSE  (screenClassName: string)
    *   GUI_KEY         (keyEvent)                               net.minecraft KeyEvent — .getKey() etc.
-   *   GUI_MOUSE_CLICK (mouseEvent)                             net.minecraft MouseButtonEvent
+   *   GUI_MOUSE_CLICK (mouseEvent)                             net.minecraft MouseButtonEvent — cancel to swallow the click
+   *   GUI_MOUSE_RELEASE (mouseEvent)                           net.minecraft MouseButtonEvent — cancel to swallow the release
    *   PACKET_RECEIVED / PACKET_SENT  (packet, name: string)    raw net.minecraft Packet + its class name (observe-only)
+   *   PRE_PACKET_SEND (packet, name: string)                   before a packet goes out — cancel to block the send (main-thread sends only)
    *
    * Custom bus: `Tessera.on("myEvent", (payload) => {})` ← `Tessera.emit("myEvent", payload)`.
    * Events not listed above have no source hook on this build — registering them logs a warning.
    */
   namespace Event {
     const CHAT: string; const ACTION_BAR: string; const MESSAGE_SENT: string; const COMMAND: string;
-    const TICK: string; const GAME_TICK: string; const STEP: string; const GAME_LOAD: string; const GAME_UNLOAD: string;
+    const TICK: string; const GAME_TICK: string; const START_TICK: string; const END_TICK: string;
+    const STEP: string; const GAME_LOAD: string; const GAME_UNLOAD: string;
     const WORLD_LOAD: string; const WORLD_UNLOAD: string; const SERVER_CONNECT: string; const SERVER_DISCONNECT: string;
     const BLOCK_BREAK: string; const SPAWN_PARTICLE: string; const PLAYER_JOIN: string; const PLAYER_LEAVE: string;
     const ENTITY_DAMAGE: string; const ENTITY_DEATH: string;
     const SOUND_PLAY: string; const NOTE_BLOCK_PLAY: string; const NOTE_BLOCK_CHANGE: string;
-    const CLICKED: string; const SCROLLED: string; const DRAGGED: string; const KEY_DOWN: string; const KEY_UP: string;
+    const CLICKED: string; const SCROLLED: string; const MOUSE_MOVE: string; const DRAGGED: string;
+    const KEY_DOWN: string; const KEY_UP: string;
     const MOUSE_LEFT: string; const MOUSE_RIGHT: string;
     const MOUSE_LEFT_RELEASE: string; const MOUSE_RIGHT_RELEASE: string;
     const PICKUP_ITEM: string; const DROP_ITEM: string; const SLOT_CLICK: string; const INVENTORY_OPEN: string; const INVENTORY_CLOSE: string;
@@ -114,7 +123,7 @@ declare module 'ratph6.tessera.api' {
     const RENDER_TITLE: string; const RENDER_DEBUG: string; const RENDER_PLAYER_LIST: string;
     const RENDER_WORLD: string; const RENDER_ENTITY: string; const POST_RENDER_ENTITY: string;
     const RENDER_TILE_ENTITY: string; const POST_RENDER_TILE_ENTITY: string; const BLOCK_HIGHLIGHT: string;
-    const PACKET_SENT: string; const PACKET_RECEIVED: string;
+    const PACKET_SENT: string; const PACKET_RECEIVED: string; const PRE_PACKET_SEND: string;
   }
 
   class TriggerHandle {
