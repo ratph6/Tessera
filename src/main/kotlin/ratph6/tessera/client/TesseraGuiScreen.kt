@@ -29,13 +29,15 @@ class TesseraGuiScreen : Screen(Component.literal("Tessera")) {
 
     // real click/release edges from MC (x/y already gui-scaled, button 0=left/1=right) — far more
     // reliable than polling GLFW every frame, which spams the action while the button is held.
+    // Passed as ONE array arg [action, x, y, button]: script callbacks are single-argument (GraalJS
+    // coerces them to a Consumer), so multiple positional args would be dropped past the first.
     override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
-        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, "click", event.x(), event.y(), event.button())
+        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, arrayOf<Any?>("click", event.x(), event.y(), event.button()))
         return true
     }
 
     override fun mouseReleased(event: MouseButtonEvent): Boolean {
-        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, "release", event.x(), event.y(), event.button())
+        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, arrayOf<Any?>("release", event.x(), event.y(), event.button()))
         return super.mouseReleased(event)
     }
 }

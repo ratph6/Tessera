@@ -4,7 +4,8 @@ import ratph6.tessera.engine.TesseraEngine
 import java.util.function.Consumer
 
 // Primary scripting entry point. Register triggers with an Event and an arrow-function callback
-// taking the event's primary value.
+// taking the event's primary value. Callbacks are single-argument (GraalJS coerces the JS function to
+// a Consumer); events that carry several values pass them as one array/object arg.
 object Tessera {
     @JvmStatic
     fun register(type: String, callback: Consumer<Any?>): TriggerHandle =
