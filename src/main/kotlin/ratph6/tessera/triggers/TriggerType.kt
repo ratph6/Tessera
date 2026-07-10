@@ -60,6 +60,7 @@ object TriggerType {
     const val GUI_DRAW_BACKGROUND = "guiDrawBackground"
     const val POST_GUI_RENDER = "postGuiRender"
     const val GUI_SCREEN_RENDER = "guiScreenRender" // Tessera's own blank GUI screen (Gui.open)
+    const val GUI_SCREEN_MOUSE = "guiScreenMouse"   // click/release on the blank GUI screen
     const val INVENTORY_OPEN = "inventoryOpen"
     const val INVENTORY_CLOSE = "inventoryClose"
     const val SLOT_CLICK = "slotClick"
@@ -105,7 +106,7 @@ object TriggerType {
         ENTITY_DAMAGE, ENTITY_DEATH, SPAWN_PARTICLE, PLAYER_JOIN, PLAYER_LEAVE,
         SOUND_PLAY, NOTE_BLOCK_PLAY, NOTE_BLOCK_CHANGE,
         GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_MOUSE_RELEASE, GUI_DRAW_BACKGROUND, POST_GUI_RENDER,
-        GUI_SCREEN_RENDER,
+        GUI_SCREEN_RENDER, GUI_SCREEN_MOUSE,
         INVENTORY_OPEN, INVENTORY_CLOSE, SLOT_CLICK, PICKUP_ITEM, DROP_ITEM,
         KEY_DOWN, KEY_UP, MOUSE_CLICK, MOUSE_RELEASE, MOUSE_SCROLLED, MOUSE_MOVE, MOUSE_DRAG,
         MOUSE_LEFT, MOUSE_RIGHT,
@@ -125,7 +126,7 @@ object TriggerType {
         GUI_OPEN, GUI_CLOSE, GUI_KEY, GUI_MOUSE_CLICK, GUI_DRAW_BACKGROUND,
         INVENTORY_OPEN, INVENTORY_CLOSE,
         MOUSE_LEFT, MOUSE_RIGHT,
-        GUI_SCREEN_RENDER,
+        GUI_SCREEN_RENDER, GUI_SCREEN_MOUSE,
     )
 
     // known type with no source hook: registrable, but won't fire

@@ -104,6 +104,8 @@ declare module 'ratph6.tessera.api' {
     const GUI_MOUSE_RELEASE: string; const GUI_DRAW_BACKGROUND: string; const POST_GUI_RENDER: string;
     /** Fires each frame while Tessera's blank GUI screen (Gui.open) is open. Callback: (mouseX, mouseY), gui-scaled. */
     const GUI_SCREEN_RENDER: string;
+    /** Click/release on Tessera's GUI screen. Callback: (action: 'click'|'release', x, y, button). */
+    const GUI_SCREEN_MOUSE: string;
     const RENDER_OVERLAY: string; const RENDER_CROSSHAIR: string; const RENDER_HOTBAR: string; const RENDER_HEALTH: string;
     const RENDER_FOOD: string; const RENDER_ARMOR: string; const RENDER_EXPERIENCE: string; const RENDER_AIR: string;
     const RENDER_PORTAL: string; const RENDER_JUMP_BAR: string; const RENDER_CHAT: string; const RENDER_HELMET: string;

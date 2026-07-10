@@ -2,6 +2,7 @@ package ratph6.tessera.client
 
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.input.MouseButtonEvent
 import net.minecraft.network.chat.Component
 import ratph6.tessera.api.Renderer
 import ratph6.tessera.engine.TesseraEngine
@@ -24,5 +25,17 @@ class TesseraGuiScreen : Screen(Component.literal("Tessera")) {
         } finally {
             Renderer.graphics = null
         }
+    }
+
+    // real click/release edges from MC (x/y already gui-scaled, button 0=left/1=right) — far more
+    // reliable than polling GLFW every frame, which spams the action while the button is held.
+    override fun mouseClicked(event: MouseButtonEvent, doubleClick: Boolean): Boolean {
+        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, "click", event.x(), event.y(), event.button())
+        return true
+    }
+
+    override fun mouseReleased(event: MouseButtonEvent): Boolean {
+        TesseraEngine.dispatch(TriggerType.GUI_SCREEN_MOUSE, "release", event.x(), event.y(), event.button())
+        return super.mouseReleased(event)
     }
 }
