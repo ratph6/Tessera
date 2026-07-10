@@ -281,48 +281,92 @@ class GraalRuntimeTest {
     }
 
     @Test
-    fun `local js imports and sibling helper files are bundled into the module scope`() {
+    fun `each file has its own scope - same top-level names in different files do not collide`() {
         TriggerRegistry.clear()
         GraalRuntime.reset()
         val captured = mutableListOf<String>()
         TesseraEngine.chatSink = { captured.add(it) }
 
-        val modules = Files.createTempDirectory("tessera-bundle").resolve("modules")
-        modules.resolve("bundle").createDirectories()
-        modules.resolve("bundle/auto.ts").writeText(
+        val modules = Files.createTempDirectory("tessera-scope").resolve("modules")
+        modules.resolve("m").createDirectories()
+        // a.ts and b.ts BOTH declare `const NAME` and `function helper` at top level.
+        modules.resolve("m/a.ts").writeText(
+            """
+            export const NAME = "A";
+            export function helper(): string { return "helperA"; }
+            """.trimIndent(),
+        )
+        modules.resolve("m/b.ts").writeText(
+            """
+            const NAME = "B-private";                 // same name as a.ts — must stay private
+            function helper(): string { return "helperB"; }
+            export function bValue(): string { return NAME + ":" + helper(); }
+            """.trimIndent(),
+        )
+        // a root sibling that is never imported must still run once on load (side effect)
+        modules.resolve("m/side.ts").writeText(
             """
             import { Tessera } from 'ratph6.tessera.api';
-            function autoHelper(value: string): string {
-              return value + ":auto";
-            }
+            Tessera.log("side-ran");
             """.trimIndent(),
         )
-        modules.resolve("bundle/side.ts").writeText(
-            """
-            function sideHelper(): string {
-              return "side";
-            }
-            """.trimIndent(),
-        )
-        modules.resolve("bundle/index.ts").writeText(
+        modules.resolve("m/index.ts").writeText(
             """
             import { Tessera, Event } from 'ratph6.tessera.api';
-            import "./side.js";
-
+            import { NAME, helper } from "./a";
+            import { bValue } from "./b";
             Tessera.register(Event.COMMAND, () => {
-              Tessera.log(autoHelper(sideHelper()));
-            }).setName("bundle");
+              Tessera.log(NAME + "|" + helper() + "|" + bValue());
+            }).setName("m");
             """.trimIndent(),
         )
 
         TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
         try {
+            assertTrue(captured.any { it.contains("side-ran") }, "un-imported root sibling should run on load: $captured")
             captured.clear()
-            TesseraEngine.dispatchCommand("bundle", emptyArray())
+            TesseraEngine.dispatchCommand("m", emptyArray())
+            // a's NAME/helper are "A"/"helperA"; b's private NAME/helper stay "B-private"/"helperB"
             assertTrue(
-                captured.any { it.contains("side:auto") },
-                "local import and auto helper should be visible in index.ts: $captured",
+                captured.any { it.contains("A|helperA|B-private:helperB") },
+                "same names in a.ts and b.ts must not collide, sharing only via export/import: $captured",
             )
+        } finally {
+            TesseraEngine.shutdown()
+            GraalRuntime.reset()
+            TriggerRegistry.clear()
+        }
+    }
+
+    @Test
+    fun `circular imports resolve - other reads a value exported by index`() {
+        TriggerRegistry.clear()
+        GraalRuntime.reset()
+        val captured = mutableListOf<String>()
+        TesseraEngine.chatSink = { captured.add(it) }
+
+        val modules = Files.createTempDirectory("tessera-circ").resolve("modules")
+        modules.resolve("c").createDirectories()
+        // index exports `shared` at the top, then side-effect-imports other at the bottom;
+        // other imports `shared` back from index (a cycle) and reads it on load.
+        modules.resolve("c/index.ts").writeText(
+            """
+            import { Tessera } from 'ratph6.tessera.api';
+            export const shared = "from-index";
+            import "./other";
+            """.trimIndent(),
+        )
+        modules.resolve("c/other.ts").writeText(
+            """
+            import { Tessera } from 'ratph6.tessera.api';
+            import { shared } from "./index";
+            Tessera.log("other sees: " + shared);
+            """.trimIndent(),
+        )
+
+        TesseraEngine.bootstrap(modules, Tessera::class.java.classLoader)
+        try {
+            assertTrue(captured.any { it.contains("other sees: from-index") }, "circular import should resolve: $captured")
         } finally {
             TesseraEngine.shutdown()
             GraalRuntime.reset()

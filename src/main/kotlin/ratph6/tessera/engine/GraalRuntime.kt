@@ -182,20 +182,24 @@ object GraalRuntime {
         return globalsPrelude(rewritten, bound) + rewritten
     }
 
-    // Transpile + evaluate as an ES module. Top-level code runs immediately (so top-level
-    // Tessera.register calls attach to `module`); the returned namespace holds exported functions.
-    fun loadModule(manifest: TesseraManifest, dir: Path, source: String, fileName: String = "${manifest.name}/${manifest.entry}"): GraalModule {
-        val js = prepare(source, fileName)
+    // Load a module directory: every file keeps its own scope (see GraalModuleBundler). The whole thing
+    // is one transpile + one eval, wrapped in an IIFE so the per-module `__reg`/`__req` and the globals
+    // prelude never leak into the shared context (a second module would otherwise redeclare them). The
+    // eval result is the ENTRY file's exports, which holds its exported (convention) functions.
+    fun loadModule(manifest: TesseraManifest, dir: Path, entryFile: Path): GraalModule {
+        val bundle = GraalModuleBundler.bundle(dir, entryFile)
+        val transpiled = transpileTs(bundle.source, "${manifest.name}/bundle.ts")
+        val prelude = globalsPrelude(transpiled, emptySet())
+        val wrapped = "(() => {\n$prelude$transpiled\nreturn __req(${jsString(bundle.entryId)});\n})()"
+
         val module = GraalModule(manifest, dir)
-        val c = context()
         TesseraEngine.withCurrentModule(module) {
-            val src = Source.newBuilder("js", js, "${manifest.name}.mjs")
-                .mimeType("application/javascript+module")
-                .build()
-            module.attach(c.eval(src))
+            module.attach(context().eval("js", wrapped))
         }
         return module
     }
+
+    private fun jsString(s: String): String = "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
     // one-off snippet for `/te eval`
     fun evalSnippet(code: String): Value {
