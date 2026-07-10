@@ -45,6 +45,9 @@ object Event {
     // in-world clicks (fire on the actual attack / use-item action; cancel to veto the click)
     const val MOUSE_LEFT = "mouseLeft"
     const val MOUSE_RIGHT = "mouseRight"
+    // release counterparts (fire when the physical button is let go; cancellable)
+    const val MOUSE_LEFT_RELEASE = "mouseLeftRelease"
+    const val MOUSE_RIGHT_RELEASE = "mouseRightRelease"
 
     // items / inventory
     const val PICKUP_ITEM = "pickupItem"

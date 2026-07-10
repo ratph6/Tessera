@@ -45,4 +45,10 @@ object TesseraHooks {
 
     @JvmStatic
     fun onMouseRight(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_RIGHT)
+
+    @JvmStatic
+    fun onMouseLeftRelease(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_LEFT_RELEASE)
+
+    @JvmStatic
+    fun onMouseRightRelease(): Boolean = TesseraEngine.dispatch(TriggerType.MOUSE_RIGHT_RELEASE)
 }
