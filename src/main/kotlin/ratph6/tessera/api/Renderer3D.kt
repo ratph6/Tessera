@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.minecraft.client.gui.Font
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector
 import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.SubmitNodeCollector
 import net.minecraft.client.renderer.rendertype.LayeringTransform
@@ -116,6 +117,16 @@ object Renderer3D {
 
     private fun filledType(): RenderType = if (depth) RenderTypes.debugFilledBox() else filledThroughWalls
 
+    // Through-walls (depth off) geometry must draw over ENTITIES too, not just terrain. Entities and our
+    // lines share ITEM_ENTITY_TARGET, so an entity submitted afterwards paints over the box. A high submit
+    // order flushes our geometry last in that target, so the ESP sits on top of everything. With depth on
+    // (occluded mode) we keep the natural order.
+    private const val ESP_ORDER = Int.MAX_VALUE
+    private fun sink(): OrderedSubmitNodeCollector? {
+        val c = collector ?: return null
+        return if (depth) c else c.order(ESP_ORDER)
+    }
+
     // ------------------------------------------------------------------------------------------------
     // lines
     // ------------------------------------------------------------------------------------------------
@@ -126,7 +137,7 @@ object Renderer3D {
         x2: Double, y2: Double, z2: Double,
         color: Int, lineWidth: Double,
     ) {
-        val col = collector ?: return
+        val col = sink() ?: return
         val ps = pose ?: return
         val w = lineWidth.toFloat()
         col.submitCustomGeometry(ps, edgeType()) { p, vc ->
@@ -164,7 +175,7 @@ object Renderer3D {
         maxX: Double, maxY: Double, maxZ: Double,
         color: Int, lineWidth: Double,
     ) {
-        val col = collector ?: return
+        val col = sink() ?: return
         val ps = pose ?: return
         val shape = Shapes.create(AABB(minX, minY, minZ, maxX, maxY, maxZ))
         // isTranslucent = false: opaque outline ordering (see submitBlockOutline in LevelRenderer)
@@ -188,7 +199,7 @@ object Renderer3D {
         maxX: Double, maxY: Double, maxZ: Double,
         color: Int,
     ) {
-        val col = collector ?: return
+        val col = sink() ?: return
         val ps = pose ?: return
         col.submitCustomGeometry(ps, filledType()) { p, vc ->
             fun v(x: Double, y: Double, z: Double) =
