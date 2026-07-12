@@ -302,10 +302,13 @@ object TesseraEngine {
 
     // called from MixinHooks on whatever thread the target method runs
     fun invokeMixin(hook: MixinRegistry.Hook, ctx: ratph6.tessera.api.MixinContext) {
-        // GraalJS contexts are single-threaded: a guest callback touched from another thread throws
-        // "multi threaded access requested". Marshal it — observe-only there (the target method has
-        // returned by the time it runs, so cancel/return-override can't apply off-thread).
-        if (hook.callback is GraalCallback && !isOnJsThread()) {
+        // The graal engine's callbacks run guest JS, and a GraalJS context is single-threaded: touching
+        // it from another thread throws "multi threaded access requested". These callbacks are
+        // HandleCallback-wrapped GraalJS Consumers (not GraalCallback), so we can't tell by type — marshal
+        // ANY call that
+        // arrives off the JS thread onto it. Observe-only there (the method has already returned, so
+        // cancel/override can't apply); calls already on the JS thread run inline, so cancel DOES apply.
+        if (!isOnJsThread()) {
             enqueue { invokeMixin(hook, ctx) }
             return
         }

@@ -20,6 +20,11 @@ object TesseraCommand {
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         this.dispatcher = dispatcher
+        // Fabric hands us a BRAND-NEW dispatcher each time it (re)builds the client command tree (world
+        // join, resource reload, etc.). The old dispatcher's nodes are gone, so the `registered` guard —
+        // which exists to avoid double-adding to the SAME dispatcher — must be reset here, or a script
+        // command that was ever added stays skipped forever and never lands in the live tree.
+        registered.clear()
         val tessera = ClientCommands.literal("te")
             .then(ClientCommands.literal("reload").executes { TesseraEngine.reload(); 1 })
             .then(ClientCommands.literal("list").executes { listModules(); 1 })

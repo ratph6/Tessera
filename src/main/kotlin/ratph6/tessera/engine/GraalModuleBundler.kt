@@ -20,8 +20,10 @@ import kotlin.io.path.readText
 // still bound once by GraalRuntime's globals prelude, which every factory closes over.
 object GraalModuleBundler {
     private val sourceExtensions = listOf("ts", "js", "mts", "mjs", "tsx", "jsx", "cts", "cjs")
+    // Trailing `// line comment` after the import is allowed — otherwise the statement fails to match,
+    // is left un-stripped in the factory body, and corrupts that file's scope (bindings never declared).
     private val importStatement = Regex(
-        """(?m)^[ \t]*import(?:\s+(type))?(?:\s+([\s\S]*?)\s+from)?\s*['"]([^'"]+)['"]\s*;?[ \t]*(?=\r?\n|$)""",
+        """(?m)^[ \t]*import(?:\s+(type))?(?:\s+([\s\S]*?)\s+from)?\s*['"]([^'"]+)['"]\s*;?[ \t]*(?://[^\r\n]*)?(?=\r?\n|$)""",
     )
     // export forms
     private val exportDecl = Regex("""(?m)^([ \t]*)export\s+(default\s+)?((?:async\s+)?(?:const|let|var|function|class))\s+([A-Za-z_$][A-Za-z0-9_$]*)""")

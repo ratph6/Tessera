@@ -14,6 +14,9 @@ group = providers.gradleProperty("maven_group").get()
 repositories {
 	// swc4j + Javet (TypeScript transpiler + V8 runtime) live on Maven Central.
 	mavenCentral()
+	// DevAuth (dev-only): lets the dev runClient log into a real Microsoft account so it can join
+	// premium / online-mode servers. Its artifacts live on the maintainer's Azure Artifacts feed.
+	maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1") { name = "DevAuth" }
 }
 
 // --- Tessera scripting engine coordinates --------------------------------------
@@ -70,6 +73,13 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	implementation("net.fabricmc:fabric-language-kotlin:${providers.gradleProperty("fabric_kotlin_version").get()}")
+
+	// DevAuth — dev-only Microsoft account auth for runClient (join premium/online-mode servers while
+	// testing). This build adds Fabric mods via plain configurations (see fabric-api above), and Fabric
+	// Loader discovers mods by scanning the run classpath, so runtimeOnly is enough: it's on the dev run
+	// classpath but never include()'d, so it's never bundled into the released jar. 1.2.2+ is required
+	// on modern Minecraft/Java (it falls back to the JDK HTTP client).
+	runtimeOnly("me.djtheredstoner:DevAuth-fabric:1.2.2")
 
 	// --- scripting engine ---------------------------------------------------
 	// swc4j API jar: on the compile + dev-runtime classpath, and nested into the remapped jar
@@ -141,6 +151,13 @@ loom {
 			// Let the /te console un-headless AWT after MC launches the JVM headless (TesseraConsole
 			// nulls GraphicsEnvironment.headless via reflection — needs java.awt opened on JDK 25+).
 			vmArgs("--add-opens", "java.desktop/java.awt=ALL-UNNAMED")
+		}
+		// Client only: turn DevAuth on for `./gradlew runClient`. It reads its account + cached token
+		// from the default config dir (~/.devauth), so the token lives outside the repo and is reused
+		// across launches. (IntelliJ's generated run config may not carry this arg — DevAuth can also be
+		// enabled globally via `defaultEnabled = true` in ~/.devauth/config.toml.)
+		named("client") {
+			vmArgs("-Ddevauth.enabled=true")
 		}
 	}
 }

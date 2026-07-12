@@ -6,9 +6,13 @@ import java.util.function.Consumer
 
 // Runtime method injection (Fabric-mixin equivalent, no restart). Targets are Mojang-mapped binary
 // names. "HEAD" (default) may cancel/override; "RETURN" (alias "TAIL") runs at every return; ctors,
-// abstract and native methods can't be injected. Callback runs on the target method's thread — an
-// off-thread method (e.g. netty) with a GraalJS module errors. Needs runtime instrumentation
+// abstract and native methods can't be injected. Needs runtime instrumentation
 // (-Djdk.attach.allowAttachSelf=true on a full JDK); otherwise the first inject reports an error.
+//
+// THREADING: TesseraEngine.invokeMixin marshals any call that arrives off the JS/render thread (netty,
+// render workers) onto the JS thread — observe-only there, since the target method has already returned,
+// so cancel/override can't apply. Calls that arrive ON the JS thread (e.g. LocalPlayer.sendPosition,
+// most gameplay) run inline, so cancel/override DO apply.
 object Mixin {
 
     @JvmStatic
